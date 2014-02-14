@@ -4,5 +4,10 @@
     <string name="app_name">Whatif</string>
     <string name="action_settings">Settings</string>
     <string name="hello_world">Hello world!</string>
+    <string name="spade">&#9824;</string>
+    <string name="heart">&#9829;</string>
+    <string name="club">&#9827;</string>
+    <string name="diamond">&#9830;</string>
+
 
 </resources>
