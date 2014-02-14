@@ -4,30 +4,37 @@
     android:layout_height="match_parent"
     android:layout_margin="10dp"
     android:background="#ffffff"
-    android:orientation="vertical"
+    android:orientation="horizontal"
     android:padding="5dp" >
 
-    <TextView
-        android:id="@+id/TrumpNum"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
         android:layout_weight="1"
-        android:gravity="center_vertical"
-        android:text="x" />
+        android:gravity="center_horizontal"
+        android:orientation="vertical" >
 
-    <TextView
-        android:id="@+id/TrumpSuit1"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:gravity="center_vertical"
-        android:text="x" />
+        <TextView
+            android:id="@+id/TrumpNum"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:text="x" />
+
+        <TextView
+            android:id="@+id/TrumpSuit1"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:text="x" />
+
+    </LinearLayout>
 
     <TextView
         android:id="@+id/TrumpSuit2"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="2"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="4"
         android:gravity="right|bottom"
         android:text="x" />
 

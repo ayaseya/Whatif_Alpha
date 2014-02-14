@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- xmlns:TrumpView="http://schemas.android.com/apk/res/com.example.whatif" -->
+    <declare-styleable name="TrumpView">
+        <attr name="number" format="integer" />
+        <attr name="suit" format="string" />
+    </declare-styleable>
+
+</resources>
