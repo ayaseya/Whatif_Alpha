@@ -2,15 +2,23 @@ package com.example.whatif;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.Window;
-import android.widget.LinearLayout;
+import android.widget.FrameLayout;
 
 public class WhatifActivity extends Activity {
-	TrumpView trumpView;
-	View v;
-	LinearLayout lLayout;
+	private TrumpView trumpView;
+	private FrameLayout frameLayout;
+	private FrameLayout layoutLocation;
+
+	private FrameLayout alphaLayout;
+
+	private CheckDevice cd;
+	private Deck deck;
 
 	/* ********** ********** ********** ********** */
 
@@ -18,22 +26,30 @@ public class WhatifActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE); // タイトルバーを非表示にする
-		setContentView(R.layout.activity_whatif);
+		//		setContentView(R.layout.activity_whatif);
+		setContentView(R.layout.activity_main);
 
-		Deck deck = new Deck(this.getApplicationContext());
+		cd = new CheckDevice(getApplicationContext());
+
+		deck = new Deck(this.getApplicationContext());
 		trumpView = new TrumpView(this.getApplicationContext());
-		v = trumpView.addTrumpView(deck, 0, this.getApplicationContext());
+		trumpView = (TrumpView) trumpView.addLayoutView(this.getApplicationContext());
 
-		lLayout = (LinearLayout) findViewById(R.id.MainLayout);
-		lLayout.addView(v);
+		layoutLocation = (FrameLayout) findViewById(R.id.layoutLocation);
+		FrameLayout.LayoutParams params =
+				new FrameLayout.LayoutParams(trumpView.getTrumpWidth(), trumpView.getTrumpHeight(),Gravity.CENTER);
 
-		//		for(int i=0;i<deck.trump.size();i++){
-		//		Log.v("Test", "deck="+ deck.trump.get(i).getSuit() + deck.trump.get(i).getNumber()	);
-		//		}
+		layoutLocation.addView(trumpView, params);
 
-		//		TrumpView tv =(TrumpView)findViewById(R.id.spade1);
-		//		tv.setNumber(1);
-		//		tv.setSuit(R.string.spade);
+		trumpView.setOnClickListener(new OnClickListener() {
+
+			public void onClick(View v) {
+
+				Log.v("Test", "w=" + v.getWidth() + " h=" + v.getHeight());
+				Log.v("Test", "w=" + ((cd.getWidth() - 60) / 5) + " h=" + ((cd.getWidth() - 60) / 5) * 1.5);
+
+			}
+		});
 
 	}// onCreate()
 
