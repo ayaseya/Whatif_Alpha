@@ -1,29 +1,95 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:TrumpView="http://schemas.android.com/apk/res/com.example.whatif"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/MainLayout"
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- ################## 画面全体のレイアウト ################## -->
+
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/FrameLayout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="#E6E6FA"
-    android:orientation="vertical"
-    android:padding="5dp"
-    tools:context=".WhatifActivity" >
+    android:layout_height="match_parent" >
 
-    <!-- <com.example.whatif.TrumpView -->
-    <!-- android:id="@+id/spade1" -->
-    <!-- android:layout_width="64dp" -->
-    <!-- android:layout_height="96dp" /> -->
+    <LinearLayout
+        android:id="@+id/MainLayout"
+        style="@style/black"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical" >
 
+        <!-- ################## ボーナス部分のレイアウト ################## -->
 
-    <!-- <com.example.whatif.TrumpView -->
-    <!-- android:layout_width="96dp" -->
-    <!-- android:layout_height="128dp" -->
-    <!-- TrumpView:number="2" -->
-    <!-- TrumpView:suit="@string/heart" /> -->
+        <LinearLayout
+            android:id="@+id/BonusLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/white_border"
+            android:orientation="vertical" >
 
+            <include layout="@layout/bonus_pannel" />
+        </LinearLayout>
 
-    <!-- <com.example.whatif.TrumpView -->
-    <!-- android:layout_width="128dp" -->
-    <!-- android:layout_height="160dp" /> -->
+        <!-- ################## ポーカー部分のレイアウト ################## -->
 
-</LinearLayout>
+        <LinearLayout
+            android:id="@+id/PokerLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="-2dp"
+            android:background="@drawable/white_border"
+            android:orientation="vertical" >
+
+            <include layout="@layout/poker_pannel" />
+        </LinearLayout>
+
+        <!-- ################## ガイド部分のレイアウト ################## -->
+
+        <LinearLayout
+            android:id="@+id/GuideLayout"
+            style="@style/blue"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="-2dp"
+            android:background="@drawable/bold_border"
+            android:padding="2dp" >
+
+            <include layout="@layout/guide_pannel" />
+        </LinearLayout>
+        <!-- ################## 山札部分のレイアウト ################## -->
+
+        <LinearLayout
+            android:id="@+id/InformationLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:baselineAligned="false" >
+
+            <include layout="@layout/information_pannel" />
+        </LinearLayout>
+
+        <!-- ################## 手札部分のレイアウト ################## -->
+
+        <LinearLayout
+            android:id="@+id/HandLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:baselineAligned="false" >
+
+            <include layout="@layout/hand_pannel" />
+        </LinearLayout>
+
+        <!-- ################## 手札部操作イアウト ################## -->
+
+        <LinearLayout
+            android:id="@+id/CoinLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+
+            <include layout="@layout/coin_pannel" />
+        </LinearLayout>
+    </LinearLayout>
+
+</FrameLayout>

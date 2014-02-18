@@ -2,6 +2,7 @@ package com.example.whatif;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.graphics.Color;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,6 +19,8 @@ public class TrumpView extends LinearLayout {
 
 	private int trumpWidth;
 	private int trumpHeight;
+
+	private int color;
 
 	public TrumpView(Context context) {
 		super(context);
@@ -62,11 +65,23 @@ public class TrumpView extends LinearLayout {
 
 		fixDisplay(context);
 
-		LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(size, (int) (size * 1.5));
+		LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(trumpWidth, trumpHeight);
 
 		tv.setTextSize(size / 6);
 		tv1.setTextSize(size / 6);
-		tv2.setTextSize(size / 3);
+		tv2.setTextSize(size / 4);
+
+		color = Color.BLACK;
+		tv.setTextColor(color);
+
+		if (suit == context.getResources().getString(R.string.heart) ||
+				suit == context.getResources().getString(R.string.diamond)) {
+			color = Color.RED;
+
+		}
+
+		tv1.setTextColor(color);
+		tv2.setTextColor(color);
 
 		layout.setLayoutParams(params);
 
@@ -76,14 +91,20 @@ public class TrumpView extends LinearLayout {
 	// 山札に使う空白のカスタムビューを返す
 	public View addLayoutView(Context context) {
 
-		View layout = LayoutInflater.from(context).inflate(R.layout.trump_view, this);
+		View layout = LayoutInflater.from(context).inflate(R.layout.layout_view, this);
 
-		TextView tv = (TextView) layout.findViewById(R.id.TrumpNum);
-		tv.setText("");
-		TextView tv1 = (TextView) layout.findViewById(R.id.TrumpSuit1);
-		TextView tv2 = (TextView) layout.findViewById(R.id.TrumpSuit2);
-		tv1.setText("");
-		tv2.setText("");
+		fixDisplay(context);
+
+		LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(trumpWidth, trumpHeight);
+		layout.setLayoutParams(params);
+
+		return layout;
+	}
+
+	// 山札に使う空白のカスタムビューを返す
+	public View addClearView(Context context) {
+
+		View layout = LayoutInflater.from(context).inflate(R.layout.clear_view, this);
 
 		fixDisplay(context);
 
@@ -101,6 +122,16 @@ public class TrumpView extends LinearLayout {
 		trumpWidth = size;
 		trumpHeight = (int) (size * 1.5);
 
+	}
+
+	@Override
+	protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+		super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+	}
+
+	@Override
+	protected void onLayout(boolean changed, int l, int t, int r, int b) {
+		super.onLayout(changed, l, t, r, b);
 	}
 
 	@Override
