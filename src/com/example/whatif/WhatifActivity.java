@@ -35,6 +35,9 @@ public class WhatifActivity extends Activity {
 	private int[] layoutView_location = new int[2];
 	private int StatusBarHeight;
 
+	// LogCat用のタグを定数で定義する
+	public static final String TAG = "Test";
+	
 	/* ********** ********** ********** ********** */
 
 	@Override
@@ -106,7 +109,7 @@ public class WhatifActivity extends Activity {
 		//		トランプが配られたときの演出（上から下へ表示される）
 		//		トランプが裏返る表現
 		//		トランプが移動するアニメ
-		Log.v("Test", "onCreate()");
+		Log.v(TAG, "onCreate()");
 	}// onCreate()
 
 	@Override
@@ -117,7 +120,7 @@ public class WhatifActivity extends Activity {
 		Rect rect = new Rect();
 		getWindow().getDecorView().getWindowVisibleDisplayFrame(rect);
 		StatusBarHeight = rect.top;
-		Log.v("Test", "ステータスバー height=" + StatusBarHeight);
+		Log.v(TAG, "ステータスバー height=" + StatusBarHeight);
 
 		int[] clearView0_location = new int[2];
 		clearView0.getLocationInWindow(clearView0_location);
@@ -127,10 +130,10 @@ public class WhatifActivity extends Activity {
 		layoutView_location[0] = Math.max(clearView0_location[0], clearView3_location[0]);
 		layoutView_location[1] = clearView0_location[1]-StatusBarHeight;
 
-//		Log.v("Test", "0 x=" + clearView0_location[0] + " y=" + clearView0_location[1]);
-//		Log.v("Test", "3 x=" + clearView3_location[0] + " y=" + clearView3_location[1]);
+//		Log.v(TAG, "0 x=" + clearView0_location[0] + " y=" + clearView0_location[1]);
+//		Log.v(TAG, "3 x=" + clearView3_location[0] + " y=" + clearView3_location[1]);
 //
-//		Log.v("Test", "layout x=" + layoutView_location[0] + " y=" + layoutView_location[1]);
+//		Log.v(TAG, "layout x=" + layoutView_location[0] + " y=" + layoutView_location[1]);
 
 		// 画像配置用に最前面のレイアウトのインスタンスを取得
 		mainFrame = (FrameLayout) findViewById(R.id.FrameLayout);
@@ -143,6 +146,7 @@ public class WhatifActivity extends Activity {
 
 		params.leftMargin = layoutView_location[0];
 		params.topMargin = layoutView_location[1];
+		params.gravity = Gravity.NO_GRAVITY;// この記載がないとマージンが有効にならない
 
 		// レイアウトに場札画像を配置する
 		mainFrame.addView(layoutView, params);
@@ -150,47 +154,44 @@ public class WhatifActivity extends Activity {
 		// レイアウトの一時配置用の画像を非表示にする(削除するとレイアウトが崩れるため非表示を選択)
 		clearView0.setVisibility(View.INVISIBLE);
 
-		Log.v("Test", "onWindowFocusChanged()");
+		Log.v(TAG, "onWindowFocusChanged()");
 
 	}
 
 	@Override
 	protected void onRestart() {
-		// TODO 自動生成されたメソッド・スタブ
 		super.onRestart();
+		Log.v(TAG, "onRestart()");
 	}
 
 	@Override
 	protected void onStart() {
-		// TODO 自動生成されたメソッド・スタブ
 		super.onStart();
-
-		Log.v("Test", "onStart()");
+		Log.v(TAG, "onStart()");
 	}
 
 	@Override
 	protected void onResume() {
-		// TODO 自動生成されたメソッド・スタブ
 		super.onResume();
-		Log.v("Test", "onResume()");
+		Log.v(TAG, "onResume()");
 	}
 
 	@Override
 	protected void onPause() {
-		// TODO 自動生成されたメソッド・スタブ
 		super.onPause();
+		Log.v(TAG, "onPause()");
 	}
 
 	@Override
 	protected void onStop() {
-		// TODO 自動生成されたメソッド・スタブ
 		super.onStop();
+		Log.v(TAG, "onStop()");
 	}
 
 	@Override
 	protected void onDestroy() {
-		// TODO 自動生成されたメソッド・スタブ
 		super.onDestroy();
+		Log.v(TAG, "onDestroy()");
 	}
 
 	@Override
