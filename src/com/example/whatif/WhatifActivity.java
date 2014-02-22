@@ -96,8 +96,10 @@ public class WhatifActivity extends Activity {
 		clearView4 = (TrumpView) clearView4.addClearView(this.getApplicationContext());
 
 		clearView5 = new TrumpView(this.getApplicationContext());
-		clearView5 = (TrumpView) clearView5.addClearView(this.getApplicationContext());
+//		clearView5 = (TrumpView) clearView5.addClearView(this.getApplicationContext());
+		clearView5 = (TrumpView) clearView5.addBackView(this.getApplicationContext());
 
+		
 		// レイアウトに手札1～5の画像を配置する
 		hand1Frame.addView(clearView1, params);
 		hand2Frame.addView(clearView2, params);

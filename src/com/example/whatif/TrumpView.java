@@ -113,6 +113,19 @@ public class TrumpView extends LinearLayout {
 
 		return layout;
 	}
+	
+	// トランプ裏面のカスタムビューを返す
+	public View addBackView(Context context) {
+
+		View layout = LayoutInflater.from(context).inflate(R.layout.back_view, this);
+
+		fixDisplay(context);
+
+		LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(trumpWidth, trumpHeight);
+		layout.setLayoutParams(params);
+
+		return layout;
+	}
 
 	private void fixDisplay(Context context) {
 
