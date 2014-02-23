@@ -1,103 +1,142 @@
 <?xml version="1.0" encoding="utf-8"?>
 <merge xmlns:android="http://schemas.android.com/apk/res/android" >
-   <include
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                layout="@layout/counter_pannel" />
 
-            <FrameLayout
-                android:id="@+id/layoutLocation"
-                android:layout_width="0dp"
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:baselineAligned="false" >
+
+        <FrameLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1" >
+
+            <TextSwitcher
+                android:id="@+id/countView"
+                style="@style/blue"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:background="@drawable/bold_border"
+                android:gravity="right|center_vertical"
+                android:padding="10dp"
+                android:textSize="64sp" />
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/layoutLocation"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1" >
+        </FrameLayout>
+
+        <TableLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1" >
+
+            <TableRow
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
                 android:layout_weight="1" >
-            </FrameLayout>
 
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="10dp"
-                android:layout_weight="1"
-                android:baselineAligned="false" >
+                <TextView
+                    style="@style/black"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="#000000"
+                    android:gravity="center_vertical"
+                    android:text="@string/Wager"
+                    android:textColor="#00FFFF"
+                    android:textStyle="bold" />
 
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical" >
+                <TextView
+                    android:id="@+id/wager"
+                    style="@style/black"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="right|center_vertical" />
 
-                    <TextView
-                        style="@style/black"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/Wager"
-                        android:textAppearance="?android:attr/textAppearanceSmall"
-                        android:textColor="#00FFFF"
-                        android:textStyle="bold" />
+            </TableRow>
 
-                    <TextView
-                        style="@style/black"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/Win"
-                        android:textAppearance="?android:attr/textAppearanceSmall"
-                        android:textColor="#FFFF00"
-                        android:textStyle="bold" />
+            <TableRow
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_weight="1" >
 
-                    <TextView
-                        style="@style/black"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/Paid"
-                        android:textAppearance="?android:attr/textAppearanceSmall"
-                        android:textColor="#FFFF00"
-                        android:textStyle="bold" />
+                <TextView
+                    style="@style/black"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
+                    android:text="@string/Win"
+                    android:textColor="#FFFF00"
+                    android:textStyle="bold" />
 
-                    <TextView
-                        style="@style/black"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/Credit"
-                        android:textAppearance="?android:attr/textAppearanceSmall"
-                        android:textColor="#00FFFF"
-                        android:textStyle="bold" />
-                </LinearLayout>
+                <TextView
+                    android:id="@+id/win"
+                    style="@style/black"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="right|center_vertical" />
 
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical" >
+            </TableRow>
 
-                    <TextView
-                        android:id="@+id/wager"
-                        style="@style/black"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp"
-                        android:textAppearance="?android:attr/textAppearanceSmall" />
+            <TableRow
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_weight="1" >
 
-                    <TextView
-                        android:id="@+id/win"
-                        style="@style/black"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp"
-                        android:textAppearance="?android:attr/textAppearanceSmall" />
+                <TextView
+                    style="@style/black"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
+                    android:text="@string/Paid"
+                    android:textColor="#FFFF00"
+                    android:textStyle="bold" />
 
-                    <TextView
-                        android:id="@+id/paid"
-                        style="@style/black"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp"
-                        android:textAppearance="?android:attr/textAppearanceSmall" />
+                <TextView
+                    android:id="@+id/paid"
+                    style="@style/black"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="right|center_vertical" />
 
-                    <TextView
-                        android:id="@+id/credit"
-                        style="@style/black"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp"
-                        android:textAppearance="?android:attr/textAppearanceSmall" />
-                </LinearLayout>
-            </LinearLayout>
+            </TableRow>
+
+            <TableRow
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_weight="1" >
+
+                <TextView
+                    style="@style/black"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
+                    android:text="@string/Credit"
+                    android:textColor="#00FFFF"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/credit"
+                    style="@style/black"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="right|center_vertical"
+                    android:text="@string/Blank" />
+
+            </TableRow>
+        </TableLayout>
+    </LinearLayout>
+
 </merge>

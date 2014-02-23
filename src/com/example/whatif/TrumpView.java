@@ -4,8 +4,11 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.util.AttributeSet;
+import android.view.Display;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -14,7 +17,7 @@ public class TrumpView extends LinearLayout {
 	private int number; // 1～13までのトランプの数字を格納する変数
 
 	private String suit; // トランプの図柄の文字列を格納する変数
-	private CheckDevice cd;
+
 	private int size;
 
 	private int trumpWidth;
@@ -65,7 +68,7 @@ public class TrumpView extends LinearLayout {
 
 		fixDisplay(context);
 
-		LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(trumpWidth, trumpHeight);
+		LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(trumpWidth, trumpHeight, Gravity.NO_GRAVITY);
 
 		tv.setTextSize(size / 6);
 		tv1.setTextSize(size / 6);
@@ -95,20 +98,20 @@ public class TrumpView extends LinearLayout {
 
 		fixDisplay(context);
 
-		LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(trumpWidth, trumpHeight);
+		LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(trumpWidth, trumpHeight, Gravity.CENTER);
 		layout.setLayoutParams(params);
 
 		return layout;
 	}
 
-	// 山札に使う空白のカスタムビューを返す
+	// 手札の配置に使う半透明のカスタムビューを返す
 	public View addClearView(Context context) {
 
 		View layout = LayoutInflater.from(context).inflate(R.layout.clear_view, this);
 
 		fixDisplay(context);
 
-		LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(trumpWidth, trumpHeight);
+		LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(trumpWidth, trumpHeight, Gravity.CENTER);
 		layout.setLayoutParams(params);
 
 		return layout;
@@ -121,7 +124,7 @@ public class TrumpView extends LinearLayout {
 
 		fixDisplay(context);
 
-		LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(trumpWidth, trumpHeight);
+		LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(trumpWidth, trumpHeight, Gravity.CENTER);
 		layout.setLayoutParams(params);
 
 		return layout;
@@ -129,9 +132,24 @@ public class TrumpView extends LinearLayout {
 
 	private void fixDisplay(Context context) {
 
-		cd = new CheckDevice(context);
 
-		size = (cd.getWidth() - 60) / 5;
+		
+		// Activityを継承していないため、getWindowManager()メソッドは利用できない
+		// Displayクラスのインスタンスを取得するため
+		// 引数のContextを使用してWindowManagerを取得する
+		WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+
+		// Displayインスタンスを取得する
+		Display display = wm.getDefaultDisplay();
+
+		int width = display.getWidth();
+		int height = display.getHeight();
+
+		// Log.v("Test","w=" + width + " h=" + height);
+		
+		
+
+		size = (width - 60) / 5;
 		trumpWidth = size;
 		trumpHeight = (int) (size * 1.5);
 
