@@ -54,9 +54,9 @@ public class TrumpView extends LinearLayout {
 	}
 
 	// TrumpViewとして定義したカスタムビューを返す
-	public View addTrumpView(Deck deck, int x, Context context) {
-		number = deck.trump.get(x).getNumber();
-		suit = deck.trump.get(x).getSuit();
+	public View addTrumpView(Deck deck, int index, Context context) {
+		number = deck.trump.get(index).getNumber();
+		suit = deck.trump.get(index).getSuit();
 		View layout = LayoutInflater.from(context).inflate(R.layout.trump_view, this);
 
 		TextView tv = (TextView) layout.findViewById(R.id.TrumpNum);

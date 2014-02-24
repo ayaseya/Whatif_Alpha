@@ -11,7 +11,6 @@ import android.view.Gravity;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.ViewGroup;
 import android.view.Window;
 import android.view.animation.Animation;
 import android.widget.FrameLayout;
@@ -20,7 +19,7 @@ public class WhatifActivity extends Activity {
 
 	private TrumpView[] clearView = new TrumpView[6];
 	private TrumpView[] trumpView = new TrumpView[6];
-	private TrumpView trumpBackView;
+	private TrumpView[] trumpBackView = new TrumpView[6];
 
 	private FrameLayout mainFrame;
 
@@ -45,7 +44,8 @@ public class WhatifActivity extends Activity {
 	private float centerX;// Y軸回転の中心点(X座標)を設定
 	private float centerY;// Y軸回転の中心点(Y座標)を設定
 	private long time = 500;// Y軸回転のアニメーションスピード
-	private ViewGroup parent;
+
+	private boolean Flag = true;
 
 	// LogCat用のタグを定数で定義する
 	public static final String TAG = "Test";
@@ -93,19 +93,36 @@ public class WhatifActivity extends Activity {
 		trumpView[0].addTrumpView(deck, 12, this.getApplicationContext());
 		//		trumpView[0].addLayoutView(this.getApplicationContext());
 
-		trumpBackView = new TrumpView(this.getApplicationContext());
-		trumpBackView.addBackView(this.getApplicationContext());
+		// trumpBackViewのインスタンス取得と配置
+		// onWindowFocusChanged()で場札の位置を微調整するので
+		// 場札の裏面は後で配置する
+		for (int i = 0; i < 6; i++) {
+			// 場札と手札1～5のViewインスタンスを取得
+			trumpBackView[i] = new TrumpView(this.getApplicationContext());
+			trumpBackView[i].addBackView(this.getApplicationContext());
 
-		centerX = trumpBackView.getTrumpWidth() / 2;
-		centerY = trumpBackView.getTrumpHeight();
+			if (i > 0) {
+				FrameLayout.LayoutParams params =
+						new FrameLayout.LayoutParams(trumpBackView[i].getTrumpWidth(), trumpBackView[i].getTrumpHeight(), Gravity.CENTER);
+
+				layoutFrame[i].addView(trumpBackView[i], params);
+
+			}
+			trumpBackView[i].setVisibility(View.INVISIBLE);
+
+		}
+
+		centerX = trumpBackView[0].getTrumpWidth() / 2;
+		centerY = trumpBackView[0].getTrumpHeight();
 
 		trumpView[0].setOnClickListener(layoutClick);// Y軸回転テスト用のクリックリスナー
 
 		findViewById(R.id.CoinLayout).setVisibility(View.GONE);
 
 		// todo
-		//		トランプ裏面0～5を読み込み配置
-		//		トランプがメインフレームに配置されていない時だけ配（onWindowFocusChanged()）
+		// onWindowFocusChanged()内で配置が呼び出される毎に実行されている
+		//		トランプ裏面0～5を読み込み配置…×
+		//		トランプがメインフレームに配置されていない時だけ配置（onWindowFocusChanged()）
 		//		ゲーム開始時に5枚手札が配られる演出（メソッド化）
 		//		手札クリック時に場札へ移動するアニメーション
 		//		カウント実装
@@ -114,6 +131,7 @@ public class WhatifActivity extends Activity {
 		//		コイン処理の移植
 		//		ゲームオーバー処理
 
+		Flag = true;
 		Log.v(TAG, "onCreate()");
 	}// onCreate()
 
@@ -121,45 +139,40 @@ public class WhatifActivity extends Activity {
 	public void onWindowFocusChanged(boolean hasFocus) {
 		super.onWindowFocusChanged(hasFocus);
 
-		// ステータスバーの高さを取得
-		Rect rect = new Rect();
-		getWindow().getDecorView().getWindowVisibleDisplayFrame(rect);
-		statusbarHeight = rect.top;
-		Log.v(TAG, "ステータスバー height=" + statusbarHeight);
-		setClearViewPoint();
+		// 機種によって複数回onWindowFocusChanged()が呼ばれる場合があるので
+		// Flagで
+		if (Flag) {
+			// ステータスバーの高さを取得
+			Rect rect = new Rect();
+			getWindow().getDecorView().getWindowVisibleDisplayFrame(rect);
+			statusbarHeight = rect.top;
+			Log.v(TAG, "ステータスバー height=" + statusbarHeight);
 
-		layout_location[0] = Math.max(clearView_location.get(0).x, clearView_location.get(3).x);
-		layout_location[1] = clearView_location.get(0).y - statusbarHeight;
+			// ClearViewの座標を取得する
+			setClearViewPoint();
 
-		FrameLayout.LayoutParams params =
-				new FrameLayout.LayoutParams(trumpView[0].getTrumpWidth(), trumpView[0].getTrumpHeight());
+			layout_location[0] = Math.max(clearView_location.get(0).x, clearView_location.get(3).x);
+			layout_location[1] = clearView_location.get(0).y - statusbarHeight;
 
-		params.leftMargin = layout_location[0];
-		params.topMargin = layout_location[1];
-		params.gravity = Gravity.NO_GRAVITY;// この記載がないとマージンが有効にならない
+			FrameLayout.LayoutParams params =
+					new FrameLayout.LayoutParams(trumpView[0].getTrumpWidth(), trumpView[0].getTrumpHeight());
 
-		// java.lang.IllegalStateException: The specified child already has a parent. 
-		// You must call removeView() on the child's parent first.
-		// http://musyamusya22.blogspot.jp/2012_11_01_archive.html
-		parent = (ViewGroup) trumpView[0].getParent(); //トランプビューの親グループを取得
-		if (parent != null) {
-			parent.removeView(trumpView[0]);
-		}//トランプビューの親グループを削除する
+			params.leftMargin = layout_location[0];
+			params.topMargin = layout_location[1];
+			params.gravity = Gravity.NO_GRAVITY;// この記載がないとマージンが有効にならない
 
-		// レイアウトに場札画像を配置する
-		mainFrame.addView(trumpView[0], params);
+			// レイアウトに場札画像を配置する
+			mainFrame.addView(trumpView[0], params);
 
-		parent = (ViewGroup) trumpBackView.getParent();
-		if (parent != null) {
-			parent.removeView(trumpBackView);
+			// レイアウトに裏面の画像を配置する(場札用)
+			mainFrame.addView(trumpBackView[0], params);
+			trumpBackView[0].setVisibility(View.INVISIBLE);
+
+			// レイアウトの一時配置用の画像を非表示にする(削除するとレイアウトが崩れるため非表示を選択)
+			clearView[0].setVisibility(View.INVISIBLE);
+
+			Flag = false;
 		}
-
-		mainFrame.addView(trumpBackView, params);
-		trumpBackView.setVisibility(View.INVISIBLE);
-
-		// レイアウトの一時配置用の画像を非表示にする(削除するとレイアウトが崩れるため非表示を選択)
-		clearView[0].setVisibility(View.INVISIBLE);
-
 		Log.v(TAG, "onWindowFocusChanged()");
 
 	}
@@ -222,7 +235,45 @@ public class WhatifActivity extends Activity {
 			// Y軸回転(0～90度)
 			Rotate3dAnimation rotation = new Rotate3dAnimation(0, 90, centerX, centerY, 0f, true);
 			rotation.setDuration(time);
-			trumpBackView.startAnimation(rotation);
+			trumpBackView[index].startAnimation(rotation);
+			rotation.setAnimationListener(new FlipAnimationListener(index) {
+				// 裏面が回転し終わり表面が回転し始める
+				@Override
+				public void onAnimationEnd(Animation animation) {
+
+					// Y軸回転(270～360度)
+					Rotate3dAnimation rotation = new Rotate3dAnimation(270, 360, centerX, centerY, 0f, false);
+					rotation.setDuration(time);
+					trumpView[index].startAnimation(rotation);
+					rotation.setAnimationListener(new FlipAnimationListener(index) {
+						@Override
+						public void onAnimationEnd(Animation animation) {
+							// アニメーションの終了
+							trumpView[index].setVisibility(View.VISIBLE);
+							animFlag = true;
+
+							Log.v(TAG, "FlipAnimation...END");
+						}
+					});
+				}
+			});
+
+		}
+	}
+
+	public void FlipTrump(final int index) {
+
+		if (animFlag) {
+			// アニメーション中にクリックできないようfalseに変更する
+			animFlag = false;
+
+			// 現在表示されているトランプ画像を非表示にする
+			trumpBackView[index].setVisibility(View.INVISIBLE);
+
+			// Y軸回転(0～90度)
+			Rotate3dAnimation rotation = new Rotate3dAnimation(0, 90, centerX, centerY, 0f, true);
+			rotation.setDuration(time);
+			trumpBackView[index].startAnimation(rotation);
 			rotation.setAnimationListener(new FlipAnimationListener(index) {
 				// 裏面が回転し終わり表面が回転し始める
 				@Override
@@ -262,13 +313,32 @@ public class WhatifActivity extends Activity {
 		}
 	}
 
+	private void dealTrump() {
+
+		trumpBackView[1].setVisibility(View.VISIBLE);
+
+		trumpView[1].addTrumpView(deck, 0, this.getApplicationContext());
+
+		FrameLayout.LayoutParams params =
+				new FrameLayout.LayoutParams(trumpView[1].getTrumpWidth(), trumpView[1].getTrumpHeight());
+
+		params.leftMargin = clearView_location.get(1).x;
+		params.topMargin = clearView_location.get(1).y-statusbarHeight;
+		params.gravity = Gravity.NO_GRAVITY;// この記載がないとマージンが有効にならない
+		// レイアウトに場札画像を配置する
+		mainFrame.addView(trumpView[1], params);
+		trumpView[1].setVisibility(View.INVISIBLE);
+		FlipTrump(1);
+
+	}
+
 	// レイアウトViewをクリックした時の処理
 	private OnClickListener layoutClick = new OnClickListener() {
 
 		@Override
 		public void onClick(View v) {
 			Log.v(TAG, "layout...CLICK");
-			FlipTrump(v, 0);
+			dealTrump();
 		}
 	};
 
