@@ -18,12 +18,15 @@ public class TrumpView extends LinearLayout {
 
 	private String suit; // トランプの図柄の文字列を格納する変数
 
-	private int size;
+	private int fontSize;
 
 	private int trumpWidth;
 	private int trumpHeight;
 
 	private int color;
+
+	// LogCat用のタグを定数で定義する
+	public static final String TAG = "Test";
 
 	public TrumpView(Context context) {
 		super(context);
@@ -70,9 +73,9 @@ public class TrumpView extends LinearLayout {
 
 		LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(trumpWidth, trumpHeight, Gravity.NO_GRAVITY);
 
-		tv.setTextSize(size / 6);
-		tv1.setTextSize(size / 6);
-		tv2.setTextSize(size / 4);
+		tv.setTextSize(fontSize);
+		tv1.setTextSize(fontSize);
+		tv2.setTextSize(fontSize * 2);
 
 		color = Color.BLACK;
 		tv.setTextColor(color);
@@ -116,7 +119,7 @@ public class TrumpView extends LinearLayout {
 
 		return layout;
 	}
-	
+
 	// トランプ裏面のカスタムビューを返す
 	public View addBackView(Context context) {
 
@@ -132,8 +135,6 @@ public class TrumpView extends LinearLayout {
 
 	private void fixDisplay(Context context) {
 
-
-		
 		// Activityを継承していないため、getWindowManager()メソッドは利用できない
 		// Displayクラスのインスタンスを取得するため
 		// 引数のContextを使用してWindowManagerを取得する
@@ -146,12 +147,26 @@ public class TrumpView extends LinearLayout {
 		int height = display.getHeight();
 
 		// Log.v("Test","w=" + width + " h=" + height);
-		
-		
 
-		size = (width - 60) / 5;
-		trumpWidth = size;
-		trumpHeight = (int) (size * 1.5);
+		trumpWidth = (width - 60) / 5;
+		trumpHeight = (int) (trumpWidth * 1.5);
+
+		if (width <= 240) {//ldpi（120dpi）240×320px
+			fontSize = 16;
+//			Log.v(TAG, "ldpi（120dpi）240×320px" + width);
+		} else if (240 < +width && +width <= 320) {//mdpi（160dpi）320×480px
+			fontSize = 18;
+//			Log.v(TAG, "mdpi（160dpi）320×480px" + width);
+		} else if (320 < +width && +width <= 480) {//hdpi（240dpi）480×800px
+			fontSize = 20;
+//			Log.v(TAG, "hdpi（240dpi）480×800px" + width);
+		} else if (480 < +width && +width <= 640) {//xhdpi（320dpi）640×960px
+			fontSize = 22;
+//			Log.v(TAG, "xhdpi（320dpi）640×960px" + width);
+		} else if (640 < +width) {//xxhdpi（480dpi）960×1440px
+			fontSize = 22;
+//			Log.v(TAG, "xxhdpi（480dpi）960×1440px" + width);
+		}
 
 	}
 
