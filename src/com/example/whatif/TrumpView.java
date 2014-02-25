@@ -153,19 +153,19 @@ public class TrumpView extends LinearLayout {
 
 		if (width <= 240) {//ldpi（120dpi）240×320px
 			fontSize = 16;
-//			Log.v(TAG, "ldpi（120dpi）240×320px" + width);
+			//			Log.v(TAG, "ldpi（120dpi）240×320px" + width);
 		} else if (240 < +width && +width <= 320) {//mdpi（160dpi）320×480px
 			fontSize = 18;
-//			Log.v(TAG, "mdpi（160dpi）320×480px" + width);
+			//			Log.v(TAG, "mdpi（160dpi）320×480px" + width);
 		} else if (320 < +width && +width <= 480) {//hdpi（240dpi）480×800px
 			fontSize = 20;
-//			Log.v(TAG, "hdpi（240dpi）480×800px" + width);
+			//			Log.v(TAG, "hdpi（240dpi）480×800px" + width);
 		} else if (480 < +width && +width <= 640) {//xhdpi（320dpi）640×960px
 			fontSize = 22;
-//			Log.v(TAG, "xhdpi（320dpi）640×960px" + width);
+			//			Log.v(TAG, "xhdpi（320dpi）640×960px" + width);
 		} else if (640 < +width) {//xxhdpi（480dpi）960×1440px
 			fontSize = 22;
-//			Log.v(TAG, "xxhdpi（480dpi）960×1440px" + width);
+			//			Log.v(TAG, "xxhdpi（480dpi）960×1440px" + width);
 		}
 
 	}
@@ -191,6 +191,18 @@ public class TrumpView extends LinearLayout {
 
 	public String getSuit() {
 		return suit;
+	}
+
+	public void setNumber(int number) {
+		this.number = number;
+	}
+
+	public void setSuit(String suit) {
+		this.suit = suit;
+	}
+
+	public void setColor(int color) {
+		this.color = color;
 	}
 
 	public int getTrumpWidth() {
