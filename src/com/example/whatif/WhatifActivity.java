@@ -3,8 +3,10 @@ package com.example.whatif;
 import java.util.ArrayList;
 
 import android.app.Activity;
+import android.content.res.Resources;
 import android.graphics.Point;
 import android.graphics.Rect;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
@@ -13,9 +15,13 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
 import android.view.animation.Animation;
+import android.view.animation.TranslateAnimation;
 import android.widget.FrameLayout;
+import android.widget.TextView;
+import android.widget.ViewSwitcher.ViewFactory;
 
-public class WhatifActivity extends Activity {
+public class WhatifActivity extends Activity
+		implements ViewFactory {
 
 	private TrumpView[] clearView = new TrumpView[6];
 	private TrumpView[] trumpView = new TrumpView[6];
@@ -51,6 +57,9 @@ public class WhatifActivity extends Activity {
 	public static final String TAG = "Test";
 
 	public int animCount = 0;
+	private int counter = 0;
+	
+	TextView guideView; // ガイド表示
 
 	/* ********** ********** ********** ********** */
 
@@ -249,117 +258,115 @@ public class WhatifActivity extends Activity {
 
 	public void FlipTrump(View v, final int index) {
 
-		if (animFlag) {
-			// アニメーション中にクリックできないようfalseに変更する
-			animFlag = false;
+		// アニメーション中にクリックできないようfalseに変更する
+		animFlag = false;
 
-			// 現在表示されているトランプ画像を非表示にする
-			v.setVisibility(View.INVISIBLE);
+		// 現在表示されているトランプ画像を非表示にする
+		v.setVisibility(View.INVISIBLE);
 
-			// Y軸回転(0～90度)
-			Rotate3dAnimation rotation = new Rotate3dAnimation(0, 90, centerX, centerY, 0f, true);
-			rotation.setDuration(time);
-			trumpBackView[index].startAnimation(rotation);
-			rotation.setAnimationListener(new FlipAnimationListener(index) {
-				// 裏面が回転し終わり表面が回転し始める
-				@Override
-				public void onAnimationEnd(Animation animation) {
+		// Y軸回転(0～90度)
+		Rotate3dAnimation rotation = new Rotate3dAnimation(0, 90, centerX, centerY, 0f, true);
+		rotation.setDuration(time);
+		trumpBackView[index].startAnimation(rotation);
+		rotation.setAnimationListener(new TrumpAnimationListener(index) {
+			// 裏面が回転し終わり表面が回転し始める
+			@Override
+			public void onAnimationEnd(Animation animation) {
 
-					// Y軸回転(270～360度)
-					Rotate3dAnimation rotation = new Rotate3dAnimation(270, 360, centerX, centerY, 0f, false);
-					rotation.setDuration(time);
-					trumpView[index].startAnimation(rotation);
-					rotation.setAnimationListener(new FlipAnimationListener(index) {
-						@Override
-						public void onAnimationEnd(Animation animation) {
-							// アニメーションの終了
-							trumpView[index].setVisibility(View.VISIBLE);
-							animFlag = true;
+				// Y軸回転(270～360度)
+				Rotate3dAnimation rotation = new Rotate3dAnimation(270, 360, centerX, centerY, 0f, false);
+				rotation.setDuration(time);
+				trumpView[index].startAnimation(rotation);
+				rotation.setAnimationListener(new TrumpAnimationListener(index) {
+					@Override
+					public void onAnimationEnd(Animation animation) {
+						// アニメーションの終了
+						trumpView[index].setVisibility(View.VISIBLE);
+						animFlag = true;
 
-							Log.v(TAG, "FlipAnimation...END");
-						}
-					});
-				}
-			});
+						Log.v(TAG, "FlipAnimation...END");
+					}
+				});
+			}
+		});
 
-		}
 	}
 
 	// トランプ1枚をアニメーションの処理
 	public void FlipTrump(final int index) {
 
-		if (animFlag) {
-			// アニメーション中にクリックできないようfalseに変更する
-			animFlag = false;
-			// 現在表示されているトランプ画像を非表示にする
-			trumpBackView[index].setVisibility(View.INVISIBLE);
+		// アニメーション中にクリックできないようfalseに変更する
+		animFlag = false;
+		// 現在表示されているトランプ画像を非表示にする
+		trumpBackView[index].setVisibility(View.INVISIBLE);
 
-			// Y軸回転(0～90度)
-			Rotate3dAnimation rotation = new Rotate3dAnimation(0, 90, centerX, centerY, 0f, true);
-			rotation.setDuration(150);
-			trumpBackView[index].startAnimation(rotation);
-			rotation.setAnimationListener(new FlipAnimationListener(index) {
-				// 裏面が回転し終わり表面が回転し始める
-				@Override
-				public void onAnimationEnd(Animation animation) {
+		// Y軸回転(0～90度)
+		Rotate3dAnimation rotation = new Rotate3dAnimation(0, 90, centerX, centerY, 0f, true);
+		rotation.setDuration(150);
+		trumpBackView[index].startAnimation(rotation);
+		rotation.setAnimationListener(new TrumpAnimationListener(index) {
+			// 裏面が回転し終わり表面が回転し始める
+			@Override
+			public void onAnimationEnd(Animation animation) {
 
-					// Y軸回転(270～360度)
-					Rotate3dAnimation rotation = new Rotate3dAnimation(270, 360, centerX, centerY, 0f, false);
-					rotation.setDuration(150);
-					trumpView[index].startAnimation(rotation);
-					rotation.setAnimationListener(new FlipAnimationListener(index) {
-						@Override
-						public void onAnimationEnd(Animation animation) {
-							// アニメーションの終了
-							trumpView[index].setVisibility(View.VISIBLE);
-							animFlag = true;
-							Log.v(TAG, "FlipAnimation...END");
+				// Y軸回転(270～360度)
+				Rotate3dAnimation rotation = new Rotate3dAnimation(270, 360, centerX, centerY, 0f, false);
+				rotation.setDuration(150);
+				trumpView[index].startAnimation(rotation);
+				rotation.setAnimationListener(new TrumpAnimationListener(index) {
+					@Override
+					public void onAnimationEnd(Animation animation) {
+						// アニメーションの終了
+						trumpView[index].setVisibility(View.VISIBLE);
+						animFlag = true;
+						Log.v(TAG, "FlipAnimation...END");
 
-						}
-					});
-				}
-			});
-		}
+					}
+				});
+			}
+		});
+
 	}
-	
+
 	// トランプ5枚を順番に捲るアニメーションの処理
 	public void dealFlipTrump(final int index) {
-		if (animFlag) {
-			// アニメーション中にクリックできないようfalseに変更する
-			animFlag = false;
-			// 現在表示されているトランプ画像を非表示にする
-			trumpBackView[index].setVisibility(View.INVISIBLE);
 
-			// Y軸回転(0～90度)
-			Rotate3dAnimation rotation = new Rotate3dAnimation(0, 90, centerX, centerY, 0f, true);
-			rotation.setDuration(150);
-			trumpBackView[index].startAnimation(rotation);
-			rotation.setAnimationListener(new FlipAnimationListener(index) {
-				// 裏面が回転し終わり表面が回転し始める
-				@Override
-				public void onAnimationEnd(Animation animation) {
+		// アニメーション中にクリックできないようfalseに変更する
+		animFlag = false;
+		// 現在表示されているトランプ画像を非表示にする
+		trumpBackView[index].setVisibility(View.INVISIBLE);
 
-					// Y軸回転(270～360度)
-					Rotate3dAnimation rotation = new Rotate3dAnimation(270, 360, centerX, centerY, 0f, false);
-					rotation.setDuration(150);
-					trumpView[index].startAnimation(rotation);
-					rotation.setAnimationListener(new FlipAnimationListener(index) {
-						@Override
-						public void onAnimationEnd(Animation animation) {
-							// アニメーションの終了
-							trumpView[index].setVisibility(View.VISIBLE);
-							animCount++;
-							animFlag = true;
-							// 手札2～5までのY軸回転処理						
-							if (animCount < 5) {
-								dealFlipTrump(index + 1);
-							}
+		// Y軸回転(0～90度)
+		Rotate3dAnimation rotation = new Rotate3dAnimation(0, 90, centerX, centerY, 0f, true);
+		rotation.setDuration(100);
+		trumpBackView[index].startAnimation(rotation);
+		rotation.setAnimationListener(new TrumpAnimationListener(index) {
+			// 裏面が回転し終わり表面が回転し始める
+			@Override
+			public void onAnimationEnd(Animation animation) {
 
+				// Y軸回転(270～360度)
+				Rotate3dAnimation rotation = new Rotate3dAnimation(270, 360, centerX, centerY, 0f, false);
+				rotation.setDuration(100);
+				trumpView[index].startAnimation(rotation);
+				rotation.setAnimationListener(new TrumpAnimationListener(index) {
+					@Override
+					public void onAnimationEnd(Animation animation) {
+						// アニメーションの終了
+						trumpView[index].setVisibility(View.VISIBLE);
+						yellowNum(trumpView[index].getSerial());
+						animCount++;
+						animFlag = true;
+						// 手札2～5までのY軸回転処理						
+						if (animCount < 5) {
+							dealFlipTrump(index + 1);
 						}
-					});
-				}
-			});
-		}
+
+					}
+				});
+			}
+		});
+
 	}
 
 	// ArrayListにclearViewのXY座標を格納する処理
@@ -386,6 +393,124 @@ public class WhatifActivity extends Activity {
 
 	}
 
+	// 手札から場札へトランプが移動する処理
+	private void moveTrump(final int index) {
+
+		TranslateAnimation translate = new TranslateAnimation(
+				0, layout_location[0] - clearView_location.get(index).x,
+				0, layout_location[1] - (clearView_location.get(index).y - statusbarHeight));
+
+		translate.setDuration(250);
+		trumpView[index].startAnimation(translate);
+		translate.setAnimationListener(new TrumpAnimationListener(index) {
+
+			@Override
+			public void onAnimationStart(Animation animation) {
+				animFlag = false;
+			}
+
+			@Override
+			public void onAnimationEnd(Animation animation) {
+
+				trumpView[0].setTrump(trumpView[index].getNumber(),
+						trumpView[index].getSuit(),
+						trumpView[index].getSerial(),
+						trumpView[index].getColor());
+
+				animFlag = true;
+			}
+
+		});
+
+	}
+
+	// 場札と同じ数字かスート(図柄)ならtrueを返す処理
+	private boolean agreeTrump(int index) {
+		if (counter == 0) {
+			// 一枚目の場合(どのカードも場札に置ける)
+			Log.v(TAG, "一枚目");
+			counter++;
+			return true;
+		} else if (trumpView[0].getSuit().equals(trumpView[index].getSuit())) {
+			// スート(図柄)が一致した場合
+			Log.v(TAG, "スート(図柄)が一致");
+			counter++;
+			return true;
+		} else if (trumpView[0].getNumber() == trumpView[index].getNumber()) {
+			// 数字が一致した場合
+			Log.v(TAG, "数字が一致");
+			counter++;
+			return true;
+		}
+		return false;
+	}
+	
+	// boldNum関数…場札に置いたトランプの数字をガイド上で太字・シアンにする処理
+	public void boldNum(int x) {
+		Resources res = getResources();
+		int guideId = res.getIdentifier("card" + x, "id", getPackageName());
+		guideView = (TextView) findViewById(guideId);
+		// TextViewの文字色を変更する（16進数で頭の2bitがアルファ値、00で透過率100%）
+		guideView.setTextColor(0xFF00BFFF);
+		// フォントのスタイル（太字、斜線など）を変更する
+		guideView.setTypeface(Typeface.DEFAULT_BOLD, Typeface.BOLD);
+	}// Card.BoldNum_**********
+
+	// yellowNum関数…場札に置いたトランプの数字をガイド上で黄色にする処理
+	public void yellowNum(int x) {
+		Resources res = getResources();
+		int guideId = res.getIdentifier("card" + x, "id", getPackageName());
+		guideView = (TextView) findViewById(guideId);
+		// TextViewの文字色を変更する（16進数で頭の2bitがアルファ値、00で透過率100%）
+		guideView.setTextColor(0xFFFFD700);
+		// フォントのスタイル（太字、斜線など）を変更する
+		guideView.setTypeface(Typeface.DEFAULT_BOLD, Typeface.BOLD);
+		// 背景色を変更する
+		guideView.setBackgroundColor(0xFF7777FF);
+	}// Card.yellowNum_**********
+
+	// deleteNum関数…場札に置いたトランプの数字をガイド上から消す処理
+	public void deleteNum(int x) {
+		// getResources()でリソースオブジェクトを
+		Resources res = getResources();
+		// guideIdという変数にリソースの場所を格納する
+		// ("card" + x , "id" , getPackageName())
+		// ↓
+		// (R.id.card***)
+		int guideId = res.getIdentifier("card" + x, "id", getPackageName());
+		guideView = (TextView) findViewById(guideId);
+		guideView.setTextColor(0x00FFFFFF);
+		// 背景色を元の青色に戻す
+		guideView.setBackgroundColor(0xFF0000FF);
+	}// Card.DeleteNum_**********
+
+	public void redrawGuide() {
+		Resources res = getResources();
+		int guideId;
+		for (int i = 0; i < 52; i++) {
+			guideId = res.getIdentifier("card" + i, "id", getPackageName());
+			guideView = (TextView) findViewById(guideId);
+			// 文字色を白に戻す
+			guideView.setTextColor(0xFFFFFFFF);
+			// 背景色を元の青色に戻す
+			guideView.setBackgroundColor(0xFF0000FF);
+		}
+	}
+
+	
+
+	// ////////////////////////////////////////////////
+	// ViewFactory
+	// ////////////////////////////////////////////////
+	@Override
+	public View makeView() {
+		TextView txt = new TextView(this);
+		txt.setGravity(Gravity.RIGHT | Gravity.CENTER_VERTICAL);
+		txt.setTextColor(0xFFFFFFFF);
+		txt.setTextSize(64);
+		return txt;
+	}
+
 	// ////////////////////////////////////////////////
 	// ボタンクリック時の処理
 	// ////////////////////////////////////////////////
@@ -395,10 +520,13 @@ public class WhatifActivity extends Activity {
 
 		@Override
 		public void onClick(View v) {
-			dealTrump();
 
-			Log.v(TAG, "場札_CLICK");
+			if (animFlag) {
+				dealTrump();
+				animCount = 0;
 
+				Log.v(TAG, "場札_CLICK");
+			}
 		}
 	};
 
@@ -407,9 +535,10 @@ public class WhatifActivity extends Activity {
 
 		@Override
 		public void onClick(View v) {
-
-			Log.v(TAG, "手札1_CLICK");
-
+			if (animFlag && agreeTrump(1)) {
+				moveTrump(1);
+				//				Log.v(TAG, "手札1_CLICK");
+			}
 		}
 	};
 
@@ -418,8 +547,10 @@ public class WhatifActivity extends Activity {
 
 		@Override
 		public void onClick(View v) {
-			Log.v(TAG, "手札2_CLICK");
-
+			if (animFlag && agreeTrump(2)) {
+				moveTrump(2);
+				//				Log.v(TAG, "手札2_CLICK");
+			}
 		}
 	};
 	// 手札1Viewをクリックした時の処理
@@ -427,8 +558,10 @@ public class WhatifActivity extends Activity {
 
 		@Override
 		public void onClick(View v) {
-			Log.v(TAG, "手札3_CLICK");
-
+			if (animFlag && agreeTrump(3)) {
+				moveTrump(3);
+				//				Log.v(TAG, "手札3_CLICK");
+			}
 		}
 	};
 	// 手札1Viewをクリックした時の処理
@@ -436,8 +569,10 @@ public class WhatifActivity extends Activity {
 
 		@Override
 		public void onClick(View v) {
-			Log.v(TAG, "手札4_CLICK");
-
+			if (animFlag && agreeTrump(4)) {
+				moveTrump(4);
+				//				Log.v(TAG, "手札4_CLICK");
+			}
 		}
 	};
 	// 手札1Viewをクリックした時の処理
@@ -445,8 +580,10 @@ public class WhatifActivity extends Activity {
 
 		@Override
 		public void onClick(View v) {
-			Log.v(TAG, "手札5_CLICK");
-
+			if (animFlag && agreeTrump(5)) {
+				moveTrump(5);
+				//				Log.v(TAG, "手札5_CLICK");
+			}
 		}
 	};
 

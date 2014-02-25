@@ -6,11 +6,13 @@ public class Trump {
 	private int number;
 	//トランプの図柄(spade heart club diamond)
 	private String suit;
+	//トランプの連番(0～51)
+	private int serial;
 
-	public Trump(int number, String suit) {
+	public Trump(int number, String suit,int serial) {
 		this.number = number;
 		this.suit = suit;
-
+		this.serial=serial;
 	}
 
 	public void setNumber(int number) {
@@ -27,6 +29,14 @@ public class Trump {
 
 	public String getSuit() {
 		return suit;
+	}
+
+	public int getSerial() {
+		return serial;
+	}
+
+	public void setSerial(int serial) {
+		this.serial = serial;
 	}
 
 }

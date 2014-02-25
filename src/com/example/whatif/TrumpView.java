@@ -18,6 +18,8 @@ public class TrumpView extends LinearLayout {
 
 	private String suit; // トランプの図柄の文字列を格納する変数
 
+	private int serial;
+
 	private int fontSize;
 
 	private int trumpWidth;
@@ -60,6 +62,8 @@ public class TrumpView extends LinearLayout {
 	public View addTrumpView(Deck deck, int index, Context context) {
 		number = deck.trump.get(index).getNumber();
 		suit = deck.trump.get(index).getSuit();
+		serial = deck.trump.get(index).getSerial();
+
 		View layout = LayoutInflater.from(context).inflate(R.layout.trump_view, this);
 
 		TextView tv = (TextView) layout.findViewById(R.id.TrumpNum);
@@ -192,6 +196,29 @@ public class TrumpView extends LinearLayout {
 	public String getSuit() {
 		return suit;
 	}
+	public int getSerial() {
+		return serial;
+	}
+	public int getColor() {
+		return color;
+	}
+
+	public void setTrump(int number, String suit, int serial,int color) {
+		this.number = number;
+		this.suit = suit;
+		this.serial=serial;
+		this.color = color;
+
+		TextView tv = (TextView) findViewById(R.id.TrumpNum);
+		tv.setText(String.valueOf(number));
+		TextView tv1 = (TextView) findViewById(R.id.TrumpSuit1);
+		TextView tv2 = (TextView) findViewById(R.id.TrumpSuit2);
+		tv1.setText(suit);
+		tv2.setText(suit);
+
+		tv.setTextColor(color);
+
+	}
 
 	public void setNumber(int number) {
 		this.number = number;
@@ -201,6 +228,9 @@ public class TrumpView extends LinearLayout {
 		this.suit = suit;
 	}
 
+	public void setSerial(int serial) {
+		this.serial = serial;
+	}
 	public void setColor(int color) {
 		this.color = color;
 	}
