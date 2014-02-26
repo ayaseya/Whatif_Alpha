@@ -54,6 +54,9 @@ public class WhatifActivity extends Activity
 	//	private ArrayList<Point> trumpView_location = new ArrayList<Point>();
 
 	private boolean animFlag = true;// アニメーション中はfalseとなり画像をクリックできない
+	private boolean flipAnimFlag = true;
+	private boolean moveAnimFlag = true;
+
 	private float centerX;// Y軸回転の中心点(X座標)を設定
 	private float centerY;// Y軸回転の中心点(Y座標)を設定
 	private long time = 500;// Y軸回転のアニメーションスピード
@@ -71,6 +74,7 @@ public class WhatifActivity extends Activity
 	private int width = 0;
 	private int height = 0;
 	private int txtSwitchFontSize = 20;
+	private boolean dealAnimFlag = true;
 
 	/* ********** ********** ********** ********** */
 
@@ -155,12 +159,13 @@ public class WhatifActivity extends Activity
 		//		トランプ裏面0～5を読み込み配置…×
 		//		トランプがメインフレームに配置されていない時だけ配置（onWindowFocusChanged()）…×
 		//		ゲーム開始時に5枚手札が配られる演出（メソッド化）…×
-		//		手札クリック時に場札へ移動するアニメーション
-		//		カウント実装
-		//		場札判定の移植
-		//		ガイド処理の移植
+		//		手札クリック時に場札へ移動するアニメーション…×
+		//		カウント実装…×
+		//		場札判定の移植…×
+		//		ガイド処理の移植…×
 		//		コイン処理の移植
 		//		ゲームオーバー処理
+		//		ListViewの処理
 
 		//カウンター処理
 		countUp();
@@ -274,12 +279,11 @@ public class WhatifActivity extends Activity
 
 	/* ********** ********** ********** ********** */
 
-
 	// トランプ1枚をアニメーションの処理
 	public void FlipTrump(final int index) {
 
 		// アニメーション中にクリックできないようfalseに変更する
-		animFlag = false;
+		flipAnimFlag = false;
 		// 現在表示されているトランプ画像を非表示にする
 		trumpBackView[index].setVisibility(View.INVISIBLE);
 
@@ -301,9 +305,7 @@ public class WhatifActivity extends Activity
 					public void onAnimationEnd(Animation animation) {
 						// アニメーションの終了
 						trumpView[index].setVisibility(View.VISIBLE);
-						animFlag = true;
-						Log.v(TAG, "FlipAnimation...END");
-
+						flipAnimFlag = true;
 					}
 				});
 			}
@@ -315,7 +317,7 @@ public class WhatifActivity extends Activity
 	public void dealFlipTrump(final int index) {
 
 		// アニメーション中にクリックできないようfalseに変更する
-		animFlag = false;
+		dealAnimFlag = false;
 		// 現在表示されているトランプ画像を非表示にする
 		trumpBackView[index].setVisibility(View.INVISIBLE);
 
@@ -339,7 +341,7 @@ public class WhatifActivity extends Activity
 						trumpView[index].setVisibility(View.VISIBLE);
 						yellowNum(trumpView[index].getSerial());
 						animCount++;
-						animFlag = true;
+						dealAnimFlag = true;
 						// 手札2～5までのY軸回転処理						
 						if (animCount < 5) {
 							dealFlipTrump(index + 1);
@@ -379,6 +381,9 @@ public class WhatifActivity extends Activity
 	// 手札から場札へトランプが移動する処理
 	private void moveTrump(final int index) {
 
+		// アニメーション中にクリックできないようfalseに変更する
+		moveAnimFlag = false;
+
 		TranslateAnimation translate = new TranslateAnimation(
 				0, layout_location[0] - clearView_location.get(index).x,
 				0, layout_location[1] - (clearView_location.get(index).y - statusbarHeight));
@@ -388,14 +393,8 @@ public class WhatifActivity extends Activity
 		translate.setAnimationListener(new TrumpAnimationListener(index) {
 
 			@Override
-			public void onAnimationStart(Animation animation) {
-				animFlag = false;
-			}
-
-			@Override
 			public void onAnimationEnd(Animation animation) {
-				
-				
+
 				// 場札のビュー(trumpView[0])に手札の情報を移す
 				trumpView[0].setTrump(trumpView[index].getNumber(),
 						trumpView[index].getSuit(),
@@ -418,20 +417,20 @@ public class WhatifActivity extends Activity
 				}
 
 				// 手札に新しい札を配る
-				if(counter<48){
-				// 手札のビュー(trumpView[index])に新しい札の情報を移す
-				trumpView[index].setTrump(deck.trump.get(counter+4).getNumber(),
-						deck.trump.get(counter+4).getSuit(),
-						deck.trump.get(counter+4).getSerial(),
-						deck.trump.get(counter+4).getColor());
-				// アニメーションのため一時非表示
-				trumpView[index].setVisibility(View.INVISIBLE);
-				FlipTrump(index);				
-				
-				}else{
+				if (counter < 48) {
+					// 手札のビュー(trumpView[index])に新しい札の情報を移す
+					trumpView[index].setTrump(deck.trump.get(counter + 4).getNumber(),
+							deck.trump.get(counter + 4).getSuit(),
+							deck.trump.get(counter + 4).getSerial(),
+							deck.trump.get(counter + 4).getColor());
+					// アニメーションのため一時非表示
+					trumpView[index].setVisibility(View.INVISIBLE);
+					FlipTrump(index);
+
+				} else {
 					trumpView[index].setVisibility(View.INVISIBLE);
 				}
-				animFlag = true;
+				moveAnimFlag = true;
 			}
 
 		});
@@ -575,7 +574,7 @@ public class WhatifActivity extends Activity
 		@Override
 		public void onClick(View v) {
 
-			if (animFlag) {
+			if (dealAnimFlag) {
 				dealTrump();
 				animCount = 0;
 
@@ -589,7 +588,7 @@ public class WhatifActivity extends Activity
 
 		@Override
 		public void onClick(View v) {
-			if (animFlag && agreeTrump(1)) {
+			if (dealAnimFlag && flipAnimFlag && moveAnimFlag && agreeTrump(1)) {
 				moveTrump(1);
 				//				Log.v(TAG, "手札1_CLICK");
 			}
@@ -601,7 +600,8 @@ public class WhatifActivity extends Activity
 
 		@Override
 		public void onClick(View v) {
-			if (animFlag && agreeTrump(2)) {
+
+			if (dealAnimFlag && flipAnimFlag && moveAnimFlag && agreeTrump(2)) {
 				moveTrump(2);
 				//				Log.v(TAG, "手札2_CLICK");
 			}
@@ -612,7 +612,7 @@ public class WhatifActivity extends Activity
 
 		@Override
 		public void onClick(View v) {
-			if (animFlag && agreeTrump(3)) {
+			if (dealAnimFlag && flipAnimFlag && moveAnimFlag && agreeTrump(3)) {
 				moveTrump(3);
 				//				Log.v(TAG, "手札3_CLICK");
 			}
@@ -623,7 +623,7 @@ public class WhatifActivity extends Activity
 
 		@Override
 		public void onClick(View v) {
-			if (animFlag && agreeTrump(4)) {
+			if (dealAnimFlag && flipAnimFlag && moveAnimFlag && agreeTrump(4)) {
 				moveTrump(4);
 				//				Log.v(TAG, "手札4_CLICK");
 			}
@@ -634,7 +634,7 @@ public class WhatifActivity extends Activity
 
 		@Override
 		public void onClick(View v) {
-			if (animFlag && agreeTrump(5)) {
+			if (dealAnimFlag && flipAnimFlag && moveAnimFlag && agreeTrump(5)) {
 				moveTrump(5);
 				//				Log.v(TAG, "手札5_CLICK");
 			}
