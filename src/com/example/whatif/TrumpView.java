@@ -217,6 +217,8 @@ public class TrumpView extends LinearLayout {
 		tv2.setText(suit);
 
 		tv.setTextColor(color);
+		tv1.setTextColor(color);
+		tv2.setTextColor(color);
 
 	}
 

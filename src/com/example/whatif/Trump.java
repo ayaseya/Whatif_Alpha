@@ -8,12 +8,17 @@ public class Trump {
 	private String suit;
 	//トランプの連番(0～51)
 	private int serial;
+	
+	private int color;
 
-	public Trump(int number, String suit,int serial) {
+	public Trump(int number, String suit,int serial,int color) {
 		this.number = number;
 		this.suit = suit;
 		this.serial=serial;
+		this.color=color;
 	}
+
+
 
 	public void setNumber(int number) {
 		this.number = number;
@@ -21,6 +26,13 @@ public class Trump {
 
 	public void setSuit(String suit) {
 		this.suit = suit;
+	}
+	public void setSerial(int serial) {
+		this.serial = serial;
+	}
+
+	public void setColor(int color) {
+		this.color = color;
 	}
 
 	public int getNumber() {
@@ -34,9 +46,9 @@ public class Trump {
 	public int getSerial() {
 		return serial;
 	}
-
-	public void setSerial(int serial) {
-		this.serial = serial;
+	public int getColor() {
+		return color;
 	}
+
 
 }

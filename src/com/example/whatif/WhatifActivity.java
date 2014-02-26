@@ -3,20 +3,25 @@ package com.example.whatif;
 import java.util.ArrayList;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Point;
 import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Display;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
+import android.view.WindowManager;
 import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.view.animation.TranslateAnimation;
 import android.widget.FrameLayout;
+import android.widget.TextSwitcher;
 import android.widget.TextView;
 import android.widget.ViewSwitcher.ViewFactory;
 
@@ -40,6 +45,8 @@ public class WhatifActivity extends Activity
 
 	private Deck deck;
 
+	private Deck record;
+
 	private int statusbarHeight;
 
 	private ArrayList<Point> clearView_location = new ArrayList<Point>();
@@ -58,8 +65,12 @@ public class WhatifActivity extends Activity
 
 	public int animCount = 0;
 	private int counter = 0;
-	
+
 	TextView guideView; // ガイド表示
+	private TextSwitcher count;
+	private int width = 0;
+	private int height = 0;
+	private int txtSwitchFontSize = 20;
 
 	/* ********** ********** ********** ********** */
 
@@ -72,6 +83,10 @@ public class WhatifActivity extends Activity
 
 		// トランプ(52枚)を管理するDeckクラスのインスタンスの取得
 		deck = new Deck(this.getApplicationContext());
+		// トランプ(52枚)の生成とシャッフル
+		deck.shuffle(this.getApplicationContext());
+		// 場札に置いた順番を記録するインスタンスを取得する
+		record = new Deck(this.getApplicationContext());
 
 		// 画像配置用に最前面のレイアウトのインスタンスを取得
 		mainFrame = (FrameLayout) findViewById(R.id.FrameLayout);
@@ -147,6 +162,9 @@ public class WhatifActivity extends Activity
 		//		コイン処理の移植
 		//		ゲームオーバー処理
 
+		//カウンター処理
+		countUp();
+
 		replaceFlag = true;
 		Log.v(TAG, "onCreate()");
 	}// onCreate()
@@ -156,7 +174,7 @@ public class WhatifActivity extends Activity
 		super.onWindowFocusChanged(hasFocus);
 
 		// 機種によって複数回onWindowFocusChanged()が呼ばれる場合があるので
-		// Flagで
+		// FlagでonCreate()の実行後に一度だけ実行されるように記述する
 		if (replaceFlag) {
 			// ステータスバーの高さを取得
 			Rect rect = new Rect();
@@ -417,6 +435,28 @@ public class WhatifActivity extends Activity
 						trumpView[index].getSerial(),
 						trumpView[index].getColor());
 
+				record.trump.add(new Trump(
+						trumpView[0].getNumber(),
+						trumpView[0].getSuit(),
+						trumpView[0].getSerial(),
+						trumpView[0].getColor()
+						));
+
+				boldNum(trumpView[0].getSerial());
+
+				if (counter > 1) {
+					deleteNum(record.trump.get(counter - 2).getSerial());
+				}
+
+				
+				if(counter<48){
+				trumpView[index].setTrump(deck.trump.get(counter+4).getNumber(),
+						deck.trump.get(counter+4).getSuit(),
+						deck.trump.get(counter+4).getSerial(),
+						deck.trump.get(counter+4).getColor());
+				}else{
+					trumpView[index].setVisibility(View.INVISIBLE);
+				}
 				animFlag = true;
 			}
 
@@ -430,21 +470,24 @@ public class WhatifActivity extends Activity
 			// 一枚目の場合(どのカードも場札に置ける)
 			Log.v(TAG, "一枚目");
 			counter++;
+			count.setText(String.valueOf(counter));
 			return true;
 		} else if (trumpView[0].getSuit().equals(trumpView[index].getSuit())) {
 			// スート(図柄)が一致した場合
 			Log.v(TAG, "スート(図柄)が一致");
 			counter++;
+			count.setText(String.valueOf(counter));
 			return true;
 		} else if (trumpView[0].getNumber() == trumpView[index].getNumber()) {
 			// 数字が一致した場合
 			Log.v(TAG, "数字が一致");
 			counter++;
+			count.setText(String.valueOf(counter));
 			return true;
 		}
 		return false;
 	}
-	
+
 	// boldNum関数…場札に置いたトランプの数字をガイド上で太字・シアンにする処理
 	public void boldNum(int x) {
 		Resources res = getResources();
@@ -497,7 +540,43 @@ public class WhatifActivity extends Activity
 		}
 	}
 
-	
+	private void countUp() {
+
+		// Activityを継承していないため、getWindowManager()メソッドは利用できない
+		// Displayクラスのインスタンスを取得するため
+		// 引数のContextを使用してWindowManagerを取得する
+		WindowManager wm = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
+
+		// Displayインスタンスを取得する
+		Display display = wm.getDefaultDisplay();
+
+		width = display.getWidth();
+		height = display.getHeight();
+
+		if (width <= 240) {//ldpi（120dpi）240×320px
+			txtSwitchFontSize = 40;
+		} else if (240 < +width && +width <= 320) {//mdpi（160dpi）320×480px
+			txtSwitchFontSize = 44;
+		} else if (320 < +width && +width <= 480) {//hdpi（240dpi）480×800px
+			txtSwitchFontSize = 48;
+		} else if (480 < +width && +width <= 640) {//xhdpi（320dpi）640×960px
+			txtSwitchFontSize = 52;
+		} else if (640 < +width) {//xxhdpi（480dpi）960×1440px
+			txtSwitchFontSize = 64;
+
+		}
+
+		final Animation in = AnimationUtils.loadAnimation(this, R.anim.down_in);
+		final Animation out = AnimationUtils.loadAnimation(this, R.anim.down_out);
+
+		count = (TextSwitcher) findViewById(R.id.countView);
+
+		count.setFactory(this);
+		count.setInAnimation(in);
+		count.setOutAnimation(out);
+
+		count.setText(String.valueOf(counter));
+	}
 
 	// ////////////////////////////////////////////////
 	// ViewFactory
@@ -505,9 +584,10 @@ public class WhatifActivity extends Activity
 	@Override
 	public View makeView() {
 		TextView txt = new TextView(this);
-		txt.setGravity(Gravity.RIGHT | Gravity.CENTER_VERTICAL);
+		//		txt.setGravity(Gravity.RIGHT | Gravity.CENTER_VERTICAL);
+		txt.setGravity(Gravity.CENTER);
 		txt.setTextColor(0xFFFFFFFF);
-		txt.setTextSize(64);
+		txt.setTextSize(txtSwitchFontSize);
 		return txt;
 	}
 

@@ -3,6 +3,7 @@ package com.example.whatif;
 import java.util.ArrayList;
 
 import android.content.Context;
+import android.graphics.Color;
 
 public class Deck {
 	ArrayList<Trump> trump;
@@ -10,19 +11,25 @@ public class Deck {
 	public Deck(Context context) {
 		trump = new ArrayList<Trump>();
 
+	}
+
+	public void shuffle(Context context) {
+
 		for (int i = 1; i <= 13; i++) {
-			trump.add(new Trump(i, context.getResources().getString(R.string.spade), i - 1));
+			trump.add(new Trump(i, context.getResources().getString(R.string.spade), i - 1,Color.BLACK));
 		}
 		for (int i = 1; i <= 13; i++) {
-			trump.add(new Trump(i, context.getResources().getString(R.string.heart), i + 12));
+			trump.add(new Trump(i, context.getResources().getString(R.string.heart), i + 12,Color.RED));
 		}
 		for (int i = 1; i <= 13; i++) {
-			trump.add(new Trump(i, context.getResources().getString(R.string.club), i + 25));
+			trump.add(new Trump(i, context.getResources().getString(R.string.club), i + 25,Color.BLACK));
 		}
 		for (int i = 1; i <= 13; i++) {
-			trump.add(new Trump(i, context.getResources().getString(R.string.diamond), i + 38));
+			trump.add(new Trump(i, context.getResources().getString(R.string.diamond), i + 38,Color.RED));
 		}
 
+		// リスト内の要素をシャッフルする
+		// Collections.shuffle(trump);
 	}
 
 }
