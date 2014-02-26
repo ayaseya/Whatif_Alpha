@@ -155,20 +155,12 @@ public class WhatifActivity extends Activity
 		findViewById(R.id.CoinLayout).setVisibility(View.GONE);
 
 		// todo
-		// onWindowFocusChanged()内で配置が呼び出される毎に実行されている
-		//		トランプ裏面0～5を読み込み配置…×
-		//		トランプがメインフレームに配置されていない時だけ配置（onWindowFocusChanged()）…×
-		//		ゲーム開始時に5枚手札が配られる演出（メソッド化）…×
-		//		手札クリック時に場札へ移動するアニメーション…×
-		//		カウント実装…×
-		//		場札判定の移植…×
-		//		ガイド処理の移植…×
 		//		コイン処理の移植
 		//		ゲームオーバー処理
 		//		ListViewの処理
 
 		//カウンター処理
-		countUp();
+		counter();
 
 		replaceFlag = true;
 		Log.v(TAG, "onCreate()");
@@ -394,7 +386,10 @@ public class WhatifActivity extends Activity
 
 			@Override
 			public void onAnimationEnd(Animation animation) {
-
+				// ////////////////////////////////////////////////
+				// トランプクリック後の処理
+				// ////////////////////////////////////////////////
+				
 				// 場札のビュー(trumpView[0])に手札の情報を移す
 				trumpView[0].setTrump(trumpView[index].getNumber(),
 						trumpView[index].getSuit(),
@@ -410,7 +405,7 @@ public class WhatifActivity extends Activity
 
 				// 場札に置いた札を強調表示する
 				boldNum(trumpView[0].getSerial());
-
+				
 				// 2枚目以降に強調表示した札の番号を消す
 				if (counter > 1) {
 					deleteNum(record.trump.get(counter - 2).getSerial());
@@ -426,6 +421,7 @@ public class WhatifActivity extends Activity
 					// アニメーションのため一時非表示
 					trumpView[index].setVisibility(View.INVISIBLE);
 					FlipTrump(index);
+					yellowNum(trumpView[index].getSerial());
 
 				} else {
 					trumpView[index].setVisibility(View.INVISIBLE);
@@ -513,7 +509,7 @@ public class WhatifActivity extends Activity
 		}
 	}
 
-	private void countUp() {
+	private void counter() {
 
 		// Activityを継承していないため、getWindowManager()メソッドは利用できない
 		// Displayクラスのインスタンスを取得するため
