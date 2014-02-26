@@ -274,41 +274,6 @@ public class WhatifActivity extends Activity
 
 	/* ********** ********** ********** ********** */
 
-	public void FlipTrump(View v, final int index) {
-
-		// アニメーション中にクリックできないようfalseに変更する
-		animFlag = false;
-
-		// 現在表示されているトランプ画像を非表示にする
-		v.setVisibility(View.INVISIBLE);
-
-		// Y軸回転(0～90度)
-		Rotate3dAnimation rotation = new Rotate3dAnimation(0, 90, centerX, centerY, 0f, true);
-		rotation.setDuration(time);
-		trumpBackView[index].startAnimation(rotation);
-		rotation.setAnimationListener(new TrumpAnimationListener(index) {
-			// 裏面が回転し終わり表面が回転し始める
-			@Override
-			public void onAnimationEnd(Animation animation) {
-
-				// Y軸回転(270～360度)
-				Rotate3dAnimation rotation = new Rotate3dAnimation(270, 360, centerX, centerY, 0f, false);
-				rotation.setDuration(time);
-				trumpView[index].startAnimation(rotation);
-				rotation.setAnimationListener(new TrumpAnimationListener(index) {
-					@Override
-					public void onAnimationEnd(Animation animation) {
-						// アニメーションの終了
-						trumpView[index].setVisibility(View.VISIBLE);
-						animFlag = true;
-
-						Log.v(TAG, "FlipAnimation...END");
-					}
-				});
-			}
-		});
-
-	}
 
 	// トランプ1枚をアニメーションの処理
 	public void FlipTrump(final int index) {
@@ -320,7 +285,7 @@ public class WhatifActivity extends Activity
 
 		// Y軸回転(0～90度)
 		Rotate3dAnimation rotation = new Rotate3dAnimation(0, 90, centerX, centerY, 0f, true);
-		rotation.setDuration(150);
+		rotation.setDuration(100);
 		trumpBackView[index].startAnimation(rotation);
 		rotation.setAnimationListener(new TrumpAnimationListener(index) {
 			// 裏面が回転し終わり表面が回転し始める
@@ -329,7 +294,7 @@ public class WhatifActivity extends Activity
 
 				// Y軸回転(270～360度)
 				Rotate3dAnimation rotation = new Rotate3dAnimation(270, 360, centerX, centerY, 0f, false);
-				rotation.setDuration(150);
+				rotation.setDuration(100);
 				trumpView[index].startAnimation(rotation);
 				rotation.setAnimationListener(new TrumpAnimationListener(index) {
 					@Override
@@ -429,12 +394,14 @@ public class WhatifActivity extends Activity
 
 			@Override
 			public void onAnimationEnd(Animation animation) {
-
+				
+				
+				// 場札のビュー(trumpView[0])に手札の情報を移す
 				trumpView[0].setTrump(trumpView[index].getNumber(),
 						trumpView[index].getSuit(),
 						trumpView[index].getSerial(),
 						trumpView[index].getColor());
-
+				// recordに場札に置いた札を記録していく
 				record.trump.add(new Trump(
 						trumpView[0].getNumber(),
 						trumpView[0].getSuit(),
@@ -442,18 +409,25 @@ public class WhatifActivity extends Activity
 						trumpView[0].getColor()
 						));
 
+				// 場札に置いた札を強調表示する
 				boldNum(trumpView[0].getSerial());
 
+				// 2枚目以降に強調表示した札の番号を消す
 				if (counter > 1) {
 					deleteNum(record.trump.get(counter - 2).getSerial());
 				}
 
-				
+				// 手札に新しい札を配る
 				if(counter<48){
+				// 手札のビュー(trumpView[index])に新しい札の情報を移す
 				trumpView[index].setTrump(deck.trump.get(counter+4).getNumber(),
 						deck.trump.get(counter+4).getSuit(),
 						deck.trump.get(counter+4).getSerial(),
 						deck.trump.get(counter+4).getColor());
+				// アニメーションのため一時非表示
+				trumpView[index].setVisibility(View.INVISIBLE);
+				FlipTrump(index);				
+				
 				}else{
 					trumpView[index].setVisibility(View.INVISIBLE);
 				}
