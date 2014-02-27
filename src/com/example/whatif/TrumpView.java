@@ -224,10 +224,18 @@ public class TrumpView extends LinearLayout {
 
 	public void setNumber(int number) {
 		this.number = number;
+		
+		TextView tv = (TextView) findViewById(R.id.TrumpNum);
+		tv.setText(String.valueOf(number));
 	}
 
 	public void setSuit(String suit) {
 		this.suit = suit;
+		
+		TextView tv1 = (TextView) findViewById(R.id.TrumpSuit1);
+		TextView tv2 = (TextView) findViewById(R.id.TrumpSuit2);
+		tv1.setText(suit);
+		tv2.setText(suit);
 	}
 
 	public void setSerial(int serial) {
@@ -235,6 +243,13 @@ public class TrumpView extends LinearLayout {
 	}
 	public void setColor(int color) {
 		this.color = color;
+		
+		TextView tv = (TextView) findViewById(R.id.TrumpNum);
+		TextView tv1 = (TextView) findViewById(R.id.TrumpSuit1);
+		TextView tv2 = (TextView) findViewById(R.id.TrumpSuit2);
+		tv.setTextColor(color);
+		tv1.setTextColor(color);
+		tv2.setTextColor(color);
 	}
 
 	public int getTrumpWidth() {

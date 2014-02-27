@@ -9,6 +9,7 @@ import android.graphics.Point;
 import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
@@ -203,21 +204,71 @@ public class WhatifActivity extends Activity
 			clearView[0].setVisibility(View.INVISIBLE);
 
 			// 手札1から5にトランプを配置し非表示にする
-			for (int i = 1; i < 6; i++) {
+			//			for (int i = 1; i < 6; i++) {
+			//
+			//				trumpView[i].addTrumpView(deck, i - 1, this.getApplicationContext());
+			//
+			//				FrameLayout.LayoutParams handParams =
+			//						new FrameLayout.LayoutParams(trumpView[i].getTrumpWidth(), trumpView[i].getTrumpHeight());
+			//
+			//				handParams.leftMargin = clearView_location.get(i).x;
+			//				handParams.topMargin = clearView_location.get(i).y - statusbarHeight;
+			//				handParams.gravity = Gravity.NO_GRAVITY;// この記載がないとマージンが有効にならない
+			//				// レイアウトに場札画像を配置する
+			//				mainFrame.addView(trumpView[i], handParams);
+			//				trumpView[i].setVisibility(View.INVISIBLE);
+			//
+			//			}
 
-				trumpView[i].addTrumpView(deck, i - 1, this.getApplicationContext());
+			trumpView[3].addTrumpView(deck, 2, this.getApplicationContext());
+			FrameLayout.LayoutParams handParams =
+					new FrameLayout.LayoutParams(trumpView[3].getTrumpWidth(), trumpView[3].getTrumpHeight());
+			handParams.leftMargin = clearView_location.get(3).x;
+			handParams.topMargin = clearView_location.get(3).y - statusbarHeight;
+			handParams.gravity = Gravity.NO_GRAVITY;// この記載がないとマージンが有効にならない
+			// レイアウトに場札画像を配置する
+			mainFrame.addView(trumpView[3], handParams);
+			trumpView[3].setVisibility(View.INVISIBLE);
 
-				FrameLayout.LayoutParams handParams =
-						new FrameLayout.LayoutParams(trumpView[i].getTrumpWidth(), trumpView[i].getTrumpHeight());
+			trumpView[2].addTrumpView(deck, 1, this.getApplicationContext());
+			handParams =
+					new FrameLayout.LayoutParams(trumpView[2].getTrumpWidth(), trumpView[2].getTrumpHeight());
+			handParams.leftMargin = clearView_location.get(2).x;
+			handParams.topMargin = clearView_location.get(2).y - statusbarHeight;
+			handParams.gravity = Gravity.NO_GRAVITY;// この記載がないとマージンが有効にならない
+			// レイアウトに場札画像を配置する
+			mainFrame.addView(trumpView[2], handParams);
+			trumpView[2].setVisibility(View.INVISIBLE);
 
-				handParams.leftMargin = clearView_location.get(i).x;
-				handParams.topMargin = clearView_location.get(i).y - statusbarHeight;
-				handParams.gravity = Gravity.NO_GRAVITY;// この記載がないとマージンが有効にならない
-				// レイアウトに場札画像を配置する
-				mainFrame.addView(trumpView[i], handParams);
-				trumpView[i].setVisibility(View.INVISIBLE);
+			trumpView[4].addTrumpView(deck, 3, this.getApplicationContext());
+			handParams =
+					new FrameLayout.LayoutParams(trumpView[4].getTrumpWidth(), trumpView[4].getTrumpHeight());
+			handParams.leftMargin = clearView_location.get(4).x;
+			handParams.topMargin = clearView_location.get(4).y - statusbarHeight;
+			handParams.gravity = Gravity.NO_GRAVITY;// この記載がないとマージンが有効にならない
+			// レイアウトに場札画像を配置する
+			mainFrame.addView(trumpView[4], handParams);
+			trumpView[4].setVisibility(View.INVISIBLE);
 
-			}
+			trumpView[1].addTrumpView(deck, 0, this.getApplicationContext());
+			handParams =
+					new FrameLayout.LayoutParams(trumpView[1].getTrumpWidth(), trumpView[1].getTrumpHeight());
+			handParams.leftMargin = clearView_location.get(1).x;
+			handParams.topMargin = clearView_location.get(1).y - statusbarHeight;
+			handParams.gravity = Gravity.NO_GRAVITY;// この記載がないとマージンが有効にならない
+			// レイアウトに場札画像を配置する
+			mainFrame.addView(trumpView[1], handParams);
+			trumpView[1].setVisibility(View.INVISIBLE);
+
+			trumpView[5].addTrumpView(deck, 4, this.getApplicationContext());
+			handParams =
+					new FrameLayout.LayoutParams(trumpView[5].getTrumpWidth(), trumpView[5].getTrumpHeight());
+			handParams.leftMargin = clearView_location.get(5).x;
+			handParams.topMargin = clearView_location.get(5).y - statusbarHeight;
+			handParams.gravity = Gravity.NO_GRAVITY;// この記載がないとマージンが有効にならない
+			// レイアウトに場札画像を配置する
+			mainFrame.addView(trumpView[5], handParams);
+			trumpView[5].setVisibility(View.INVISIBLE);
 
 			replaceFlag = false;
 		}
@@ -281,7 +332,7 @@ public class WhatifActivity extends Activity
 
 		// Y軸回転(0～90度)
 		Rotate3dAnimation rotation = new Rotate3dAnimation(0, 90, centerX, centerY, 0f, true);
-		rotation.setDuration(100);
+		rotation.setDuration(90);
 		trumpBackView[index].startAnimation(rotation);
 		rotation.setAnimationListener(new TrumpAnimationListener(index) {
 			// 裏面が回転し終わり表面が回転し始める
@@ -290,7 +341,7 @@ public class WhatifActivity extends Activity
 
 				// Y軸回転(270～360度)
 				Rotate3dAnimation rotation = new Rotate3dAnimation(270, 360, centerX, centerY, 0f, false);
-				rotation.setDuration(100);
+				rotation.setDuration(90);
 				trumpView[index].startAnimation(rotation);
 				rotation.setAnimationListener(new TrumpAnimationListener(index) {
 					@Override
@@ -315,7 +366,7 @@ public class WhatifActivity extends Activity
 
 		// Y軸回転(0～90度)
 		Rotate3dAnimation rotation = new Rotate3dAnimation(0, 90, centerX, centerY, 0f, true);
-		rotation.setDuration(100);
+		rotation.setDuration(50);
 		trumpBackView[index].startAnimation(rotation);
 		rotation.setAnimationListener(new TrumpAnimationListener(index) {
 			// 裏面が回転し終わり表面が回転し始める
@@ -324,7 +375,7 @@ public class WhatifActivity extends Activity
 
 				// Y軸回転(270～360度)
 				Rotate3dAnimation rotation = new Rotate3dAnimation(270, 360, centerX, centerY, 0f, false);
-				rotation.setDuration(100);
+				rotation.setDuration(50);
 				trumpView[index].startAnimation(rotation);
 				rotation.setAnimationListener(new TrumpAnimationListener(index) {
 					@Override
@@ -371,7 +422,7 @@ public class WhatifActivity extends Activity
 	}
 
 	// 手札から場札へトランプが移動する処理
-	private void moveTrump(final int index) {
+	private synchronized void moveTrump(final int index) {
 
 		// アニメーション中にクリックできないようfalseに変更する
 		moveAnimFlag = false;
@@ -380,22 +431,27 @@ public class WhatifActivity extends Activity
 				0, layout_location[0] - clearView_location.get(index).x,
 				0, layout_location[1] - (clearView_location.get(index).y - statusbarHeight));
 
-		translate.setDuration(250);
+		translate.setDuration(150);
 		trumpView[index].startAnimation(translate);
 		translate.setAnimationListener(new TrumpAnimationListener(index) {
+			@Override
+			public void onAnimationStart(Animation animation) {
+
+			}
 
 			@Override
 			public void onAnimationEnd(Animation animation) {
 				// ////////////////////////////////////////////////
 				// トランプクリック後の処理
 				// ////////////////////////////////////////////////
-				
+
 				// 場札のビュー(trumpView[0])に手札の情報を移す
 				trumpView[0].setTrump(trumpView[index].getNumber(),
 						trumpView[index].getSuit(),
 						trumpView[index].getSerial(),
 						trumpView[index].getColor());
-				// recordに場札に置いた札を記録していく
+
+				// recordに場札に置く札を記録していく
 				record.trump.add(new Trump(
 						trumpView[0].getNumber(),
 						trumpView[0].getSuit(),
@@ -405,28 +461,47 @@ public class WhatifActivity extends Activity
 
 				// 場札に置いた札を強調表示する
 				boldNum(trumpView[0].getSerial());
-				
+
 				// 2枚目以降に強調表示した札の番号を消す
 				if (counter > 1) {
 					deleteNum(record.trump.get(counter - 2).getSerial());
 				}
 
 				// 手札に新しい札を配る
-				if (counter < 48) {
-					// 手札のビュー(trumpView[index])に新しい札の情報を移す
-					trumpView[index].setTrump(deck.trump.get(counter + 4).getNumber(),
-							deck.trump.get(counter + 4).getSuit(),
-							deck.trump.get(counter + 4).getSerial(),
-							deck.trump.get(counter + 4).getColor());
-					// アニメーションのため一時非表示
-					trumpView[index].setVisibility(View.INVISIBLE);
-					FlipTrump(index);
-					yellowNum(trumpView[index].getSerial());
+				final Handler handler = new Handler();
 
-				} else {
-					trumpView[index].setVisibility(View.INVISIBLE);
-				}
-				moveAnimFlag = true;
+				new Thread(new Runnable() {
+
+					@Override
+					public void run() {
+
+						handler.post(new Runnable() {
+
+							@Override
+							public void run() {
+								if (counter < 48) {
+									// 手札のビュー(trumpView[index])に新しい札の情報を移す
+									trumpView[index].setTrump(deck.trump.get(counter + 4).getNumber(),
+											deck.trump.get(counter + 4).getSuit(),
+											deck.trump.get(counter + 4).getSerial(),
+											deck.trump.get(counter + 4).getColor());
+									// アニメーションのため一時非表示
+									trumpView[index].setVisibility(View.INVISIBLE);
+									FlipTrump(index);
+									yellowNum(trumpView[index].getSerial());
+
+								} else {
+									trumpView[index].setVisibility(View.INVISIBLE);
+								}
+								moveAnimFlag = true;
+							}
+
+						});
+
+					}
+
+				}).start();
+
 			}
 
 		});
@@ -437,19 +512,19 @@ public class WhatifActivity extends Activity
 	private boolean agreeTrump(int index) {
 		if (counter == 0) {
 			// 一枚目の場合(どのカードも場札に置ける)
-			Log.v(TAG, "一枚目");
+			//			Log.v(TAG, "一枚目");
 			counter++;
 			count.setText(String.valueOf(counter));
 			return true;
 		} else if (trumpView[0].getSuit().equals(trumpView[index].getSuit())) {
 			// スート(図柄)が一致した場合
-			Log.v(TAG, "スート(図柄)が一致");
+			//			Log.v(TAG, "スート(図柄)が一致");
 			counter++;
 			count.setText(String.valueOf(counter));
 			return true;
 		} else if (trumpView[0].getNumber() == trumpView[index].getNumber()) {
 			// 数字が一致した場合
-			Log.v(TAG, "数字が一致");
+			//			Log.v(TAG, "数字が一致");
 			counter++;
 			count.setText(String.valueOf(counter));
 			return true;
@@ -574,7 +649,7 @@ public class WhatifActivity extends Activity
 				dealTrump();
 				animCount = 0;
 
-				Log.v(TAG, "場札_CLICK");
+				//				Log.v(TAG, "場札_CLICK");
 			}
 		}
 	};
@@ -584,10 +659,12 @@ public class WhatifActivity extends Activity
 
 		@Override
 		public void onClick(View v) {
+
 			if (dealAnimFlag && flipAnimFlag && moveAnimFlag && agreeTrump(1)) {
 				moveTrump(1);
-				//				Log.v(TAG, "手札1_CLICK");
+//				Log.v(TAG, "手札1_CLICK");
 			}
+
 		}
 	};
 
@@ -599,8 +676,9 @@ public class WhatifActivity extends Activity
 
 			if (dealAnimFlag && flipAnimFlag && moveAnimFlag && agreeTrump(2)) {
 				moveTrump(2);
-				//				Log.v(TAG, "手札2_CLICK");
+//				Log.v(TAG, "手札2_CLICK");
 			}
+
 		}
 	};
 	// 手札1Viewをクリックした時の処理
@@ -608,21 +686,25 @@ public class WhatifActivity extends Activity
 
 		@Override
 		public void onClick(View v) {
+
 			if (dealAnimFlag && flipAnimFlag && moveAnimFlag && agreeTrump(3)) {
 				moveTrump(3);
-				//				Log.v(TAG, "手札3_CLICK");
+//				Log.v(TAG, "手札3_CLICK");
 			}
 		}
+
 	};
 	// 手札1Viewをクリックした時の処理
 	OnClickListener hand4Listener = new OnClickListener() {
 
 		@Override
 		public void onClick(View v) {
+
 			if (dealAnimFlag && flipAnimFlag && moveAnimFlag && agreeTrump(4)) {
 				moveTrump(4);
-				//				Log.v(TAG, "手札4_CLICK");
+//				Log.v(TAG, "手札4_CLICK");
 			}
+
 		}
 	};
 	// 手札1Viewをクリックした時の処理
@@ -630,11 +712,13 @@ public class WhatifActivity extends Activity
 
 		@Override
 		public void onClick(View v) {
+
 			if (dealAnimFlag && flipAnimFlag && moveAnimFlag && agreeTrump(5)) {
 				moveTrump(5);
-				//				Log.v(TAG, "手札5_CLICK");
+//				Log.v(TAG, "手札5_CLICK");
 			}
 		}
+
 	};
 
 }
