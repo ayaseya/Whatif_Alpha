@@ -76,6 +76,11 @@ public class WhatifActivity extends Activity
 	private int height = 0;
 	private int txtSwitchFontSize = 20;
 	private boolean dealAnimFlag = true;
+	
+	
+	Typeface typefaceR;
+	Typeface typefaceB;
+	
 
 	/* ********** ********** ********** ********** */
 
@@ -163,6 +168,12 @@ public class WhatifActivity extends Activity
 		//カウンター処理
 		counter();
 
+		
+		typefaceR = Typeface.createFromAsset(getAssets(),"PixelMplus12-Regular.ttf");
+		typefaceB = Typeface.createFromAsset(getAssets(),"PixelMplus12-Bold.ttf");
+
+		
+		
 		replaceFlag = true;
 		Log.v(TAG, "onCreate()");
 	}// onCreate()
@@ -540,7 +551,7 @@ public class WhatifActivity extends Activity
 		// TextViewの文字色を変更する（16進数で頭の2bitがアルファ値、00で透過率100%）
 		guideView.setTextColor(0xFF00BFFF);
 		// フォントのスタイル（太字、斜線など）を変更する
-		guideView.setTypeface(Typeface.DEFAULT_BOLD, Typeface.BOLD);
+		guideView.setTypeface(typefaceB);
 	}// Card.BoldNum_**********
 
 	// yellowNum関数…場札に置いたトランプの数字をガイド上で黄色にする処理
@@ -551,7 +562,7 @@ public class WhatifActivity extends Activity
 		// TextViewの文字色を変更する（16進数で頭の2bitがアルファ値、00で透過率100%）
 		guideView.setTextColor(0xFFFFD700);
 		// フォントのスタイル（太字、斜線など）を変更する
-		guideView.setTypeface(Typeface.DEFAULT_BOLD, Typeface.BOLD);
+		guideView.setTypeface(typefaceB);
 		// 背景色を変更する
 		guideView.setBackgroundColor(0xFF7777FF);
 	}// Card.yellowNum_**********
@@ -632,6 +643,7 @@ public class WhatifActivity extends Activity
 		txt.setGravity(Gravity.CENTER);
 		txt.setTextColor(0xFFFFFFFF);
 		txt.setTextSize(txtSwitchFontSize);
+		txt.setTypeface(typefaceR);
 		return txt;
 	}
 
