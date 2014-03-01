@@ -24,7 +24,9 @@ import android.view.animation.TranslateAnimation;
 import android.widget.FrameLayout;
 import android.widget.TextSwitcher;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ViewSwitcher.ViewFactory;
+
 
 public class WhatifActivity extends Activity
 		implements ViewFactory {
@@ -76,6 +78,7 @@ public class WhatifActivity extends Activity
 	private int height = 0;
 	private int txtSwitchFontSize = 20;
 	private boolean dealAnimFlag = true;
+
 
 	/* ********** ********** ********** ********** */
 
@@ -494,6 +497,11 @@ public class WhatifActivity extends Activity
 									trumpView[index].setVisibility(View.INVISIBLE);
 								}
 								moveAnimFlag = true;
+
+								// ゲームオーバーの判定
+								GameOver();
+								// ゲームクリアの判定
+								GameClear();
 							}
 
 						});
@@ -623,6 +631,33 @@ public class WhatifActivity extends Activity
 	}
 
 	// ////////////////////////////////////////////////
+	// GameFlag
+	// ////////////////////////////////////////////////
+
+	// GameOver関数…ゲームフラグの管理
+	public void GameOver() {
+		for (int i = 1; i < 6; i++) {
+
+			if (trumpView[0].getSuit().equals(trumpView[i].getSuit()) ||
+					trumpView[0].getNumber() == trumpView[i].getNumber()) {
+				// スート(図柄)と数字の両方が一致した場合
+				return;
+			}
+
+		}
+		Toast.makeText(WhatifActivity.this, "ＧＡＭＥ ＯＶＥＲ", Toast.LENGTH_SHORT).show();
+
+	}// GameOver_**********
+
+	public void GameClear() {
+		
+		if(counter==52){
+			Toast.makeText(WhatifActivity.this, "ＧＡＭＥ ＣＬＥＡＲ", Toast.LENGTH_SHORT).show();
+		}
+
+	}
+
+	// ////////////////////////////////////////////////
 	// ViewFactory
 	// ////////////////////////////////////////////////
 	@Override
@@ -662,7 +697,7 @@ public class WhatifActivity extends Activity
 
 			if (dealAnimFlag && flipAnimFlag && moveAnimFlag && agreeTrump(1)) {
 				moveTrump(1);
-//				Log.v(TAG, "手札1_CLICK");
+				//				Log.v(TAG, "手札1_CLICK");
 			}
 
 		}
@@ -676,7 +711,7 @@ public class WhatifActivity extends Activity
 
 			if (dealAnimFlag && flipAnimFlag && moveAnimFlag && agreeTrump(2)) {
 				moveTrump(2);
-//				Log.v(TAG, "手札2_CLICK");
+				//				Log.v(TAG, "手札2_CLICK");
 			}
 
 		}
@@ -689,7 +724,7 @@ public class WhatifActivity extends Activity
 
 			if (dealAnimFlag && flipAnimFlag && moveAnimFlag && agreeTrump(3)) {
 				moveTrump(3);
-//				Log.v(TAG, "手札3_CLICK");
+				//				Log.v(TAG, "手札3_CLICK");
 			}
 		}
 
@@ -702,7 +737,7 @@ public class WhatifActivity extends Activity
 
 			if (dealAnimFlag && flipAnimFlag && moveAnimFlag && agreeTrump(4)) {
 				moveTrump(4);
-//				Log.v(TAG, "手札4_CLICK");
+				//				Log.v(TAG, "手札4_CLICK");
 			}
 
 		}
@@ -715,7 +750,7 @@ public class WhatifActivity extends Activity
 
 			if (dealAnimFlag && flipAnimFlag && moveAnimFlag && agreeTrump(5)) {
 				moveTrump(5);
-//				Log.v(TAG, "手札5_CLICK");
+				//				Log.v(TAG, "手札5_CLICK");
 			}
 		}
 
