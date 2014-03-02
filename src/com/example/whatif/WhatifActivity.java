@@ -109,6 +109,9 @@ public class WhatifActivity extends Activity
 	private int beforeWager;
 	private TextView msg;
 
+	private boolean scrollFlag = true;
+	private int scrollCount = 0;
+
 	/* ********** ********** ********** ********** */
 
 	@Override
@@ -743,12 +746,13 @@ public class WhatifActivity extends Activity
 		final Animation out = AnimationUtils.loadAnimation(this, R.anim.down_out);
 
 		count = (TextSwitcher) findViewById(R.id.countView);
-
 		count.setFactory(this);
+
 		count.setInAnimation(in);
 		count.setOutAnimation(out);
 
 		count.setText(String.valueOf(counter));
+
 	}
 
 	private void setTxtBounus() {
@@ -794,10 +798,10 @@ public class WhatifActivity extends Activity
 
 	private void scrollUp() {
 		if (counter < 53) {
-			Resources res = getResources();
+			final Resources res = getResources();
 
-			int cChainId = res.getIdentifier("cChain" + counter, "id", getPackageName());
-			int cBonusId = res.getIdentifier("cBonus" + counter, "id", getPackageName());
+			final int cChainId = res.getIdentifier("cChain" + counter, "id", getPackageName());
+			final int cBonusId = res.getIdentifier("cBonus" + counter, "id", getPackageName());
 			if (counter == 1) {
 
 				((TextView) findViewById(cChainId)).setBackgroundColor(0xFFFF0000);
@@ -807,20 +811,32 @@ public class WhatifActivity extends Activity
 
 			} else {
 				if (counter <= 50) {
+
 					chainScroll.scrollBy(0, -scrollHeight);
 					bonusScroll.scrollBy(0, -scrollHeight);
+					//					chainScroll.smoothScrollBy(0, -scrollHeight);
+					//					bonusScroll.smoothScrollBy(0, -scrollHeight);
+
+					// 1つ前のViewの状態を元に戻す
+					((TextView) findViewById(res.getIdentifier("cChain" + (counter - 1), "id", getPackageName())))
+							.setBackgroundColor(0xFF0000FF);
+
+					((TextView) findViewById(res.getIdentifier("cBonus" + (counter - 1), "id", getPackageName())))
+							.setTextColor(0xFFFFFFFF);
+					((TextView) findViewById(res.getIdentifier("cBonus" + (counter - 1), "id", getPackageName())))
+							.setBackgroundColor(0xFFFF0000);
+
+					((TextView) findViewById(cChainId)).setBackgroundColor(0xFFFF0000);
+
+					((TextView) findViewById(cBonusId)).setTextColor(0xFFFF0000);
+					((TextView) findViewById(cBonusId)).setBackgroundColor(0xFFFFFFFF);
+
+				} else {
+					((TextView) findViewById(cChainId)).setBackgroundColor(0xFFFF0000);
+
+					((TextView) findViewById(cBonusId)).setTextColor(0xFFFF0000);
+					((TextView) findViewById(cBonusId)).setBackgroundColor(0xFFFFFFFF);
 				}
-				// 1つ前のViewの状態を元に戻す
-				((TextView) findViewById(res.getIdentifier("cChain" + (counter - 1), "id", getPackageName()))).setBackgroundColor(0xFF0000FF);
-
-				((TextView) findViewById(res.getIdentifier("cBonus" + (counter - 1), "id", getPackageName()))).setTextColor(0xFFFFFFFF);
-				((TextView) findViewById(res.getIdentifier("cBonus" + (counter - 1), "id", getPackageName()))).setBackgroundColor(0xFFFF0000);
-
-				// 
-				((TextView) findViewById(cChainId)).setBackgroundColor(0xFFFF0000);
-
-				((TextView) findViewById(cBonusId)).setTextColor(0xFFFF0000);
-				((TextView) findViewById(cBonusId)).setBackgroundColor(0xFFFFFFFF);
 
 			}
 
@@ -954,33 +970,68 @@ public class WhatifActivity extends Activity
 
 		}
 
-		coin.setBeforeWager(coin.getWager());
+		final Handler handler = new Handler();
 
-		for (int i = 1; i < 6; i++) {
-			trumpView[i].setVisibility(View.INVISIBLE);
-		}
+		new Thread(new Runnable() {
 
-		msg = (TextView) findViewById(R.id.msgView1);
+			@Override
+			public void run() {
 
-		if (counter >= 14) {
+				try {
+					Thread.sleep(250);
 
-			msg.setText("WINNER!");
-			msg.setTextColor(Color.RED);
-		}
-		else if (10 <= counter && counter <= 13) {
-			msg.setText("DRAW!");
-			msg.setTextColor(Color.GREEN);
-		}
-		else {
-			msg.setText("LOSER!");
-			msg.setTextColor(Color.BLUE);
-		}
-		// 手札を非表示にして、メッセージ画面手札を表示する
-		findViewById(R.id.HandLayout).setVisibility(View.GONE);
-		findViewById(R.id.TextLayout).setVisibility(View.VISIBLE);
+					handler.post(new Runnable() {
 
-		refundCoin();
-		//Toast.makeText(WhatifActivity.this, "ＧＡＭＥ ＯＶＥＲ", Toast.LENGTH_SHORT).show();
+						@Override
+						public void run() {
+
+							try {
+								Thread.sleep(1000);
+
+								coin.setBeforeWager(coin.getWager());
+
+								for (int i = 1; i < 6; i++) {
+									trumpView[i].setVisibility(View.INVISIBLE);
+								}
+
+								msg = (TextView) findViewById(R.id.msgView1);
+
+								if (counter >= 14) {
+
+									msg.setText("WINNER!");
+									msg.setTextColor(Color.RED);
+								}
+								else if (10 <= counter && counter <= 13) {
+									msg.setText("DRAW!");
+									msg.setTextColor(Color.GREEN);
+								}
+								else {
+									msg.setText("LOSER!");
+									msg.setTextColor(Color.BLUE);
+								}
+								// 手札を非表示にして、メッセージ画面手札を表示する
+								findViewById(R.id.HandLayout).setVisibility(View.GONE);
+								findViewById(R.id.TextLayout).setVisibility(View.VISIBLE);
+
+								refundCoin();
+								//Toast.makeText(WhatifActivity.this, "ＧＡＭＥ ＯＶＥＲ", Toast.LENGTH_SHORT).show();
+
+							} catch (InterruptedException e) {
+								e.printStackTrace();
+							}
+
+						}
+
+					});
+
+				} catch (InterruptedException e1) {
+					// TODO 自動生成された catch ブロック
+					e1.printStackTrace();
+				}
+
+			}
+
+		}).start();
 
 	}// GameOver_**********
 
@@ -1004,16 +1055,6 @@ public class WhatifActivity extends Activity
 			//Toast.makeText(WhatifActivity.this, "ＧＡＭＥ ＣＬＥＡＲ", Toast.LENGTH_SHORT).show();
 		}
 
-	}
-
-	//指定ミリ秒実行を止めるメソッド
-	public synchronized void sleep(long msec)
-	{
-		try
-		{
-			wait(msec);
-		} catch (InterruptedException e) {
-		}
 	}
 
 	// ////////////////////////////////////////////////
