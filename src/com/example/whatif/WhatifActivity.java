@@ -475,7 +475,7 @@ public class WhatifActivity extends Activity
 						// ゲームオーバーの判定
 						GameOver();
 						// ゲームクリアの判定
-
+						selectAble();
 						flipAnimFlag = true;
 					}
 				});
@@ -518,7 +518,7 @@ public class WhatifActivity extends Activity
 							dealFlipTrump(index + 1);
 						} else if (animCount == 5) {
 							animCount = 0;
-
+							selectAble();
 						}
 
 					}
@@ -633,6 +633,12 @@ public class WhatifActivity extends Activity
 
 								} else {
 									trumpView[index].setVisibility(View.INVISIBLE);
+									
+									Resources res = getResources();
+									int id = res.getIdentifier("selectAble" + index, "id", getPackageName());
+									TextView view = (TextView) findViewById(id);
+									view.setTextColor(0x00FFFF00);
+									
 									GameClear();
 								}
 
@@ -797,12 +803,32 @@ public class WhatifActivity extends Activity
 	}
 
 	private void scrollUp() {
-		if (counter < 53) {
-			final Resources res = getResources();
 
-			final int cChainId = res.getIdentifier("cChain" + counter, "id", getPackageName());
-			final int cBonusId = res.getIdentifier("cBonus" + counter, "id", getPackageName());
-			if (counter == 1) {
+		final Resources res = getResources();
+
+		final int cChainId = res.getIdentifier("cChain" + counter, "id", getPackageName());
+		final int cBonusId = res.getIdentifier("cBonus" + counter, "id", getPackageName());
+		if (counter == 1) {
+
+			((TextView) findViewById(cChainId)).setBackgroundColor(0xFFFF0000);
+
+			((TextView) findViewById(cBonusId)).setTextColor(0xFFFF0000);
+			((TextView) findViewById(cBonusId)).setBackgroundColor(0xFFFFFFFF);
+
+		} else {
+			if (counter <= 50) {
+
+				chainScroll.scrollBy(0, -scrollHeight);
+				bonusScroll.scrollBy(0, -scrollHeight);
+
+				// 1つ前のViewの状態を元に戻す
+				((TextView) findViewById(res.getIdentifier("cChain" + (counter - 1), "id", getPackageName())))
+						.setBackgroundColor(0xFF0000FF);
+
+				((TextView) findViewById(res.getIdentifier("cBonus" + (counter - 1), "id", getPackageName())))
+						.setTextColor(0xFFFFFFFF);
+				((TextView) findViewById(res.getIdentifier("cBonus" + (counter - 1), "id", getPackageName())))
+						.setBackgroundColor(0xFFFF0000);
 
 				((TextView) findViewById(cChainId)).setBackgroundColor(0xFFFF0000);
 
@@ -810,37 +836,24 @@ public class WhatifActivity extends Activity
 				((TextView) findViewById(cBonusId)).setBackgroundColor(0xFFFFFFFF);
 
 			} else {
-				if (counter <= 50) {
 
-					chainScroll.scrollBy(0, -scrollHeight);
-					bonusScroll.scrollBy(0, -scrollHeight);
-					//					chainScroll.smoothScrollBy(0, -scrollHeight);
-					//					bonusScroll.smoothScrollBy(0, -scrollHeight);
+				// 1つ前のViewの状態を元に戻す
+				((TextView) findViewById(res.getIdentifier("cChain" + (counter - 1), "id", getPackageName())))
+						.setBackgroundColor(0xFF0000FF);
 
-					// 1つ前のViewの状態を元に戻す
-					((TextView) findViewById(res.getIdentifier("cChain" + (counter - 1), "id", getPackageName())))
-							.setBackgroundColor(0xFF0000FF);
+				((TextView) findViewById(res.getIdentifier("cBonus" + (counter - 1), "id", getPackageName())))
+						.setTextColor(0xFFFFFFFF);
+				((TextView) findViewById(res.getIdentifier("cBonus" + (counter - 1), "id", getPackageName())))
+						.setBackgroundColor(0xFFFF0000);
 
-					((TextView) findViewById(res.getIdentifier("cBonus" + (counter - 1), "id", getPackageName())))
-							.setTextColor(0xFFFFFFFF);
-					((TextView) findViewById(res.getIdentifier("cBonus" + (counter - 1), "id", getPackageName())))
-							.setBackgroundColor(0xFFFF0000);
+				((TextView) findViewById(cChainId)).setBackgroundColor(0xFFFF0000);
 
-					((TextView) findViewById(cChainId)).setBackgroundColor(0xFFFF0000);
-
-					((TextView) findViewById(cBonusId)).setTextColor(0xFFFF0000);
-					((TextView) findViewById(cBonusId)).setBackgroundColor(0xFFFFFFFF);
-
-				} else {
-					((TextView) findViewById(cChainId)).setBackgroundColor(0xFFFF0000);
-
-					((TextView) findViewById(cBonusId)).setTextColor(0xFFFF0000);
-					((TextView) findViewById(cBonusId)).setBackgroundColor(0xFFFFFFFF);
-				}
-
+				((TextView) findViewById(cBonusId)).setTextColor(0xFFFF0000);
+				((TextView) findViewById(cBonusId)).setBackgroundColor(0xFFFFFFFF);
 			}
 
 		}
+
 	}
 
 	public void redrawCoin() {
@@ -954,6 +967,43 @@ public class WhatifActivity extends Activity
 
 	}
 
+	// 場札と同じ数字かスート(図柄)ならSELECT ABLEを表示する処理
+	private void selectAble() {
+
+		Resources res = getResources();
+		int id;
+		TextView view;
+
+		if (counter == 0) {
+			// 一枚目の場合(どのカードも場札に置ける)
+
+			for (int i = 1; i <= 5; i++) {
+				id = res.getIdentifier("selectAble" + i, "id", getPackageName());
+				view = (TextView) findViewById(id);
+				view.setTextColor(0xFFFFFF00);
+			}
+
+		} else {
+			// スート(図柄)が一致した場合
+			for (int i = 1; i <= 5; i++) {
+				id = res.getIdentifier("selectAble" + i, "id", getPackageName());
+				view = (TextView) findViewById(id);
+				if (trumpView[0].getSuit().equals(trumpView[i].getSuit())) {
+					view.setTextColor(0xFFFFFF00);
+				}
+				else if (trumpView[0].getNumber() == trumpView[i].getNumber()) {
+					view.setTextColor(0xFFFFFF00);
+
+				}
+				else {
+					view.setTextColor(0x00FFFF00);
+				}
+
+			}
+		}
+
+	}
+
 	// ////////////////////////////////////////////////
 	// GameFlag
 	// ////////////////////////////////////////////////
@@ -1044,9 +1094,10 @@ public class WhatifActivity extends Activity
 			}
 
 			coin.setBeforeWager(coin.getWager());
-
+			msg = (TextView) findViewById(R.id.msgView1);
 			msg.setText("CONGRATULATION!");
 			msg.setTextColor(Color.YELLOW);
+
 			// 手札を非表示にして、メッセージ画面手札を表示する
 			findViewById(R.id.HandLayout).setVisibility(View.GONE);
 			findViewById(R.id.TextLayout).setVisibility(View.VISIBLE);
