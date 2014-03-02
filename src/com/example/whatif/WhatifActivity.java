@@ -1,10 +1,13 @@
 package com.example.whatif;
 
 import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
+import android.graphics.Color;
 import android.graphics.Point;
 import android.graphics.Rect;
 import android.graphics.Typeface;
@@ -14,19 +17,21 @@ import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.Menu;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnTouchListener;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.TranslateAnimation;
 import android.widget.FrameLayout;
+import android.widget.ScrollView;
 import android.widget.TextSwitcher;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ViewSwitcher.ViewFactory;
-
 
 public class WhatifActivity extends Activity
 		implements ViewFactory {
@@ -78,7 +83,31 @@ public class WhatifActivity extends Activity
 	private int height = 0;
 	private int txtSwitchFontSize = 20;
 	private boolean dealAnimFlag = true;
+	private ScrollView chainScroll;
+	private ScrollView bonusScroll;
 
+	private int scrollHeight;
+	private com.example.whatif.Coin coin;
+	private TextView wagerView;
+	private TextView winView;
+	private TextView paidView;
+	private TextView creditView;
+
+	private enum DPI {
+		ldpi, mdpi, hdpi, xhdpi, xxhdpi
+	}
+
+	private DPI dpi;
+	private boolean coin_flag;
+	private boolean skip_flag;
+	private Handler handler = new Handler();
+	private int beforeCredit;
+	private int timerCount;
+
+	private int[] rate52 = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 2, 2, 2, 2, 3, 3,
+			3, 3, 4, 4, 4, 5, 5, 6, 6, 7, 7, 8, 8, 10, 10, 12, 12, 14, 14, 16,
+			18, 20, 22, 25, 30, 35, 40, 45, 50, 55, 60, 80, 100 };
+	private int beforeWager;
 
 	/* ********** ********** ********** ********** */
 
@@ -95,6 +124,35 @@ public class WhatifActivity extends Activity
 		deck.shuffle(this.getApplicationContext());
 		// 場札に置いた順番を記録するインスタンスを取得する
 		record = new Deck(this.getApplicationContext());
+
+		coin = new Coin();
+
+		// Activityを継承していないため、getWindowManager()メソッドは利用できない
+		// Displayクラスのインスタンスを取得するため
+		// 引数のContextを使用してWindowManagerを取得する
+		WindowManager wm = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
+
+		// Displayインスタンスを取得する
+		Display display = wm.getDefaultDisplay();
+
+		width = display.getWidth();
+		height = display.getHeight();
+
+		if (width <= 240) {//ldpi（120dpi）240×320px
+			dpi = DPI.ldpi;
+		} else if (240 < +width && +width <= 320) {//mdpi（160dpi）320×480px
+			dpi = DPI.mdpi;
+		} else if (320 < +width && +width <= 480) {//hdpi（240dpi）480×800px
+			dpi = DPI.hdpi;
+		} else if (480 < +width && +width <= 640) {//xhdpi（320dpi）640×960px
+			dpi = DPI.xhdpi;
+		} else if (640 < +width) {//xxhdpi（480dpi）960×1440px
+			dpi = DPI.xxhdpi;
+		}
+		Log.v(TAG, "> " + dpi + " w=" + width + " h=" + height);
+
+		// コイン操作画面を非表示にする(アニメーションの座標計算のため)
+		findViewById(R.id.CoinLayout).setVisibility(View.GONE);
 
 		// 画像配置用に最前面のレイアウトのインスタンスを取得
 		mainFrame = (FrameLayout) findViewById(R.id.FrameLayout);
@@ -124,8 +182,8 @@ public class WhatifActivity extends Activity
 
 		}
 
-		trumpView[0].addTrumpView(deck, 12, this.getApplicationContext());
-		//		trumpView[0].addLayoutView(this.getApplicationContext());
+		trumpView[0].addLayoutView(this.getApplicationContext());
+		trumpView[0].setVisibility(View.INVISIBLE);
 
 		// trumpBackViewのインスタンス取得と配置
 		// onWindowFocusChanged()で場札の位置を微調整するので
@@ -156,7 +214,17 @@ public class WhatifActivity extends Activity
 		trumpView[4].setOnClickListener(hand4Listener);
 		trumpView[5].setOnClickListener(hand5Listener);
 
-		findViewById(R.id.CoinLayout).setVisibility(View.GONE);
+		findViewById(R.id.collectBtn).setOnClickListener(collectBtnListener);
+		findViewById(R.id.hdBtn).setOnClickListener(hbBtnListener);
+		findViewById(R.id.betBtn).setOnClickListener(betBtnListener);
+		findViewById(R.id.repeatBtn).setOnClickListener(repeatBtnListener);
+		findViewById(R.id.payoutBtn).setOnClickListener(payoutBtnListener);
+		findViewById(R.id.dealBtn).setOnClickListener(dealBtnListener);
+
+		wagerView = (TextView) findViewById(R.id.wager);//
+		winView = (TextView) findViewById(R.id.win);//
+		paidView = (TextView) findViewById(R.id.paid);//
+		creditView = (TextView) findViewById(R.id.credit);//
 
 		// todo
 		//		コイン処理の移植
@@ -164,7 +232,7 @@ public class WhatifActivity extends Activity
 		//		ListViewの処理
 
 		//カウンター処理
-		counter();
+		countChain();
 
 		replaceFlag = true;
 		Log.v(TAG, "onCreate()");
@@ -203,8 +271,11 @@ public class WhatifActivity extends Activity
 			mainFrame.addView(trumpBackView[0], params);
 			trumpBackView[0].setVisibility(View.INVISIBLE);
 
-			// レイアウトの一時配置用の画像を非表示にする(削除するとレイアウトが崩れるため非表示を選択)
-			clearView[0].setVisibility(View.INVISIBLE);
+			int x = Math.max(clearView_location.get(0).x, clearView_location.get(3).x)
+					- Math.min(clearView_location.get(0).x, clearView_location.get(3).x);
+
+			clearView[0].layout(clearView[0].getLeft() + x, 0,
+					clearView[0].getRight() + x, clearView[0].getHeight());
 
 			// 手札1から5にトランプを配置し非表示にする
 			//			for (int i = 1; i < 6; i++) {
@@ -273,6 +344,49 @@ public class WhatifActivity extends Activity
 			mainFrame.addView(trumpView[5], handParams);
 			trumpView[5].setVisibility(View.INVISIBLE);
 
+			scrollHeight = findViewById(R.id.cChain1).getHeight();
+
+			chainScroll = (ScrollView) findViewById(R.id.chainScroll);
+
+			chainScroll.setOnTouchListener(new OnTouchListener() {
+				@Override
+				public boolean onTouch(View v, MotionEvent event) {
+					return true;
+				}
+			});
+
+			chainScroll.post(new Runnable() {
+
+				@Override
+				public void run() {
+					chainScroll.fullScroll(ScrollView.FOCUS_DOWN);
+
+				}
+			});
+
+			bonusScroll = (ScrollView) findViewById(R.id.bonusScroll);
+			bonusScroll.setOnTouchListener(new OnTouchListener() {
+				@Override
+				public boolean onTouch(View v, MotionEvent event) {
+					return true;
+				}
+			});
+
+			bonusScroll.post(new Runnable() {
+
+				@Override
+				public void run() {
+					bonusScroll.fullScroll(ScrollView.FOCUS_DOWN);
+
+				}
+			});
+
+			setTxtBounus();
+
+			findViewById(R.id.HandLayout).setVisibility(View.GONE);
+			findViewById(R.id.CoinLayout).setVisibility(View.VISIBLE);
+
+			redrawCoin();
 			replaceFlag = false;
 		}
 		Log.v(TAG, "onWindowFocusChanged()");
@@ -351,6 +465,11 @@ public class WhatifActivity extends Activity
 					public void onAnimationEnd(Animation animation) {
 						// アニメーションの終了
 						trumpView[index].setVisibility(View.VISIBLE);
+
+						// ゲームオーバーの判定
+						GameOver();
+						// ゲームクリアの判定
+
 						flipAnimFlag = true;
 					}
 				});
@@ -391,6 +510,9 @@ public class WhatifActivity extends Activity
 						// 手札2～5までのY軸回転処理						
 						if (animCount < 5) {
 							dealFlipTrump(index + 1);
+						} else if (animCount == 5) {
+							animCount = 0;
+
 						}
 
 					}
@@ -417,9 +539,12 @@ public class WhatifActivity extends Activity
 	// 手札1～5を配る処理
 	private void dealTrump() {
 
+		trumpView[0].setVisibility(View.INVISIBLE);
 		for (int i = 1; i < 6; i++) {
-			trumpBackView[i].setVisibility(View.VISIBLE);
+			trumpView[i].setVisibility(View.INVISIBLE);
+			trumpBackView[i].setVisibility(View.INVISIBLE);
 		}
+
 		dealFlipTrump(1);
 
 	}
@@ -448,11 +573,18 @@ public class WhatifActivity extends Activity
 				// トランプクリック後の処理
 				// ////////////////////////////////////////////////
 
+				counter++;
+				count.setText(String.valueOf(counter));
+
 				// 場札のビュー(trumpView[0])に手札の情報を移す
 				trumpView[0].setTrump(trumpView[index].getNumber(),
 						trumpView[index].getSuit(),
 						trumpView[index].getSerial(),
 						trumpView[index].getColor());
+
+				if (counter == 1) {
+					trumpView[0].setVisibility(View.VISIBLE);
+				}
 
 				// recordに場札に置く札を記録していく
 				record.trump.add(new Trump(
@@ -495,13 +627,13 @@ public class WhatifActivity extends Activity
 
 								} else {
 									trumpView[index].setVisibility(View.INVISIBLE);
+									GameClear();
 								}
+
+								scrollUp();
+
 								moveAnimFlag = true;
 
-								// ゲームオーバーの判定
-								GameOver();
-								// ゲームクリアの判定
-								GameClear();
 							}
 
 						});
@@ -521,20 +653,17 @@ public class WhatifActivity extends Activity
 		if (counter == 0) {
 			// 一枚目の場合(どのカードも場札に置ける)
 			//			Log.v(TAG, "一枚目");
-			counter++;
-			count.setText(String.valueOf(counter));
+
 			return true;
 		} else if (trumpView[0].getSuit().equals(trumpView[index].getSuit())) {
 			// スート(図柄)が一致した場合
 			//			Log.v(TAG, "スート(図柄)が一致");
-			counter++;
-			count.setText(String.valueOf(counter));
+
 			return true;
 		} else if (trumpView[0].getNumber() == trumpView[index].getNumber()) {
 			// 数字が一致した場合
 			//			Log.v(TAG, "数字が一致");
-			counter++;
-			count.setText(String.valueOf(counter));
+
 			return true;
 		}
 		return false;
@@ -592,18 +721,7 @@ public class WhatifActivity extends Activity
 		}
 	}
 
-	private void counter() {
-
-		// Activityを継承していないため、getWindowManager()メソッドは利用できない
-		// Displayクラスのインスタンスを取得するため
-		// 引数のContextを使用してWindowManagerを取得する
-		WindowManager wm = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
-
-		// Displayインスタンスを取得する
-		Display display = wm.getDefaultDisplay();
-
-		width = display.getWidth();
-		height = display.getHeight();
+	private void countChain() {
 
 		if (width <= 240) {//ldpi（120dpi）240×320px
 			txtSwitchFontSize = 40;
@@ -630,6 +748,193 @@ public class WhatifActivity extends Activity
 		count.setText(String.valueOf(counter));
 	}
 
+	private void setTxtBounus() {
+
+		Resources res = getResources();
+		int id;
+		TextView view;
+		for (int i = 1; i <= 52; i++) {
+			id = res.getIdentifier("cChain" + i, "id", getPackageName());
+			view = (TextView) findViewById(id);
+			view.setText(String.valueOf(i) + " CARDS");
+			view.setBackgroundColor(0xFF0000FF);
+		}
+
+		for (int i = 1; i <= 52; i++) {
+			id = res.getIdentifier("cBonus" + i, "id", getPackageName());
+			view = (TextView) findViewById(id);
+			view.setText(String.valueOf(rate52[i - 1]));
+
+		}
+	}
+
+	private void setTxtBounus(int wager) {
+
+		Resources res = getResources();
+		int id;
+		TextView view;
+
+		for (int i = 1; i <= 52; i++) {
+			id = res.getIdentifier("cChain" + i, "id", getPackageName());
+			view = (TextView) findViewById(id);
+			view.setBackgroundColor(0xFF0000FF);
+		}
+
+		for (int i = 1; i <= 52; i++) {
+			id = res.getIdentifier("cBonus" + i, "id", getPackageName());
+			view = (TextView) findViewById(id);
+			view.setText(String.valueOf(rate52[i - 1] * wager));
+			view.setTextColor(0xFFFFFFFF);
+			view.setBackgroundColor(0xFFFF0000);
+		}
+	}
+
+	private void scrollUp() {
+		if (counter < 53) {
+			Resources res = getResources();
+
+			int cChainId = res.getIdentifier("cChain" + counter, "id", getPackageName());
+			int cBonusId = res.getIdentifier("cBonus" + counter, "id", getPackageName());
+			if (counter == 1) {
+
+				((TextView) findViewById(cChainId)).setBackgroundColor(0xFFFF0000);
+
+				((TextView) findViewById(cBonusId)).setTextColor(0xFFFF0000);
+				((TextView) findViewById(cBonusId)).setBackgroundColor(0xFFFFFFFF);
+
+			} else {
+				if (counter <= 50) {
+					chainScroll.scrollBy(0, -scrollHeight);
+					bonusScroll.scrollBy(0, -scrollHeight);
+				}
+				// 1つ前のViewの状態を元に戻す
+				((TextView) findViewById(res.getIdentifier("cChain" + (counter - 1), "id", getPackageName()))).setBackgroundColor(0xFF0000FF);
+
+				((TextView) findViewById(res.getIdentifier("cBonus" + (counter - 1), "id", getPackageName()))).setTextColor(0xFFFFFFFF);
+				((TextView) findViewById(res.getIdentifier("cBonus" + (counter - 1), "id", getPackageName()))).setBackgroundColor(0xFFFF0000);
+
+				// 
+				((TextView) findViewById(cChainId)).setBackgroundColor(0xFFFF0000);
+
+				((TextView) findViewById(cBonusId)).setTextColor(0xFFFF0000);
+				((TextView) findViewById(cBonusId)).setBackgroundColor(0xFFFFFFFF);
+
+			}
+
+		}
+	}
+
+	public void redrawCoin() {
+		wagerView.setText(String.valueOf(coin.getWager()));
+		winView.setText(String.valueOf(0));
+		paidView.setText(String.valueOf(0));
+		creditView.setText(String.valueOf(coin.getCredit()));
+	}
+
+	// cuCoin関数…cu = Count Upの略称、払い戻し時にコインの枚数が1枚ずつ
+	// 増減する様子を表示する処理、引数は増減する枚数を渡す
+	public void cuCoin(final int x) {
+		// コイン増加表示の処理中かフラグ判定
+		if (coin_flag == false && (x != 0)) {
+
+			coin_flag = true;// コイン増加表示の処理中というフラグを立てる
+			beforeCredit = coin.getCredit();// 増加前のコインの枚数を格納
+			beforeWager = coin.getBeforeWager();
+			final Timer timer = new Timer();
+
+			//			Log.v(TAG, "timer_start x=" + x);
+
+			winView.setText(String.valueOf(x));
+
+			timer.schedule(new TimerTask() {
+				@Override
+				public void run() {
+					// handlerを通じてUI Threadへ処理をキューイング
+					handler.post(new Runnable() {
+						public void run() {
+							paidView.setText(String.valueOf(timerCount));
+							creditView.setText(String.valueOf(beforeCredit + timerCount));
+							timerCount++;
+
+							// Timer終了処理　
+							if (x == beforeWager && timerCount == x) {
+
+								creditView.setText(String.valueOf(beforeCredit
+										+ timerCount));
+								coin.setCredit((beforeCredit + beforeWager));
+								coin.setWager(0);
+
+								wagerView.setText("0");
+								winView.setText("0");
+								paidView.setText("0");
+
+								Log.v(TAG, "timer_stop x=" + x + "counter=" + timerCount);
+								coin_flag = false;
+								timerCount = 0;
+								timer.cancel();
+
+							} else if (timerCount == (x - beforeWager)
+									&& x != beforeWager) {
+
+								creditView.setText(String.valueOf(beforeCredit + x));
+
+								coin.setCredit((beforeCredit + x));
+								coin.setWager(0);
+
+								wagerView.setText("0");
+								winView.setText("0");
+								paidView.setText("0");
+
+								Log.v(TAG, "timer_stop x=" + x + "counter=" + timerCount);
+								coin_flag = false;
+								timerCount = 0;
+								timer.cancel();
+							}
+
+							else if (skip_flag == true) {
+
+								creditView.setText(String.valueOf(beforeCredit + x));
+
+								coin.setCredit((beforeCredit + x));
+								coin.setWager(0);
+
+								wagerView.setText("0");
+								winView.setText("0");
+								paidView.setText("0");
+
+								Log.v(TAG, "timer_stop_skip x=" + x + "counter=" + timerCount);
+								skip_flag = false;
+								coin_flag = false;
+								timerCount = 0;
+								timer.cancel();
+							}
+
+						}
+					});
+
+				}
+			}, 0, 50);
+
+		}
+		//		else if ((0 < timerCount) && (timerCount < (x - coin.getWager()))
+		//				&& (x != 0)) {
+		//			// コイン増加表示の処理中に再度ボタンを押した時に
+		//			// 増加表示をスキップする処理
+		//			timerCount = x - 1;
+		//		} 
+		else if (x == 0) {
+			coin.setWager(0);
+			redrawCoin();
+		}
+
+	}
+
+	private void refundCoin() {
+
+		cuCoin(rate52[counter - 1] * coin.getWager());
+
+	}
+
 	// ////////////////////////////////////////////////
 	// GameFlag
 	// ////////////////////////////////////////////////
@@ -645,13 +950,37 @@ public class WhatifActivity extends Activity
 			}
 
 		}
+
+		coin.setBeforeWager(coin.getWager());
+
+		for (int i = 1; i < 6; i++) {
+			trumpView[i].setVisibility(View.INVISIBLE);
+		}
+
+		// 手札を非表示にして、コイン操作画面手札を表示する
+		findViewById(R.id.HandLayout).setVisibility(View.GONE);
+		findViewById(R.id.CoinLayout).setVisibility(View.VISIBLE);
+
+		refundCoin();
 		Toast.makeText(WhatifActivity.this, "ＧＡＭＥ ＯＶＥＲ", Toast.LENGTH_SHORT).show();
 
 	}// GameOver_**********
 
 	public void GameClear() {
-		
-		if(counter==52){
+
+		if (counter == 52) {
+
+			for (int i = 1; i < 6; i++) {
+				trumpView[i].setVisibility(View.INVISIBLE);
+			}
+
+			coin.setBeforeWager(coin.getWager());
+
+			// 手札を非表示にして、コイン操作画面手札を表示する
+			findViewById(R.id.HandLayout).setVisibility(View.GONE);
+			findViewById(R.id.CoinLayout).setVisibility(View.VISIBLE);
+
+			refundCoin();
 			Toast.makeText(WhatifActivity.this, "ＧＡＭＥ ＣＬＥＡＲ", Toast.LENGTH_SHORT).show();
 		}
 
@@ -680,12 +1009,6 @@ public class WhatifActivity extends Activity
 		@Override
 		public void onClick(View v) {
 
-			if (dealAnimFlag) {
-				dealTrump();
-				animCount = 0;
-
-				//				Log.v(TAG, "場札_CLICK");
-			}
 		}
 	};
 
@@ -697,13 +1020,12 @@ public class WhatifActivity extends Activity
 
 			if (dealAnimFlag && flipAnimFlag && moveAnimFlag && agreeTrump(1)) {
 				moveTrump(1);
-				//				Log.v(TAG, "手札1_CLICK");
 			}
 
 		}
 	};
 
-	// 手札1Viewをクリックした時の処理
+	// 手札2Viewをクリックした時の処理
 	OnClickListener hand2Listener = new OnClickListener() {
 
 		@Override
@@ -711,12 +1033,11 @@ public class WhatifActivity extends Activity
 
 			if (dealAnimFlag && flipAnimFlag && moveAnimFlag && agreeTrump(2)) {
 				moveTrump(2);
-				//				Log.v(TAG, "手札2_CLICK");
 			}
 
 		}
 	};
-	// 手札1Viewをクリックした時の処理
+	// 手札3Viewをクリックした時の処理
 	OnClickListener hand3Listener = new OnClickListener() {
 
 		@Override
@@ -724,12 +1045,11 @@ public class WhatifActivity extends Activity
 
 			if (dealAnimFlag && flipAnimFlag && moveAnimFlag && agreeTrump(3)) {
 				moveTrump(3);
-				//				Log.v(TAG, "手札3_CLICK");
 			}
 		}
 
 	};
-	// 手札1Viewをクリックした時の処理
+	// 手札4Viewをクリックした時の処理
 	OnClickListener hand4Listener = new OnClickListener() {
 
 		@Override
@@ -737,12 +1057,11 @@ public class WhatifActivity extends Activity
 
 			if (dealAnimFlag && flipAnimFlag && moveAnimFlag && agreeTrump(4)) {
 				moveTrump(4);
-				//				Log.v(TAG, "手札4_CLICK");
 			}
 
 		}
 	};
-	// 手札1Viewをクリックした時の処理
+	// 手札5Viewをクリックした時の処理
 	OnClickListener hand5Listener = new OnClickListener() {
 
 		@Override
@@ -750,10 +1069,145 @@ public class WhatifActivity extends Activity
 
 			if (dealAnimFlag && flipAnimFlag && moveAnimFlag && agreeTrump(5)) {
 				moveTrump(5);
-				//				Log.v(TAG, "手札5_CLICK");
 			}
 		}
 
+	};
+
+	// コレクトボタンをクリックした時の処理
+	OnClickListener collectBtnListener = new OnClickListener() {
+
+		@Override
+		public void onClick(View v) {
+
+			if (coin_flag) {
+				skip_flag = true;
+			}
+
+			if (0 < coin.getWager()) {
+				coin.cancelBet();
+				wagerView.setText(String.valueOf(coin.getWager()));
+				creditView.setText(String.valueOf(coin.getCredit()));
+			}
+
+		}
+	};
+
+	// ハーフダブルボタンをクリックした時の処理
+	OnClickListener hbBtnListener = new OnClickListener() {
+		// 当たり枚数の半分を賭けて行うダブルダウンのこと。負けても半分は返ってくる。
+		@Override
+		public void onClick(View v) {
+
+		}
+	};
+	// ベットボタンをクリックした時の処理
+	OnClickListener betBtnListener = new OnClickListener() {
+
+		@Override
+		public void onClick(View v) {
+
+			if (!coin_flag) {
+
+				coin.minBet();
+
+				wagerView.setText(String.valueOf(coin.getWager()));
+				creditView.setText(String.valueOf(coin.getCredit()));
+			}
+		}
+	};
+	// リピートボタンをクリックした時の処理
+	OnClickListener repeatBtnListener = new OnClickListener() {
+
+		@Override
+		public void onClick(View v) {
+			if (!coin_flag) {
+				coin.repBet();
+				wagerView.setText(String.valueOf(coin.getWager()));
+				creditView.setText(String.valueOf(coin.getCredit()));
+			}
+		}
+	};
+	// プレイアウトボタンをクリックした時の処理
+	OnClickListener payoutBtnListener = new OnClickListener() {
+
+		@Override
+		public void onClick(View v) {
+
+		}
+	};
+
+	// ディールボタンをクリックした時の処理
+	OnClickListener dealBtnListener = new OnClickListener() {
+
+		@Override
+		public void onClick(View v) {
+
+			if (!coin_flag) {
+				// 最小BET数を満たしていたらゲーム開始
+				if (coin.getWager() >= coin.getMinbet() && counter == 0) {
+
+					setTxtBounus(coin.getWager());
+
+					// コイン操作画面を非表示にして、手札を表示する				
+					findViewById(R.id.CoinLayout).setVisibility(View.GONE);
+					findViewById(R.id.HandLayout).setVisibility(View.VISIBLE);
+
+					dealTrump();
+				} else if (coin.getWager() >= coin.getMinbet() && counter > 0) {
+
+					counter = 0;
+					count.setText(String.valueOf(0));
+
+					trumpView[0].setTrump(0, "", 0, Color.WHITE);
+
+					// トランプ(52枚)を管理するDeckクラスのインスタンスの取得
+					deck = new Deck(getApplicationContext());
+					// トランプ(52枚)の生成とシャッフル
+					deck.shuffle(getApplicationContext());
+					// 場札に置いた順番を記録するインスタンスを取得する
+					record = new Deck(getApplicationContext());
+
+					setTxtBounus(coin.getWager());
+
+					chainScroll.post(new Runnable() {
+
+						@Override
+						public void run() {
+							chainScroll.fullScroll(ScrollView.FOCUS_DOWN);
+
+						}
+					});
+
+					bonusScroll.post(new Runnable() {
+
+						@Override
+						public void run() {
+							bonusScroll.fullScroll(ScrollView.FOCUS_DOWN);
+
+						}
+					});
+
+					redrawGuide();
+
+					for (int i = 1; i < 6; i++) {
+						// 手札のビュー(trumpView[index])に新しい札の情報を移す
+						trumpView[i].setTrump(deck.trump.get(i - 1).getNumber(),
+								deck.trump.get(i - 1).getSuit(),
+								deck.trump.get(i - 1).getSerial(),
+								deck.trump.get(i - 1).getColor());
+
+					}
+
+					// コイン操作画面を非表示にして、手札を表示する				
+					findViewById(R.id.CoinLayout).setVisibility(View.GONE);
+					findViewById(R.id.HandLayout).setVisibility(View.VISIBLE);
+
+					dealTrump();
+				}
+
+			}
+		}
 	};
 
 }

@@ -103,12 +103,30 @@ public class TrumpView extends LinearLayout {
 
 		View layout = LayoutInflater.from(context).inflate(R.layout.layout_view, this);
 
+		TextView tv = (TextView) layout.findViewById(R.id.TrumpNum);
+		tv.setText("");
+		TextView tv1 = (TextView) layout.findViewById(R.id.TrumpSuit1);
+		TextView tv2 = (TextView) layout.findViewById(R.id.TrumpSuit2);
+		tv1.setText("");
+		tv2.setText("");
+
 		fixDisplay(context);
 
-		LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(trumpWidth, trumpHeight, Gravity.CENTER);
+		LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(trumpWidth, trumpHeight, Gravity.NO_GRAVITY);
+
+		tv.setTextSize(fontSize);
+		tv1.setTextSize(fontSize);
+		tv2.setTextSize(fontSize * 2);
+
+		tv.setTextColor(Color.WHITE);
+
+		tv1.setTextColor(Color.WHITE);
+		tv2.setTextColor(Color.WHITE);
+
 		layout.setLayoutParams(params);
 
 		return layout;
+
 	}
 
 	// 手札の配置に使う半透明のカスタムビューを返す
@@ -196,17 +214,19 @@ public class TrumpView extends LinearLayout {
 	public String getSuit() {
 		return suit;
 	}
+
 	public int getSerial() {
 		return serial;
 	}
+
 	public int getColor() {
 		return color;
 	}
 
-	public void setTrump(int number, String suit, int serial,int color) {
+	public void setTrump(int number, String suit, int serial, int color) {
 		this.number = number;
 		this.suit = suit;
-		this.serial=serial;
+		this.serial = serial;
 		this.color = color;
 
 		TextView tv = (TextView) findViewById(R.id.TrumpNum);
@@ -224,14 +244,14 @@ public class TrumpView extends LinearLayout {
 
 	public void setNumber(int number) {
 		this.number = number;
-		
+
 		TextView tv = (TextView) findViewById(R.id.TrumpNum);
 		tv.setText(String.valueOf(number));
 	}
 
 	public void setSuit(String suit) {
 		this.suit = suit;
-		
+
 		TextView tv1 = (TextView) findViewById(R.id.TrumpSuit1);
 		TextView tv2 = (TextView) findViewById(R.id.TrumpSuit2);
 		tv1.setText(suit);
@@ -241,9 +261,10 @@ public class TrumpView extends LinearLayout {
 	public void setSerial(int serial) {
 		this.serial = serial;
 	}
+
 	public void setColor(int color) {
 		this.color = color;
-		
+
 		TextView tv = (TextView) findViewById(R.id.TrumpNum);
 		TextView tv1 = (TextView) findViewById(R.id.TrumpSuit1);
 		TextView tv2 = (TextView) findViewById(R.id.TrumpSuit2);

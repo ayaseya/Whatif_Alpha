@@ -1,80 +1,74 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical" >
+<merge xmlns:android="http://schemas.android.com/apk/res/android" >
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center" >
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical" >
 
-        <Button
-            android:id="@+id/collectBtn"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@android:color/transparent"
-            android:contentDescription="@string/collect"
-            android:onClick="colBtn_onClick"
-            android:text="@string/collect" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
 
-        <Button
-            android:id="@+id/hdBtn"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@android:color/transparent"
-            android:contentDescription="@string/halfdouble"
-            android:onClick="hdBtn_onClick"
-            android:text="@string/halfdouble" />
+            <Button
+                android:id="@+id/collectBtn"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:text="@string/collect"
+                android:textSize="14sp" />
 
-        <Button
-            android:id="@+id/betBtn"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@android:color/transparent"
-            android:contentDescription="@string/bet"
-            android:onClick="betBtn_onClick"
-            android:text="@string/bet" />
+            <Button
+                android:id="@+id/hdBtn"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:text="@string/halfdouble"
+                android:textSize="14sp" />
 
-        <Button
-            android:id="@+id/repeatBtn"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@android:color/transparent"
-            android:contentDescription="@string/repeatbet"
-            android:onClick="repeatBtn_onClick"
-            android:text="@string/repeatbet" />
+            <Button
+                android:id="@+id/betBtn"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:text="@string/bet" />
+
+            <Button
+                android:id="@+id/repeatBtn"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:text="@string/repeatbet"
+                android:textSize="14sp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+
+            <Button
+                android:id="@+id/payoutBtn"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:text="@string/payout" />
+
+            <Button
+                android:id="@+id/dealBtn"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:text="@string/deal" />
+
+        </LinearLayout>
     </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
-
-        <Button
-            android:id="@+id/payoutBtn"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_weight="1"
-            android:background="@android:color/transparent"
-            android:contentDescription="@string/payout"
-            android:onClick="payoutBtn_onClick"
-            android:text="@string/payout" />
-
-        <Button
-            android:id="@+id/dealBtn"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_weight="1"
-            android:background="@android:color/transparent"
-            android:contentDescription="@string/deal"
-            android:onClick="dealBtn_onClick"
-            android:text="@string/deal" />
-    </LinearLayout>
-
-</LinearLayout>
+</merge>
