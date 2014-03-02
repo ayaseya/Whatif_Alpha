@@ -95,6 +95,17 @@
 
             <include layout="@layout/coin_pannel" />
         </LinearLayout>
+        
+                <!-- ################## 手札部操作イアウト ################## -->
+
+        <LinearLayout
+            android:id="@+id/TextLayout"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1" >
+
+            <include layout="@layout/text_pannel" />
+        </LinearLayout>
     </LinearLayout>
 
 </FrameLayout>

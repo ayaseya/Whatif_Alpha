@@ -30,7 +30,6 @@ import android.widget.FrameLayout;
 import android.widget.ScrollView;
 import android.widget.TextSwitcher;
 import android.widget.TextView;
-import android.widget.Toast;
 import android.widget.ViewSwitcher.ViewFactory;
 
 public class WhatifActivity extends Activity
@@ -108,6 +107,7 @@ public class WhatifActivity extends Activity
 			3, 3, 4, 4, 4, 5, 5, 6, 6, 7, 7, 8, 8, 10, 10, 12, 12, 14, 14, 16,
 			18, 20, 22, 25, 30, 35, 40, 45, 50, 55, 60, 80, 100 };
 	private int beforeWager;
+	private TextView msg;
 
 	/* ********** ********** ********** ********** */
 
@@ -153,6 +153,7 @@ public class WhatifActivity extends Activity
 
 		// コイン操作画面を非表示にする(アニメーションの座標計算のため)
 		findViewById(R.id.CoinLayout).setVisibility(View.GONE);
+		findViewById(R.id.TextLayout).setVisibility(View.GONE);
 
 		// 画像配置用に最前面のレイアウトのインスタンスを取得
 		mainFrame = (FrameLayout) findViewById(R.id.FrameLayout);
@@ -220,6 +221,8 @@ public class WhatifActivity extends Activity
 		findViewById(R.id.repeatBtn).setOnClickListener(repeatBtnListener);
 		findViewById(R.id.payoutBtn).setOnClickListener(payoutBtnListener);
 		findViewById(R.id.dealBtn).setOnClickListener(dealBtnListener);
+
+		findViewById(R.id.TextLayout).setOnClickListener(textListener);
 
 		wagerView = (TextView) findViewById(R.id.wager);//
 		winView = (TextView) findViewById(R.id.win);//
@@ -559,7 +562,7 @@ public class WhatifActivity extends Activity
 				0, layout_location[0] - clearView_location.get(index).x,
 				0, layout_location[1] - (clearView_location.get(index).y - statusbarHeight));
 
-		translate.setDuration(150);
+		translate.setDuration(175);
 		trumpView[index].startAnimation(translate);
 		translate.setAnimationListener(new TrumpAnimationListener(index) {
 			@Override
@@ -868,7 +871,7 @@ public class WhatifActivity extends Activity
 								winView.setText("0");
 								paidView.setText("0");
 
-								Log.v(TAG, "timer_stop x=" + x + "counter=" + timerCount);
+								//								Log.v(TAG, "timer_stop x=" + x + "counter=" + timerCount);
 								coin_flag = false;
 								timerCount = 0;
 								timer.cancel();
@@ -885,7 +888,7 @@ public class WhatifActivity extends Activity
 								winView.setText("0");
 								paidView.setText("0");
 
-								Log.v(TAG, "timer_stop x=" + x + "counter=" + timerCount);
+								//								Log.v(TAG, "timer_stop x=" + x + "counter=" + timerCount);
 								coin_flag = false;
 								timerCount = 0;
 								timer.cancel();
@@ -902,7 +905,7 @@ public class WhatifActivity extends Activity
 								winView.setText("0");
 								paidView.setText("0");
 
-								Log.v(TAG, "timer_stop_skip x=" + x + "counter=" + timerCount);
+								//								Log.v(TAG, "timer_stop_skip x=" + x + "counter=" + timerCount);
 								skip_flag = false;
 								coin_flag = false;
 								timerCount = 0;
@@ -957,12 +960,27 @@ public class WhatifActivity extends Activity
 			trumpView[i].setVisibility(View.INVISIBLE);
 		}
 
-		// 手札を非表示にして、コイン操作画面手札を表示する
+		msg = (TextView) findViewById(R.id.msgView1);
+
+		if (counter >= 14) {
+
+			msg.setText("WINNER!");
+			msg.setTextColor(Color.RED);
+		}
+		else if (10 <= counter && counter <= 13) {
+			msg.setText("DRAW!");
+			msg.setTextColor(Color.GREEN);
+		}
+		else {
+			msg.setText("LOSER!");
+			msg.setTextColor(Color.BLUE);
+		}
+		// 手札を非表示にして、メッセージ画面手札を表示する
 		findViewById(R.id.HandLayout).setVisibility(View.GONE);
-		findViewById(R.id.CoinLayout).setVisibility(View.VISIBLE);
+		findViewById(R.id.TextLayout).setVisibility(View.VISIBLE);
 
 		refundCoin();
-		Toast.makeText(WhatifActivity.this, "ＧＡＭＥ ＯＶＥＲ", Toast.LENGTH_SHORT).show();
+		//Toast.makeText(WhatifActivity.this, "ＧＡＭＥ ＯＶＥＲ", Toast.LENGTH_SHORT).show();
 
 	}// GameOver_**********
 
@@ -976,14 +994,26 @@ public class WhatifActivity extends Activity
 
 			coin.setBeforeWager(coin.getWager());
 
-			// 手札を非表示にして、コイン操作画面手札を表示する
+			msg.setText("CONGRATULATION!");
+			msg.setTextColor(Color.YELLOW);
+			// 手札を非表示にして、メッセージ画面手札を表示する
 			findViewById(R.id.HandLayout).setVisibility(View.GONE);
-			findViewById(R.id.CoinLayout).setVisibility(View.VISIBLE);
+			findViewById(R.id.TextLayout).setVisibility(View.VISIBLE);
 
 			refundCoin();
-			Toast.makeText(WhatifActivity.this, "ＧＡＭＥ ＣＬＥＡＲ", Toast.LENGTH_SHORT).show();
+			//Toast.makeText(WhatifActivity.this, "ＧＡＭＥ ＣＬＥＡＲ", Toast.LENGTH_SHORT).show();
 		}
 
+	}
+
+	//指定ミリ秒実行を止めるメソッド
+	public synchronized void sleep(long msec)
+	{
+		try
+		{
+			wait(msec);
+		} catch (InterruptedException e) {
+		}
 	}
 
 	// ////////////////////////////////////////////////
@@ -1207,6 +1237,22 @@ public class WhatifActivity extends Activity
 				}
 
 			}
+		}
+	};
+
+	// プレイアウトボタンをクリックした時の処理
+	OnClickListener textListener = new OnClickListener() {
+
+		@Override
+		public void onClick(View v) {
+
+			if (coin_flag) {
+				skip_flag = true;
+			}
+
+			findViewById(R.id.TextLayout).setVisibility(View.GONE);
+			findViewById(R.id.CoinLayout).setVisibility(View.VISIBLE);
+
 		}
 	};
 
