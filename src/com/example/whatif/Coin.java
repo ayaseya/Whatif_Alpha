@@ -1,6 +1,5 @@
 package com.example.whatif;
 
-import android.util.Log;
 
 public class Coin {
 
@@ -31,21 +30,21 @@ public class Coin {
 				
 				credit -= beforeWager;
 				wager += beforeWager;
-				Log.v("Test", "1:credit="+credit+" wager="+wager);
+//				Log.v("Test", "1:credit="+credit+" wager="+wager);
 				
 		} else if (wager + beforeWager < maxbet) {
 	
 				credit -= beforeWager;
 				wager += beforeWager;
 				
-				Log.v("Test", "2:credit="+credit+" wager="+wager);
+//				Log.v("Test", "2:credit="+credit+" wager="+wager);
 				
 			} else if (wager + beforeWager >= maxbet) {
 	
 				credit -= maxbet - wager;
 				wager = maxbet;
 				
-				Log.v("Test", "3:credit="+credit+" wager="+wager);
+//				Log.v("Test", "3:credit="+credit+" wager="+wager);
 			}
 		}
 
