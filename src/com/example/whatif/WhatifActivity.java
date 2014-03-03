@@ -918,8 +918,8 @@ public class WhatifActivity extends Activity
 		if (coin_flag == false && (x != 0)) {
 
 			coin_flag = true;// コイン増加表示の処理中というフラグを立てる
-			beforeCredit = coin.getCredit();// 増加前のコインの枚数を格納
-			beforeWager = coin.getBeforeWager();
+			//			beforeCredit = coin.getCredit();// 増加前のコインの枚数を格納
+			//			beforeWager = coin.getBeforeWager();
 			final Timer timer = new Timer();
 
 			//			Log.v(TAG, "timer_start x=" + x);
@@ -933,59 +933,34 @@ public class WhatifActivity extends Activity
 					handler.post(new Runnable() {
 						public void run() {
 							paidView.setText(String.valueOf(timerCount));
-							creditView.setText(String.valueOf(beforeCredit + timerCount));
+							creditView.setText(String.valueOf(coin.getCredit() + timerCount));
 							timerCount++;
 
-							// Timer終了処理　
-							if (x == beforeWager && timerCount == x) {
+							if (x == timerCount) {
+								Log.v(TAG, "timer_stop_WIN");
 
-								creditView.setText(String.valueOf(beforeCredit + beforeWager));
-								coin.setCredit((beforeCredit + beforeWager));
+								coin.setCredit(coin.getCredit() + x);
 								coin.setWager(0);
 
-								wagerView.setText("0");
-								winView.setText("0");
-								paidView.setText("0");
+								redrawCoin();
 
-								//								Log.v(TAG, "timer_stop x=" + x + "counter=" + timerCount);
 								coin_flag = false;
 								timerCount = 0;
 								timer.cancel();
 
-							} else if (timerCount == (x - beforeWager)
-									&& x != beforeWager) {
+							} else if (skip_flag == true) {
+								Log.v(TAG, "timer_stop_SKIP");
 
-								creditView.setText(String.valueOf(beforeCredit + x));
-
-								coin.setCredit((beforeCredit + x));
+								coin.setCredit(coin.getCredit() + x);
 								coin.setWager(0);
 
-								wagerView.setText("0");
-								winView.setText("0");
-								paidView.setText("0");
+								redrawCoin();
 
-								//								Log.v(TAG, "timer_stop x=" + x + "counter=" + timerCount);
 								coin_flag = false;
-								timerCount = 0;
-								timer.cancel();
-							}
-
-							else if (skip_flag == true) {
-
-								creditView.setText(String.valueOf(beforeCredit + x));
-
-								coin.setCredit((beforeCredit + x));
-								coin.setWager(0);
-
-								wagerView.setText("0");
-								winView.setText("0");
-								paidView.setText("0");
-
-								//								Log.v(TAG, "timer_stop_skip x=" + x + "counter=" + timerCount);
 								skip_flag = false;
-								coin_flag = false;
 								timerCount = 0;
 								timer.cancel();
+
 							}
 
 						}
@@ -994,14 +969,7 @@ public class WhatifActivity extends Activity
 				}
 			}, 0, 50);
 
-		}
-		//		else if ((0 < timerCount) && (timerCount < (x - coin.getWager()))
-		//				&& (x != 0)) {
-		//			// コイン増加表示の処理中に再度ボタンを押した時に
-		//			// 増加表示をスキップする処理
-		//			timerCount = x - 1;
-		//		} 
-		else if (x == 0) {
+		} else if (x == 0) {
 			coin.setWager(0);
 			redrawCoin();
 		}
@@ -1011,7 +979,8 @@ public class WhatifActivity extends Activity
 	private void refundCoin() {
 
 		cuCoin(rate52[counter - 1] * coin.getWager());
-
+		Log.v(TAG, "RATE=" + rate52[counter - 1] + "WAGER" + coin.getWager());
+		Log.v(TAG, "WIN=" + rate52[counter - 1] * coin.getWager());
 	}
 
 	// 場札と同じ数字かスート(図柄)ならSELECT ABLEを表示する処理
