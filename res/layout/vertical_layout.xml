@@ -3,9 +3,10 @@
     android:id="@+id/mainLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginLeft="10dp"
-    android:layout_marginRight="10dp"
-    android:orientation="vertical" >
+    android:background="#000000"
+    android:orientation="vertical"
+    android:paddingLeft="10dp"
+    android:paddingRight="10dp" >
 
     <View
         android:id="@+id/header"
@@ -20,6 +21,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/header"
         android:layout_centerHorizontal="true"
+        android:background="@drawable/white_border"
         android:baselineAligned="false" >
 
         <LinearLayout
@@ -40,13 +42,13 @@
             <ScrollView
                 android:id="@+id/bonusScroll1"
                 android:layout_width="match_parent"
-                android:layout_height="64dp"
+                android:layout_height="96dp"
+                android:background="@drawable/white_border"
                 android:scrollbars="none" >
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/white_border"
                     android:orientation="vertical" >
 
                     <TextView
@@ -486,13 +488,13 @@
             <ScrollView
                 android:id="@+id/paysScroll1"
                 android:layout_width="match_parent"
-                android:layout_height="64dp"
+                android:layout_height="96dp"
+                android:background="@drawable/white_border"
                 android:scrollbars="none" >
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/white_border"
                     android:orientation="vertical" >
 
                     <TextView
@@ -869,6 +871,8 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/bonusLayout"
         android:layout_centerHorizontal="true"
+        android:layout_marginTop="-2dp"
+        android:background="@drawable/white_border"
         android:baselineAligned="false"
         android:orientation="horizontal" >
 
@@ -891,12 +895,22 @@
             <ScrollView
                 android:id="@+id/bonusScroll2"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" >
+                android:layout_height="32dp"
+                android:background="@drawable/white_border" >
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical" >
+
+                    <TextView
+                        android:id="@+id/handName0"
+                        style="@style/blue"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:paddingLeft="10dp"
+                        android:text="@string/Blank" />
 
                     <TextView
                         android:id="@+id/handName1"
@@ -964,12 +978,21 @@
             <ScrollView
                 android:id="@+id/paysScroll2"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" >
+                android:layout_height="32dp"
+                android:background="@drawable/white_border" >
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical" >
+
+                    <TextView
+                        android:id="@+id/handBonus0"
+                        style="@style/red"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="@string/Blank" />
 
                     <TextView
                         android:id="@+id/handBonus1"
@@ -1032,12 +1055,21 @@
             <ScrollView
                 android:id="@+id/hitsScroll1"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" >
+                android:layout_height="32dp"
+                android:background="@drawable/white_border" >
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical" >
+
+                    <TextView
+                        android:id="@+id/hitsFlag0"
+                        style="@style/blue"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="@string/Blank" />
 
                     <TextView
                         android:id="@+id/hitsFlag1"
@@ -1083,13 +1115,588 @@
         </LinearLayout>
     </LinearLayout>
 
+    <TableLayout
+        android:id="@+id/guideLayout"
+        style="@style/blue"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/pokerLayout"
+        android:layout_marginTop="-2dp"
+        android:background="@drawable/white_border" >
+
+        <!-- ################## スペード ################## -->
+
+        <TableRow
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center" >
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="@string/spade"
+                android:textColor="#FFFFFF" />
+
+            <TextView
+                android:id="@+id/card0"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="@string/rank1"
+                android:textColor="#FFFFFF" />
+
+            <TextView
+                android:id="@+id/card1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="@string/rank2"
+                android:textColor="#FFFFFF" />
+
+            <TextView
+                android:id="@+id/card2"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="@string/rank3"
+                android:textColor="#FFFFFF" />
+
+            <TextView
+                android:id="@+id/card3"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="@string/rank4"
+                android:textColor="#FFFFFF" />
+
+            <TextView
+                android:id="@+id/card4"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="@string/rank5"
+                android:textColor="#FFFFFF" />
+
+            <TextView
+                android:id="@+id/card5"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="@string/rank6"
+                android:textColor="#FFFFFF" />
+
+            <TextView
+                android:id="@+id/card6"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="@string/rank7"
+                android:textColor="#FFFFFF" />
+
+            <TextView
+                android:id="@+id/card7"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="@string/rank8"
+                android:textColor="#FFFFFF" />
+
+            <TextView
+                android:id="@+id/card8"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="@string/rank9"
+                android:textColor="#FFFFFF" />
+
+            <TextView
+                android:id="@+id/card9"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="@string/rank10"
+                android:textColor="#FFFFFF" />
+
+            <TextView
+                android:id="@+id/card10"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="@string/rank11"
+                android:textColor="#FFFFFF" />
+
+            <TextView
+                android:id="@+id/card11"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="@string/rank12"
+                android:textColor="#FFFFFF" />
+
+            <TextView
+                android:id="@+id/card12"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="@string/rank13"
+                android:textColor="#FFFFFF" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="@string/spade"
+                android:textColor="#FFFFFF" />
+        </TableRow>
+
+        <!-- ################## ハート ################## -->
+
+        <TableRow
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center" >
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="@string/heart"
+                android:textColor="#FF0000" />
+
+            <TextView
+                android:id="@+id/card13"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="@string/rank1"
+                android:textColor="#FFFFFF" />
+
+            <TextView
+                android:id="@+id/card14"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="@string/rank2"
+                android:textColor="#FFFFFF" />
+
+            <TextView
+                android:id="@+id/card15"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="@string/rank3"
+                android:textColor="#FFFFFF" />
+
+            <TextView
+                android:id="@+id/card16"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="@string/rank4"
+                android:textColor="#FFFFFF" />
+
+            <TextView
+                android:id="@+id/card17"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="@string/rank5"
+                android:textColor="#FFFFFF" />
+
+            <TextView
+                android:id="@+id/card18"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="@string/rank6"
+                android:textColor="#FFFFFF" />
+
+            <TextView
+                android:id="@+id/card19"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="@string/rank7"
+                android:textColor="#FFFFFF" />
+
+            <TextView
+                android:id="@+id/card20"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="@string/rank8"
+                android:textColor="#FFFFFF" />
+
+            <TextView
+                android:id="@+id/card21"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="@string/rank9"
+                android:textColor="#FFFFFF" />
+
+            <TextView
+                android:id="@+id/card22"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="@string/rank10"
+                android:textColor="#FFFFFF" />
+
+            <TextView
+                android:id="@+id/card23"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="@string/rank11"
+                android:textColor="#FFFFFF" />
+
+            <TextView
+                android:id="@+id/card24"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="@string/rank12"
+                android:textColor="#FFFFFF" />
+
+            <TextView
+                android:id="@+id/card25"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="@string/rank13"
+                android:textColor="#FFFFFF" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="@string/heart"
+                android:textColor="#FF0000" />
+        </TableRow>
+
+        <!-- ################## クラブ ################## -->
+
+        <TableRow
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center" >
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="@string/club"
+                android:textColor="#FFFFFF" />
+
+            <TextView
+                android:id="@+id/card26"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="@string/rank1"
+                android:textColor="#FFFFFF" />
+
+            <TextView
+                android:id="@+id/card27"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="@string/rank2"
+                android:textColor="#FFFFFF" />
+
+            <TextView
+                android:id="@+id/card28"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="@string/rank3"
+                android:textColor="#FFFFFF" />
+
+            <TextView
+                android:id="@+id/card29"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="@string/rank4"
+                android:textColor="#FFFFFF" />
+
+            <TextView
+                android:id="@+id/card30"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="@string/rank5"
+                android:textColor="#FFFFFF" />
+
+            <TextView
+                android:id="@+id/card31"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="@string/rank6"
+                android:textColor="#FFFFFF" />
+
+            <TextView
+                android:id="@+id/card32"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="@string/rank7"
+                android:textColor="#FFFFFF" />
+
+            <TextView
+                android:id="@+id/card33"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="@string/rank8"
+                android:textColor="#FFFFFF" />
+
+            <TextView
+                android:id="@+id/card34"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="@string/rank9"
+                android:textColor="#FFFFFF" />
+
+            <TextView
+                android:id="@+id/card35"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="@string/rank10"
+                android:textColor="#FFFFFF" />
+
+            <TextView
+                android:id="@+id/card36"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="@string/rank11"
+                android:textColor="#FFFFFF" />
+
+            <TextView
+                android:id="@+id/card37"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="@string/rank12"
+                android:textColor="#FFFFFF" />
+
+            <TextView
+                android:id="@+id/card38"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="@string/rank13"
+                android:textColor="#FFFFFF" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="@string/club"
+                android:textColor="#FFFFFF" />
+        </TableRow>
+
+        <!-- ################## ダイヤ ################## -->
+
+        <TableRow
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center" >
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="@string/diamond"
+                android:textColor="#FF0000" />
+
+            <TextView
+                android:id="@+id/card39"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="@string/rank1"
+                android:textColor="#FFFFFF" />
+
+            <TextView
+                android:id="@+id/card40"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="@string/rank2"
+                android:textColor="#FFFFFF" />
+
+            <TextView
+                android:id="@+id/card41"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="@string/rank3"
+                android:textColor="#FFFFFF" />
+
+            <TextView
+                android:id="@+id/card42"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="@string/rank4"
+                android:textColor="#FFFFFF" />
+
+            <TextView
+                android:id="@+id/card43"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="@string/rank5"
+                android:textColor="#FFFFFF" />
+
+            <TextView
+                android:id="@+id/card44"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="@string/rank6"
+                android:textColor="#FFFFFF" />
+
+            <TextView
+                android:id="@+id/card45"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="@string/rank7"
+                android:textColor="#FFFFFF" />
+
+            <TextView
+                android:id="@+id/card46"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="@string/rank8"
+                android:textColor="#FFFFFF" />
+
+            <TextView
+                android:id="@+id/card47"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="@string/rank9"
+                android:textColor="#FFFFFF" />
+
+            <TextView
+                android:id="@+id/card48"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="@string/rank10"
+                android:textColor="#FFFFFF" />
+
+            <TextView
+                android:id="@+id/card49"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="@string/rank11"
+                android:textColor="#FFFFFF" />
+
+            <TextView
+                android:id="@+id/card50"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="@string/rank12"
+                android:textColor="#FFFFFF" />
+
+            <TextView
+                android:id="@+id/card51"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="@string/rank13"
+                android:textColor="#FFFFFF" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="@string/diamond"
+                android:textColor="#FF0000" />
+        </TableRow>
+    </TableLayout>
+
     <com.example.whatif.RoundedImageView
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/roundedImageView0"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/pokerLayout"
+        android:layout_below="@+id/guideLayout"
         android:layout_centerHorizontal="true"
+        android:layout_marginTop="25dp"
         android:src="@drawable/back"
         app:border_color="#ffffff"
         app:border_width="1dip"
@@ -1118,7 +1725,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignTop="@+id/roundedImageView3"
-        android:layout_marginRight="15dp"
         android:layout_toLeftOf="@+id/roundedImageView3"
         android:src="@drawable/back"
         app:border_color="#ffffff"
@@ -1133,7 +1739,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignTop="@+id/roundedImageView3"
-        android:layout_marginRight="15dp"
         android:layout_toLeftOf="@+id/roundedImageView2"
         android:src="@drawable/back"
         app:border_color="#ffffff"
@@ -1148,7 +1753,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignTop="@+id/roundedImageView3"
-        android:layout_marginLeft="15dp"
         android:layout_toRightOf="@+id/roundedImageView3"
         android:src="@drawable/back"
         app:border_color="#ffffff"
@@ -1163,7 +1767,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignTop="@+id/roundedImageView3"
-        android:layout_marginLeft="15dp"
         android:layout_toRightOf="@+id/roundedImageView4"
         android:src="@drawable/back"
         app:border_color="#ffffff"
@@ -1172,37 +1775,100 @@
         app:is_oval="false"
         app:round_background="true" />
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/roundedImageView3"
+        android:gravity="center"
+        android:orientation="horizontal" >
+  
+    <TextView
+        android:id="@+id/selectAble1"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:text="@string/selectAble"
+        android:textColor="#000000"
+        android:textSize="10sp" />
+
+    <TextView
+        android:id="@+id/selectAble2"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:text="@string/selectAble"
+        android:textColor="#000000"
+        android:textSize="10sp" />
+
+    <TextView
+        android:id="@+id/selectAble3"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:text="@string/selectAble"
+        android:textColor="#000000"
+        android:textSize="10sp" />
+
+    <TextView
+        android:id="@+id/selectAble4"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:text="@string/selectAble"
+        android:textColor="#000000"
+        android:textSize="10sp" />
+
+    <TextView
+        android:id="@+id/selectAble5"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:text="@string/selectAble"
+        android:textColor="#000000"
+        android:textSize="10sp" />
+
+  </LinearLayout>
+  
     <TextSwitcher
         android:id="@+id/countView"
         style="@style/blue"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignTop="@+id/roundedImageView0"
-        android:layout_marginRight="15dp"
+        android:layout_marginRight="25dp"
+        android:layout_marginTop="-5dp"
         android:layout_toLeftOf="@+id/roundedImageView0"
         android:background="@drawable/bold_border"
         android:gravity="center"
-        android:minHeight="64dp"
-        android:minWidth="64dp"
-        android:padding="10dp"
+        android:minHeight="32dp"
+        android:minWidth="32dp"
+        android:padding="5dp"
         android:textSize="64sp" >
     </TextSwitcher>
 
     <TableLayout
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignTop="@+id/roundedImageView0"
-        android:layout_marginLeft="15dp"
+        android:layout_marginLeft="25dp"
+        android:layout_marginTop="-5dp"
         android:layout_toRightOf="@+id/roundedImageView0" >
 
         <TableRow
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content" >
 
             <TextView
+                android:id="@+id/wagerView"
                 style="@style/black"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_weight="2"
                 android:background="#000000"
                 android:gravity="center_vertical"
                 android:text="@string/Wager"
@@ -1212,19 +1878,23 @@
             <TextView
                 android:id="@+id/wager"
                 style="@style/black"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:gravity="right|center_vertical" />
+                android:layout_weight="1"
+                android:gravity="right|center_vertical"
+                android:text="@string/zero" />
         </TableRow>
 
         <TableRow
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content" >
 
             <TextView
+                android:id="@+id/winView"
                 style="@style/black"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_weight="2"
                 android:gravity="center_vertical"
                 android:text="@string/Win"
                 android:textColor="#FFFF00"
@@ -1233,19 +1903,23 @@
             <TextView
                 android:id="@+id/win"
                 style="@style/black"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:gravity="right|center_vertical" />
+                android:layout_weight="1"
+                android:gravity="right|center_vertical"
+                android:text="@string/zero" />
         </TableRow>
 
         <TableRow
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content" >
 
             <TextView
+                android:id="@+id/paidView"
                 style="@style/black"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_weight="2"
                 android:gravity="center_vertical"
                 android:text="@string/Paid"
                 android:textColor="#FFFF00"
@@ -1254,19 +1928,23 @@
             <TextView
                 android:id="@+id/paid"
                 style="@style/black"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:gravity="right|center_vertical" />
+                android:layout_weight="1"
+                android:gravity="right|center_vertical"
+                android:text="@string/zero" />
         </TableRow>
 
         <TableRow
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content" >
 
             <TextView
+                android:id="@+id/creditView"
                 style="@style/black"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_weight="2"
                 android:gravity="center_vertical"
                 android:text="@string/Credit"
                 android:textColor="#00FFFF"
@@ -1275,67 +1953,165 @@
             <TextView
                 android:id="@+id/credit"
                 style="@style/black"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:gravity="right|center_vertical"
-                android:text="@string/Blank" />
+                android:text="@string/zero" />
         </TableRow>
     </TableLayout>
 
-    <TextView
-        android:id="@+id/selectAble1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="SELECT ABLE"
-        android:textColor="#000000"
-        android:textSize="10sp" 
-        android:layout_below="@+id/roundedImageView1"
-        />
-
-    <TextView
-        android:id="@+id/selectAble2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="SELECT ABLE"
-        android:textColor="#000000"
-        android:textSize="10sp" 
-        android:layout_below="@+id/roundedImageView2"
-        />
-    <TextView
-        android:id="@+id/selectAble4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="SELECT ABLE"
-        android:textColor="#000000"
-        android:textSize="10sp" 
-        android:layout_below="@+id/roundedImageView4"
-        />
-    <TextView
-        android:id="@+id/selectAble5"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="SELECT ABLE"
-        android:textColor="#000000"
-        android:textSize="10sp" 
-        android:layout_below="@+id/roundedImageView5"
-        />
-    
-    
     <View
         android:id="@+id/footer"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_height="0dp" />
 
-    <TextView
-        android:id="@+id/selectAble3"
+    <com.example.whatif.TrumpView
+        android:id="@+id/trumpView0"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/roundedImageView3"
-        android:layout_centerHorizontal="true"
-        android:text="SELECT ABLE"
-        android:textColor="#000000"
-        android:textSize="10sp" />
+        android:layout_alignTop="@id/roundedImageView0"
+        android:layout_below="@+id/guideLayout"
+        android:layout_centerHorizontal="true" >
+    </com.example.whatif.TrumpView>
+
+    <com.example.whatif.TrumpView
+        android:id="@+id/trumpView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/roundedImageView3"
+        android:layout_centerHorizontal="true" >
+    </com.example.whatif.TrumpView>
+
+    <com.example.whatif.TrumpView
+        android:id="@+id/trumpView5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/roundedImageView5"
+        android:layout_alignTop="@+id/roundedImageView5" >
+    </com.example.whatif.TrumpView>
+
+    <com.example.whatif.TrumpView
+        android:id="@+id/trumpView4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/roundedImageView4"
+        android:layout_alignTop="@+id/roundedImageView4" >
+    </com.example.whatif.TrumpView>
+
+    <com.example.whatif.TrumpView
+        android:id="@+id/trumpView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignRight="@+id/roundedImageView1"
+        android:layout_alignTop="@+id/roundedImageView1" >
+    </com.example.whatif.TrumpView>
+
+    <com.example.whatif.TrumpView
+        android:id="@+id/trumpView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignRight="@+id/roundedImageView2"
+        android:layout_alignTop="@+id/roundedImageView2" >
+    </com.example.whatif.TrumpView>
+
+    <LinearLayout
+        android:id="@+id/msgLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignTop="@id/roundedImageView3"
+        android:layout_below="@id/roundedImageView0"
+        android:background="#000000"
+        android:gravity="center"
+        android:orientation="vertical" >
+
+        <TextView
+            android:id="@+id/msgView1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="WINNER!"
+            android:textColor="#FF0000"
+            android:textSize="24sp" />
+
+        <TextView
+            android:id="@+id/msgView2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="To the next game by touching"
+            android:textColor="#FFFFFF" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/coinLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignTop="@id/roundedImageView3"
+        android:layout_below="@id/roundedImageView0"
+        android:gravity="center"
+        android:orientation="vertical" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+
+            <Button
+                android:id="@+id/collectBtn"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:text="@string/collect"
+                android:textSize="14sp" />
+
+            <Button
+                android:id="@+id/hdBtn"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:text="@string/halfdouble"
+                android:textSize="14sp" />
+
+            <Button
+                android:id="@+id/betBtn"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:text="@string/bet" />
+
+            <Button
+                android:id="@+id/repeatBtn"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:text="@string/repeatbet"
+                android:textSize="14sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+
+            <Button
+                android:id="@+id/payoutBtn"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:text="@string/payout" />
+
+            <Button
+                android:id="@+id/dealBtn"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:text="@string/deal" />
+        </LinearLayout>
+    </LinearLayout>
 
 </RelativeLayout>

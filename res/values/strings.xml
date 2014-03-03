@@ -127,4 +127,6 @@
 	<string name="repeatbet">REPEAT\nBET</string>
 	<string name="payout">PAYOUT</string>
 	<string name="deal">DEAL\n/DOUBLE</string>
+	<string name="selectAble">SELECT ABLE</string>
+	
 </resources>

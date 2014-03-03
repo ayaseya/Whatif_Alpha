@@ -21,16 +21,13 @@
                 android:id="@+id/TrumpNum"
                 android:layout_width="wrap_content"
                 android:layout_height="0dp"
-                android:layout_weight="1"
-                android:text="x" />
+                android:layout_weight="1" />
 
             <TextView
                 android:id="@+id/TrumpSuit1"
                 android:layout_width="wrap_content"
                 android:layout_height="0dp"
-                android:layout_weight="1"
-                android:text="x" />
-
+                android:layout_weight="1" />
         </LinearLayout>
 
         <FrameLayout
@@ -38,7 +35,6 @@
             android:layout_height="match_parent"
             android:layout_weight="1" >
         </FrameLayout>
-
     </LinearLayout>
 
     <TextView
@@ -46,7 +42,6 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:gravity="right|bottom"
-        android:text="x" />
+        android:gravity="right|bottom" />
 
 </LinearLayout>
