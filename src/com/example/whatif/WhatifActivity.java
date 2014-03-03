@@ -352,7 +352,7 @@ public class WhatifActivity extends Activity
 
 			scrollHeight = findViewById(R.id.cChain1).getHeight();
 
-			chainScroll = (ScrollView) findViewById(R.id.chainScroll);
+			chainScroll = (ScrollView) findViewById(R.id.bonusScroll2);
 
 			chainScroll.setOnTouchListener(new OnTouchListener() {
 				@Override
@@ -370,7 +370,7 @@ public class WhatifActivity extends Activity
 				}
 			});
 
-			bonusScroll = (ScrollView) findViewById(R.id.bonusScroll);
+			bonusScroll = (ScrollView) findViewById(R.id.paysScroll1);
 			bonusScroll.setOnTouchListener(new OnTouchListener() {
 				@Override
 				public boolean onTouch(View v, MotionEvent event) {

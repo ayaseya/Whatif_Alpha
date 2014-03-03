@@ -16,7 +16,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="@string/suit1"
+            android:text="@string/spade"
             android:textColor="#FFFFFF" />
 
         <TextView
@@ -141,7 +141,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="@string/suit1"
+            android:text="@string/spade"
             android:textColor="#FFFFFF" />
     </TableRow>
 
@@ -157,7 +157,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="@string/suit2"
+            android:text="@string/heart"
             android:textColor="#FF0000" />
 
         <TextView
@@ -282,7 +282,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="@string/suit2"
+            android:text="@string/heart"
             android:textColor="#FF0000" />
     </TableRow>
 
@@ -298,7 +298,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="@string/suit3"
+            android:text="@string/club"
             android:textColor="#FFFFFF" />
 
         <TextView
@@ -423,7 +423,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="@string/suit3"
+            android:text="@string/club"
             android:textColor="#FFFFFF" />
     </TableRow>
 
@@ -439,7 +439,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="@string/suit4"
+            android:text="@string/diamond"
             android:textColor="#FF0000" />
 
         <TextView
@@ -564,7 +564,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="@string/suit4"
+            android:text="@string/diamond"
             android:textColor="#FF0000" />
     </TableRow>
 
