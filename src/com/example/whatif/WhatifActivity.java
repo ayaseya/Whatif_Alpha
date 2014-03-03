@@ -633,12 +633,12 @@ public class WhatifActivity extends Activity
 
 								} else {
 									trumpView[index].setVisibility(View.INVISIBLE);
-									
+
 									Resources res = getResources();
 									int id = res.getIdentifier("selectAble" + index, "id", getPackageName());
 									TextView view = (TextView) findViewById(id);
 									view.setTextColor(0x00FFFF00);
-									
+
 									GameClear();
 								}
 
@@ -818,22 +818,70 @@ public class WhatifActivity extends Activity
 		} else {
 			if (counter <= 50) {
 
-				chainScroll.scrollBy(0, -scrollHeight);
-				bonusScroll.scrollBy(0, -scrollHeight);
+				final Handler scrollHandler = new Handler();
 
-				// 1つ前のViewの状態を元に戻す
-				((TextView) findViewById(res.getIdentifier("cChain" + (counter - 1), "id", getPackageName())))
-						.setBackgroundColor(0xFF0000FF);
+				new Thread(new Runnable() {
 
-				((TextView) findViewById(res.getIdentifier("cBonus" + (counter - 1), "id", getPackageName())))
-						.setTextColor(0xFFFFFFFF);
-				((TextView) findViewById(res.getIdentifier("cBonus" + (counter - 1), "id", getPackageName())))
-						.setBackgroundColor(0xFFFF0000);
+					@Override
+					public void run() {
 
-				((TextView) findViewById(cChainId)).setBackgroundColor(0xFFFF0000);
+						scrollHandler.post(new Runnable() {
 
-				((TextView) findViewById(cBonusId)).setTextColor(0xFFFF0000);
-				((TextView) findViewById(cBonusId)).setBackgroundColor(0xFFFFFFFF);
+							@Override
+							public void run() {
+
+								chainScroll.smoothScrollBy(0, -scrollHeight);
+								bonusScroll.smoothScrollBy(0, -scrollHeight);
+
+							}
+
+						});
+
+					}
+
+				}).start();
+
+				final Handler handler = new Handler();
+
+				new Thread(new Runnable() {
+
+					@Override
+					public void run() {
+
+						try {
+							Thread.sleep(300);
+
+							handler.post(new Runnable() {
+
+								@Override
+								public void run() {
+
+									// 1つ前のViewの状態を元に戻す
+									((TextView) findViewById(res.getIdentifier("cChain" + (counter - 1), "id", getPackageName())))
+											.setBackgroundColor(0xFF0000FF);
+
+									((TextView) findViewById(res.getIdentifier("cBonus" + (counter - 1), "id", getPackageName())))
+											.setTextColor(0xFFFFFFFF);
+									((TextView) findViewById(res.getIdentifier("cBonus" + (counter - 1), "id", getPackageName())))
+											.setBackgroundColor(0xFFFF0000);
+
+									((TextView) findViewById(cChainId)).setBackgroundColor(0xFFFF0000);
+
+									((TextView) findViewById(cBonusId)).setTextColor(0xFFFF0000);
+									((TextView) findViewById(cBonusId)).setBackgroundColor(0xFFFFFFFF);
+
+								}
+
+							});
+
+						} catch (InterruptedException e1) {
+							// TODO 自動生成された catch ブロック
+							e1.printStackTrace();
+						}
+
+					}
+
+				}).start();
 
 			} else {
 
@@ -891,8 +939,7 @@ public class WhatifActivity extends Activity
 							// Timer終了処理　
 							if (x == beforeWager && timerCount == x) {
 
-								creditView.setText(String.valueOf(beforeCredit
-										+ timerCount));
+								creditView.setText(String.valueOf(beforeCredit + beforeWager));
 								coin.setCredit((beforeCredit + beforeWager));
 								coin.setWager(0);
 
@@ -1035,40 +1082,33 @@ public class WhatifActivity extends Activity
 						@Override
 						public void run() {
 
-							try {
-								Thread.sleep(1000);
+							coin.setBeforeWager(coin.getWager());
 
-								coin.setBeforeWager(coin.getWager());
-
-								for (int i = 1; i < 6; i++) {
-									trumpView[i].setVisibility(View.INVISIBLE);
-								}
-
-								msg = (TextView) findViewById(R.id.msgView1);
-
-								if (counter >= 14) {
-
-									msg.setText("WINNER!");
-									msg.setTextColor(Color.RED);
-								}
-								else if (10 <= counter && counter <= 13) {
-									msg.setText("DRAW!");
-									msg.setTextColor(Color.GREEN);
-								}
-								else {
-									msg.setText("LOSER!");
-									msg.setTextColor(Color.BLUE);
-								}
-								// 手札を非表示にして、メッセージ画面手札を表示する
-								findViewById(R.id.HandLayout).setVisibility(View.GONE);
-								findViewById(R.id.TextLayout).setVisibility(View.VISIBLE);
-
-								refundCoin();
-								//Toast.makeText(WhatifActivity.this, "ＧＡＭＥ ＯＶＥＲ", Toast.LENGTH_SHORT).show();
-
-							} catch (InterruptedException e) {
-								e.printStackTrace();
+							for (int i = 1; i < 6; i++) {
+								trumpView[i].setVisibility(View.INVISIBLE);
 							}
+
+							msg = (TextView) findViewById(R.id.msgView1);
+
+							if (counter >= 14) {
+
+								msg.setText("WINNER!");
+								msg.setTextColor(Color.RED);
+							}
+							else if (10 <= counter && counter <= 13) {
+								msg.setText("DRAW!");
+								msg.setTextColor(Color.GREEN);
+							}
+							else {
+								msg.setText("LOSER!");
+								msg.setTextColor(Color.BLUE);
+							}
+							// 手札を非表示にして、メッセージ画面手札を表示する
+							findViewById(R.id.HandLayout).setVisibility(View.GONE);
+							findViewById(R.id.TextLayout).setVisibility(View.VISIBLE);
+
+							refundCoin();
+							//Toast.makeText(WhatifActivity.this, "ＧＡＭＥ ＯＶＥＲ", Toast.LENGTH_SHORT).show();
 
 						}
 
