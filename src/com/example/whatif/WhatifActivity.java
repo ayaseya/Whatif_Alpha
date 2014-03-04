@@ -23,6 +23,7 @@ import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.TranslateAnimation;
@@ -116,6 +117,8 @@ public class WhatifActivity extends Activity
 		//		setContentView(R.layout.activity_whatif);
 		setContentView(R.layout.vertical_layout);
 
+		findViewById(R.id.black).bringToFront();
+		
 		// トランプ(52枚)を管理するDeckクラスのインスタンスの取得
 		deck = new Deck(this.getApplicationContext());
 		// トランプ(52枚)の生成とシャッフル
@@ -266,6 +269,37 @@ public class WhatifActivity extends Activity
 			redrawCoin();
 			// 起動時のみ必要な処理が終了したのでフラグを変更する
 			replaceFlag = false;
+			
+			final Handler handler = new Handler();
+			
+			new Thread((new Runnable() {
+				
+				@Override
+				public void run() {
+					handler.post(new Runnable() {
+						
+						@Override
+						public void run() {
+							
+							AlphaAnimation alpha = new AlphaAnimation(
+					                1.0f,  // 開始時の透明度（1は全く透過しない）
+					                0.0f); // 終了時の透明度（0は完全に透過）
+		
+					        alpha.setDuration( 1000 );
+					 
+					        // アニメーション終了時の表示状態を維持する
+					        alpha.setFillEnabled(true);
+					        alpha.setFillAfter  (true);
+					 
+					        // アニメーションを開始
+					        findViewById(R.id.black).startAnimation(alpha);
+						}
+					});
+					
+				}
+			})).start();
+			
+			
 		}
 		Log.v(TAG, "onWindowFocusChanged()");
 	}
