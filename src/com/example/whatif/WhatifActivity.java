@@ -79,7 +79,7 @@ public class WhatifActivity extends Activity
 	private DPI dpi;
 	private boolean coinFlag = false;// trueでコインの加算処理中のため入力を受け付けないようにする
 	private boolean skipFlag = false;// trueでコインの加算処理をスキップ
-	private Handler handler = new Handler();
+
 	private int timerCounter;// タイマー処理のカウントアップに使用する変数
 
 	private int[] rate52 = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 2, 2, 2, 2, 3, 3,
@@ -99,6 +99,13 @@ public class WhatifActivity extends Activity
 	private ScrollView hitsScroll1;
 
 	private int scrollLines = 3;// スクロールViewで表示させ行数
+
+	private int timeTranslate = 200;//200
+	private int timeDeal = 50;//50
+	private int timeFlip = 100;//100
+
+	private int scrollSleepTime = 250;//250
+	private int msgSleepTime = 500;//500
 
 	/* ********** ********** ********** ********** */
 
@@ -157,8 +164,6 @@ public class WhatifActivity extends Activity
 			trumpBackView[i] = (RoundedImageView) findViewById(id);
 		}
 
-		Log.v(TAG, "TEST");
-
 		// リスナー登録
 		trumpView[0].setOnClickListener(layoutListener);// Y軸回転テスト用のクリックリスナー
 		trumpView[1].setOnClickListener(hand1Listener);
@@ -211,25 +216,23 @@ public class WhatifActivity extends Activity
 			}
 			// trumpViewのフォントサイズを変更する
 
-			int fontSize = 12;
+			int fontSize = 20;
 			switch (dpi) {
 			case ldpi:
-				fontSize = 12;
+				fontSize = 20;
 				break;
-
 			case mdpi:
-				fontSize = 14;
+				fontSize = 20;
 				break;
 			case hdpi:
-				fontSize = 16;
+				fontSize = 20;
 				break;
 			case xhdpi:
-				fontSize = 18;
+				fontSize = 20;
 				break;
 			case xxhdpi:
 				fontSize = 20;
 				break;
-
 			}
 
 			for (int i = 0; i <= 5; i++) {
@@ -323,7 +326,8 @@ public class WhatifActivity extends Activity
 
 		// Y軸回転(0～90度)
 		Rotate3dAnimation rotation = new Rotate3dAnimation(0, 90, centerX, centerY, 0f, true);
-		rotation.setDuration(90);
+		//		rotation.setDuration(90);
+		rotation.setDuration(timeFlip);
 		trumpBackView[index].startAnimation(rotation);
 		rotation.setAnimationListener(new TrumpAnimationListener(index) {
 			// 裏面が回転し終わり表面が回転し始める
@@ -332,7 +336,8 @@ public class WhatifActivity extends Activity
 
 				// Y軸回転(270～360度)
 				Rotate3dAnimation rotation = new Rotate3dAnimation(270, 360, centerX, centerY, 0f, false);
-				rotation.setDuration(90);
+				//				rotation.setDuration(90);
+				rotation.setDuration(timeFlip);
 				trumpView[index].startAnimation(rotation);
 				rotation.setAnimationListener(new TrumpAnimationListener(index) {
 					@Override
@@ -362,7 +367,8 @@ public class WhatifActivity extends Activity
 
 		// Y軸回転(0～90度)
 		Rotate3dAnimation rotation = new Rotate3dAnimation(0, 90, centerX, centerY, 0f, true);
-		rotation.setDuration(50);
+		//		rotation.setDuration(50);
+		rotation.setDuration(timeDeal);
 		trumpBackView[index].startAnimation(rotation);
 		rotation.setAnimationListener(new TrumpAnimationListener(index) {
 			// 裏面が回転し終わり表面が回転し始める
@@ -371,7 +377,8 @@ public class WhatifActivity extends Activity
 
 				// Y軸回転(270～360度)
 				Rotate3dAnimation rotation = new Rotate3dAnimation(270, 360, centerX, centerY, 0f, false);
-				rotation.setDuration(50);
+				//				rotation.setDuration(50);
+				rotation.setDuration(timeDeal);
 				trumpView[index].startAnimation(rotation);
 				rotation.setAnimationListener(new TrumpAnimationListener(index) {
 					@Override
@@ -490,11 +497,17 @@ public class WhatifActivity extends Activity
 		// アニメーション中にクリックできないようfalseに変更する
 		moveAnimFlag = false;
 
+		// アニメーションするViewを最前面に移動する
+		trumpView[index].bringToFront();
+
 		TranslateAnimation translate = new TranslateAnimation(
 				0, trumpBackView_location.get(0).x - trumpBackView_location.get(index).x,
 				0, (trumpBackView_location.get(0).y - statusbarHeight) - ((trumpBackView_location.get(index).y - statusbarHeight)));
 
-		translate.setDuration(175);
+		//		translate.setDuration(175);
+		translate.setDuration(timeTranslate);
+		translate.setFillAfter(true);
+
 		trumpView[index].startAnimation(translate);
 		translate.setAnimationListener(new TrumpAnimationListener(index) {
 			@Override
@@ -507,6 +520,7 @@ public class WhatifActivity extends Activity
 				// ////////////////////////////////////////////////
 				// トランプクリック後の処理
 				// ////////////////////////////////////////////////
+				trumpView[index].setAnimation(null);//チラつき防止、移動後のアニメViewが消える前に次のトランプが読み込まれてしまうため
 
 				counter++;
 				count.setText(String.valueOf(counter));
@@ -537,52 +551,35 @@ public class WhatifActivity extends Activity
 					deleteNum(record.trump.get(counter - 2).getSerial());
 				}
 
+				// アニメーションのため一時非表示
+				trumpView[index].setVisibility(View.INVISIBLE);
+
 				// 手札に新しい札を配る
-				final Handler handler = new Handler();
 
-				new Thread(new Runnable() {
+				if (counter < 48) {
+					// 手札のビュー(trumpView[index])に新しい札の情報を移す
+					trumpView[index].setTrump(deck.trump.get(counter + 4).getNumber(),
+							deck.trump.get(counter + 4).getSuit(),
+							deck.trump.get(counter + 4).getSerial(),
+							deck.trump.get(counter + 4).getColor());
 
-					@Override
-					public void run() {
+					FlipTrump(index);
+					yellowNum(trumpView[index].getSerial());
 
-						handler.post(new Runnable() {
+				} else {
+					trumpView[index].setVisibility(View.INVISIBLE);
 
-							@Override
-							public void run() {
-								if (counter < 48) {
-									// 手札のビュー(trumpView[index])に新しい札の情報を移す
-									trumpView[index].setTrump(deck.trump.get(counter + 4).getNumber(),
-											deck.trump.get(counter + 4).getSuit(),
-											deck.trump.get(counter + 4).getSerial(),
-											deck.trump.get(counter + 4).getColor());
-									// アニメーションのため一時非表示
-									trumpView[index].setVisibility(View.INVISIBLE);
-									FlipTrump(index);
-									yellowNum(trumpView[index].getSerial());
+					Resources res = getResources();
+					int id = res.getIdentifier("selectAble" + index, "id", getPackageName());
+					TextView view = (TextView) findViewById(id);
+					view.setTextColor(0x00FFFF00);
 
-								} else {
-									trumpView[index].setVisibility(View.INVISIBLE);
+					GameClear();
+				}
 
-									Resources res = getResources();
-									int id = res.getIdentifier("selectAble" + index, "id", getPackageName());
-									TextView view = (TextView) findViewById(id);
-									view.setTextColor(0x00FFFF00);
+				scrollUp();
 
-									GameClear();
-								}
-
-								scrollUp();
-
-								moveAnimFlag = true;
-
-							}
-
-						});
-
-					}
-
-				}).start();
-
+				moveAnimFlag = true;
 			}
 
 		});
@@ -777,7 +774,7 @@ public class WhatifActivity extends Activity
 					public void run() {
 
 						try {
-							Thread.sleep(300);
+							Thread.sleep(scrollSleepTime);
 
 							handler.post(new Runnable() {
 
@@ -854,6 +851,8 @@ public class WhatifActivity extends Activity
 
 			winView.setText(String.valueOf(x));
 
+			final Handler handler = new Handler();
+
 			timer.schedule(new TimerTask() {
 				@Override
 				public void run() {
@@ -865,8 +864,8 @@ public class WhatifActivity extends Activity
 							timerCounter++;
 
 							if (x == coin.getWager()) {
-								Log.v(TAG, "timer_stop_MIN");
-								coin.setCredit(coin.getCredit()+coin.getWager());
+								//								Log.v(TAG, "timer_stop_MIN");
+								coin.setCredit(coin.getCredit() + coin.getWager());
 								coin.setWager(0);
 
 								redrawCoin();
@@ -874,10 +873,9 @@ public class WhatifActivity extends Activity
 								coinFlag = false;
 								timerCounter = 0;
 								timer.cancel();
-							
 
-							} else if (x > coin.getWager() && x == timerCounter) {
-								Log.v(TAG, "timer_stop_WIN");
+							} else if (coin.getWager() > 0 && x == timerCounter) {
+								//								Log.v(TAG, "timer_stop_WIN");
 
 								coin.setCredit(coin.getCredit() + x);
 								coin.setWager(0);
@@ -887,9 +885,8 @@ public class WhatifActivity extends Activity
 								coinFlag = false;
 								timerCounter = 0;
 								timer.cancel();
-
 							} else if (skipFlag == true) {
-								Log.v(TAG, "timer_stop_SKIP");
+								//								Log.v(TAG, "timer_stop_SKIP");
 
 								coin.setCredit(coin.getCredit() + x);
 								coin.setWager(0);
@@ -919,8 +916,8 @@ public class WhatifActivity extends Activity
 	private void refundCoin() {
 
 		cuCoin(rate52[counter - 1] * coin.getWager());
-		Log.v(TAG, "RATE=" + rate52[counter - 1] + "WAGER" + coin.getWager());
-		Log.v(TAG, "WIN=" + rate52[counter - 1] * coin.getWager());
+		//		Log.v(TAG, "RATE=" + rate52[counter - 1] + "WAGER" + coin.getWager());
+		//		Log.v(TAG, "WIN=" + rate52[counter - 1] * coin.getWager());
 	}
 
 	// 場札と同じ数字かスート(図柄)ならSELECT ABLEを表示する処理
@@ -984,7 +981,7 @@ public class WhatifActivity extends Activity
 			public void run() {
 
 				try {
-					Thread.sleep(250);
+					Thread.sleep(msgSleepTime);
 
 					handler.post(new Runnable() {
 
