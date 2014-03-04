@@ -21,6 +21,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
+import android.view.ViewGroup.MarginLayoutParams;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.animation.AlphaAnimation;
@@ -103,10 +104,14 @@ public class WhatifActivity extends Activity
 
 	private int timeTranslate = 200;//200
 	private int timeDeal = 50;//50
-	private int timeFlip = 100;//100
+	private int timeFlip = 90;//90
 
 	private int scrollSleepTime = 250;//250
 	private int msgSleepTime = 500;//500
+
+	Handler handler = new Handler();
+
+	private int margin;
 
 	/* ********** ********** ********** ********** */
 
@@ -118,7 +123,7 @@ public class WhatifActivity extends Activity
 		setContentView(R.layout.vertical_layout);
 
 		findViewById(R.id.black).bringToFront();
-		
+
 		// トランプ(52枚)を管理するDeckクラスのインスタンスの取得
 		deck = new Deck(this.getApplicationContext());
 		// トランプ(52枚)の生成とシャッフル
@@ -129,6 +134,15 @@ public class WhatifActivity extends Activity
 		// コイン処理のインスタンスを取得する
 		coin = new Coin();
 
+		// ldpi : 120 dpi
+		// mdpi : 160 dpi
+		// hdpi : 240 dpi
+		// xhdpi : 320 dpi
+		// xxhdpi : 480 dpi
+		// txdpi : 213 dpi (Nexus 7)
+
+		// ldpi : mdpi : hdpi : xdhpi : xxhdpi : tvdpi = 0.75 : 1 : 1.5 : 2 : 3 : 1.33125
+
 		// Activityを継承していないため、getWindowManager()メソッドは利用できない
 		// Displayクラスのインスタンスを取得するため
 		// 引数のContextを使用してWindowManagerを取得する
@@ -136,6 +150,14 @@ public class WhatifActivity extends Activity
 
 		// Displayインスタンスを取得する
 		Display display = wm.getDefaultDisplay();
+
+		// DPI を取得する
+		int _dpi = getResources().getDisplayMetrics().densityDpi;
+
+		// dpi を元に比率を計算する ( dpi ÷ 基準値(mdpi) )
+		float ratio = _dpi / 160f;
+
+		Log.v(TAG, "dpi=" + _dpi + " density=" + ratio);
 
 		width = display.getWidth();
 		height = display.getHeight();
@@ -250,11 +272,34 @@ public class WhatifActivity extends Activity
 						deck.trump.get(i - 1).getColor());
 			}
 
-			// 非表示にする
-			for (int i = 0; i <= 5; i++) {
-				trumpView[i].setVisibility(View.INVISIBLE);
-				trumpBackView[i].setVisibility(View.INVISIBLE);
-			}
+			// トランプ画像(×5)のwidthと端末のwidthから余白を計算する
+			int trumpWidth = trumpBackView[0].getWidth();
+			margin = (Math.max(trumpWidth * 5, width) - Math.min(trumpWidth * 5, width)) / 6;
+			Log.v(TAG, "margin=" + margin);
+
+			trumpBackView[2].getLayoutParams();
+			// trumpBackViewからマージンを取得
+			MarginLayoutParams marginParms2 = (MarginLayoutParams) trumpBackView[2].getLayoutParams();
+			// 移動させたい距離に変更
+			marginParms2.rightMargin += margin;
+			// trumpBackViewへ反映
+			trumpBackView[2].setLayoutParams(marginParms2);
+
+			trumpBackView[1].getLayoutParams();
+			MarginLayoutParams marginParms1 = (MarginLayoutParams) trumpBackView[1].getLayoutParams();
+			marginParms1.rightMargin += margin;
+			trumpBackView[1].setLayoutParams(marginParms1);
+
+			trumpBackView[4].getLayoutParams();
+			MarginLayoutParams marginParms4 = (MarginLayoutParams) trumpBackView[4].getLayoutParams();
+			marginParms4.leftMargin += margin;
+			trumpBackView[4].setLayoutParams(marginParms4);
+
+			trumpBackView[5].getLayoutParams();
+			MarginLayoutParams marginParms5 = (MarginLayoutParams) trumpBackView[5].getLayoutParams();
+			marginParms5.leftMargin += margin;
+			trumpBackView[5].setLayoutParams(marginParms5);
+
 			// Y軸回転用の変数を取得する
 			centerX = trumpBackView[0].getWidth() / 2;
 			centerY = trumpBackView[0].getLayoutParams().height;
@@ -267,39 +312,44 @@ public class WhatifActivity extends Activity
 			setTxtBounus();
 			// コインの初期値を設定する
 			redrawCoin();
-			// 起動時のみ必要な処理が終了したのでフラグを変更する
-			replaceFlag = false;
-			
-			final Handler handler = new Handler();
-			
+
+			// トランプ画像を非表示にする
+			for (int i = 0; i <= 5; i++) {
+				trumpView[i].setVisibility(View.INVISIBLE);
+				trumpBackView[i].setVisibility(View.INVISIBLE);
+			}
+
+			// 最前面の黒画像をフェードアウトする
 			new Thread((new Runnable() {
-				
+
 				@Override
 				public void run() {
 					handler.post(new Runnable() {
-						
+
 						@Override
 						public void run() {
-							
+
 							AlphaAnimation alpha = new AlphaAnimation(
-					                1.0f,  // 開始時の透明度（1は全く透過しない）
-					                0.0f); // 終了時の透明度（0は完全に透過）
-		
-					        alpha.setDuration( 1000 );
-					 
-					        // アニメーション終了時の表示状態を維持する
-					        alpha.setFillEnabled(true);
-					        alpha.setFillAfter  (true);
-					 
-					        // アニメーションを開始
-					        findViewById(R.id.black).startAnimation(alpha);
+									1.0f, // 開始時の透明度（1は全く透過しない）
+									0.0f); // 終了時の透明度（0は完全に透過）
+
+							alpha.setDuration(1000);
+
+							// アニメーション終了時の表示状態を維持する
+							alpha.setFillEnabled(true);
+							alpha.setFillAfter(true);
+
+							// アニメーションを開始
+							findViewById(R.id.black).startAnimation(alpha);
 						}
 					});
-					
+
 				}
 			})).start();
-			
-			
+
+			// 起動時のみ必要な処理が終了したのでフラグを変更する
+			replaceFlag = false;
+
 		}
 		Log.v(TAG, "onWindowFocusChanged()");
 	}
@@ -777,14 +827,12 @@ public class WhatifActivity extends Activity
 		} else {
 			if (counter <= 50) {
 
-				final Handler scrollHandler = new Handler();
-
 				new Thread(new Runnable() {
 
 					@Override
 					public void run() {
 
-						scrollHandler.post(new Runnable() {
+						handler.post(new Runnable() {
 
 							@Override
 							public void run() {
@@ -799,8 +847,6 @@ public class WhatifActivity extends Activity
 					}
 
 				}).start();
-
-				final Handler handler = new Handler();
 
 				new Thread(new Runnable() {
 
@@ -884,8 +930,6 @@ public class WhatifActivity extends Activity
 			//			Log.v(TAG, "timer_start x=" + x);
 
 			winView.setText(String.valueOf(x));
-
-			final Handler handler = new Handler();
 
 			timer.schedule(new TimerTask() {
 				@Override
@@ -1006,8 +1050,6 @@ public class WhatifActivity extends Activity
 			}
 
 		}
-
-		final Handler handler = new Handler();
 
 		new Thread(new Runnable() {
 
