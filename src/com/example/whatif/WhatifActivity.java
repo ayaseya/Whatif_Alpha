@@ -115,7 +115,7 @@ public class WhatifActivity extends Activity
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE); // タイトルバーを非表示にする
 		//		setContentView(R.layout.activity_whatif);
-		setContentView(R.layout.vertical_layout);
+		setContentView(R.layout.whatif_layout);
 
 		findViewById(R.id.black).bringToFront();
 
