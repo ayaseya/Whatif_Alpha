@@ -1,6 +1,5 @@
 package com.example.whatif;
 
-import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -8,8 +7,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Color;
-import android.graphics.Point;
-import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Handler;
@@ -46,8 +43,6 @@ public class WhatifActivity extends Activity
 	private Deck record;
 
 	private int statusbarHeight;
-
-	private ArrayList<Point> trumpBackView_location = new ArrayList<Point>();
 
 	private boolean flipAnimFlag = true;// アニメーション中はfalseとなり画像をクリックできない
 	private boolean moveAnimFlag = true;// アニメーション中はfalseとなり画像をクリックできない
@@ -228,10 +223,10 @@ public class WhatifActivity extends Activity
 		// FlagでonCreate()の実行後に一度だけ実行されるように記述する
 		if (replaceFlag) {
 			// ステータスバーの高さを取得
-			Rect rect = new Rect();
-			getWindow().getDecorView().getWindowVisibleDisplayFrame(rect);
-			statusbarHeight = rect.top;
-			Log.v(TAG, "ステータスバー height=" + statusbarHeight);
+			//			Rect rect = new Rect();
+			//			getWindow().getDecorView().getWindowVisibleDisplayFrame(rect);
+			//			statusbarHeight = rect.top;
+			//			Log.v(TAG, "ステータスバー height=" + statusbarHeight);
 
 			// trumpViewの縦横を画像に合わせる
 			for (int i = 0; i <= 5; i++) {
@@ -239,8 +234,8 @@ public class WhatifActivity extends Activity
 				trumpView[i].getLayoutParams().height = trumpBackView[0].getHeight();
 				trumpView[i].requestLayout();
 			}
+			
 			// trumpViewのフォントサイズを変更する
-
 			int fontSize = 20;
 			switch (dpi) {
 			case ldpi:
@@ -304,8 +299,6 @@ public class WhatifActivity extends Activity
 			centerX = trumpBackView[0].getWidth() / 2;
 			centerY = trumpBackView[0].getLayoutParams().height;
 
-			// トランプ画像の座標を取得
-			getTrumpBackViewPoint();
 			//スクロールViewの設定をする
 			setScrollView();
 			// ボーナスにテキストを設定する
@@ -410,7 +403,6 @@ public class WhatifActivity extends Activity
 
 		// Y軸回転(0～90度)
 		Rotate3dAnimation rotation = new Rotate3dAnimation(0, 90, centerX, centerY, 0f, true);
-		//		rotation.setDuration(90);
 		rotation.setDuration(timeFlip);
 		trumpBackView[index].startAnimation(rotation);
 		rotation.setAnimationListener(new TrumpAnimationListener(index) {
@@ -420,7 +412,7 @@ public class WhatifActivity extends Activity
 
 				// Y軸回転(270～360度)
 				Rotate3dAnimation rotation = new Rotate3dAnimation(270, 360, centerX, centerY, 0f, false);
-				//				rotation.setDuration(90);
+
 				rotation.setDuration(timeFlip);
 				trumpView[index].startAnimation(rotation);
 				rotation.setAnimationListener(new TrumpAnimationListener(index) {
@@ -428,11 +420,9 @@ public class WhatifActivity extends Activity
 					public void onAnimationEnd(Animation animation) {
 						// アニメーションの終了
 						trumpView[index].setVisibility(View.VISIBLE);
-
+						selectAble();
 						// ゲームオーバーの判定
 						GameOver();
-						// ゲームクリアの判定
-						selectAble();
 						flipAnimFlag = true;
 					}
 				});
@@ -451,7 +441,7 @@ public class WhatifActivity extends Activity
 
 		// Y軸回転(0～90度)
 		Rotate3dAnimation rotation = new Rotate3dAnimation(0, 90, centerX, centerY, 0f, true);
-		//		rotation.setDuration(50);
+
 		rotation.setDuration(timeDeal);
 		trumpBackView[index].startAnimation(rotation);
 		rotation.setAnimationListener(new TrumpAnimationListener(index) {
@@ -461,7 +451,7 @@ public class WhatifActivity extends Activity
 
 				// Y軸回転(270～360度)
 				Rotate3dAnimation rotation = new Rotate3dAnimation(270, 360, centerX, centerY, 0f, false);
-				//				rotation.setDuration(50);
+
 				rotation.setDuration(timeDeal);
 				trumpView[index].startAnimation(rotation);
 				rotation.setAnimationListener(new TrumpAnimationListener(index) {
@@ -561,20 +551,6 @@ public class WhatifActivity extends Activity
 
 	}
 
-	// ArrayListにclearViewのXY座標を格納する処理
-	private void getTrumpBackViewPoint() {
-		int[] location = new int[2];
-		for (int i = 0; i < 6; i++) {
-
-			trumpBackView[i].getLocationInWindow(location);
-			int x = location[0];
-			int y = location[1];
-			Point point = new Point(x, y);
-			trumpBackView_location.add(point);
-
-		}
-	}
-
 	// 手札から場札へトランプが移動する処理
 	private void moveTrump(final int index) {
 
@@ -585,10 +561,9 @@ public class WhatifActivity extends Activity
 		trumpView[index].bringToFront();
 
 		TranslateAnimation translate = new TranslateAnimation(
-				0, trumpBackView_location.get(0).x - trumpBackView_location.get(index).x,
-				0, (trumpBackView_location.get(0).y - statusbarHeight) - ((trumpBackView_location.get(index).y - statusbarHeight)));
+				0, trumpView[0].getLeft() - trumpView[index].getLeft(),
+				0, trumpView[0].getTop() - trumpView[index].getTop());
 
-		//		translate.setDuration(175);
 		translate.setDuration(timeTranslate);
 		translate.setFillAfter(true);
 
@@ -991,6 +966,7 @@ public class WhatifActivity extends Activity
 
 	}
 
+	// 払い戻し金を表示する処理
 	private void refundCoin() {
 
 		cuCoin(rate52[counter - 1] * coin.getWager());
@@ -1015,18 +991,17 @@ public class WhatifActivity extends Activity
 			}
 
 		} else {
-			// スート(図柄)が一致した場合
+
 			for (int i = 1; i <= 5; i++) {
 				id = res.getIdentifier("selectAble" + i, "id", getPackageName());
 				view = (TextView) findViewById(id);
-				if (trumpView[0].getSuit().equals(trumpView[i].getSuit())) {
+				if (trumpView[0].getSuit().equals(trumpView[i].getSuit())) {// スート(図柄)が一致した場合
 					view.setTextColor(0xFFFFFF00);
 				}
-				else if (trumpView[0].getNumber() == trumpView[i].getNumber()) {
+				else if (trumpView[0].getNumber() == trumpView[i].getNumber()) {// 数字が一致した場合
 					view.setTextColor(0xFFFFFF00);
-
 				}
-				else {
+				else {// 一致しなかった場合は透明にする
 					view.setTextColor(0x00FFFF00);
 				}
 
