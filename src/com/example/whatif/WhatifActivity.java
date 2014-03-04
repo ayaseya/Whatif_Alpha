@@ -234,7 +234,7 @@ public class WhatifActivity extends Activity
 				trumpView[i].getLayoutParams().height = trumpBackView[0].getHeight();
 				trumpView[i].requestLayout();
 			}
-			
+
 			// trumpViewのフォントサイズを変更する
 			int fontSize = 20;
 			switch (dpi) {
@@ -269,6 +269,8 @@ public class WhatifActivity extends Activity
 
 			// トランプ画像(×5)のwidthと端末のwidthから余白を計算する
 			int trumpWidth = trumpBackView[0].getWidth();
+
+			Log.v(TAG, "trumpWidth=" + trumpWidth);
 			margin = (Math.max(trumpWidth * 5, width) - Math.min(trumpWidth * 5, width)) / 6;
 			Log.v(TAG, "margin=" + margin);
 
@@ -420,9 +422,6 @@ public class WhatifActivity extends Activity
 					public void onAnimationEnd(Animation animation) {
 						// アニメーションの終了
 						trumpView[index].setVisibility(View.VISIBLE);
-						selectAble();
-						// ゲームオーバーの判定
-						GameOver();
 						flipAnimFlag = true;
 					}
 				});
@@ -624,15 +623,18 @@ public class WhatifActivity extends Activity
 
 					FlipTrump(index);
 					yellowNum(trumpView[index].getSerial());
+					selectAble();
+					GameOver();
 
 				} else {
 					trumpView[index].setVisibility(View.INVISIBLE);
+					trumpView[index].setTrump(0, null, 0, 0);// 非表示になった手札には空の情報を入れておく(selectAble()に反応しないよう)
 
 					Resources res = getResources();
 					int id = res.getIdentifier("selectAble" + index, "id", getPackageName());
 					TextView view = (TextView) findViewById(id);
 					view.setTextColor(0x00FFFF00);
-
+					selectAble();
 					GameClear();
 				}
 
@@ -995,13 +997,12 @@ public class WhatifActivity extends Activity
 			for (int i = 1; i <= 5; i++) {
 				id = res.getIdentifier("selectAble" + i, "id", getPackageName());
 				view = (TextView) findViewById(id);
+
 				if (trumpView[0].getSuit().equals(trumpView[i].getSuit())) {// スート(図柄)が一致した場合
 					view.setTextColor(0xFFFFFF00);
-				}
-				else if (trumpView[0].getNumber() == trumpView[i].getNumber()) {// 数字が一致した場合
+				} else if (trumpView[0].getNumber() == trumpView[i].getNumber()) {// 数字が一致した場合
 					view.setTextColor(0xFFFFFF00);
-				}
-				else {// 一致しなかった場合は透明にする
+				} else {// 一致しなかった場合は透明にする
 					view.setTextColor(0x00FFFF00);
 				}
 
