@@ -1783,28 +1783,27 @@
         app:is_oval="false"
         app:round_background="true" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/roundedImageView3"
-        android:gravity="center"
-        android:orientation="horizontal" >
-
-        <TextView
+     <TextView
             android:id="@+id/selectAble1"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:layout_alignLeft="@id/roundedImageView1"
+            android:layout_alignRight="@id/roundedImageView1"
+            android:layout_below="@id/roundedImageView1"
             android:gravity="center"
             android:text="@string/selectAble"
             android:textColor="#000000"
-            android:textSize="10sp" />
+            android:textSize="10sp"
+      android:textStyle="bold"/>
 
         <TextView
             android:id="@+id/selectAble2"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:layout_alignLeft="@id/roundedImageView2"
+            android:layout_alignRight="@id/roundedImageView2"
+            android:layout_below="@id/roundedImageView2"
+    android:textStyle="bold"
             android:gravity="center"
             android:text="@string/selectAble"
             android:textColor="#000000"
@@ -1814,7 +1813,10 @@
             android:id="@+id/selectAble3"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:layout_alignLeft="@id/roundedImageView3"
+            android:layout_alignRight="@id/roundedImageView3"
+            android:layout_below="@id/roundedImageView3"
+    android:textStyle="bold"
             android:gravity="center"
             android:text="@string/selectAble"
             android:textColor="#000000"
@@ -1824,7 +1826,10 @@
             android:id="@+id/selectAble4"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:layout_alignLeft="@id/roundedImageView4"
+            android:layout_alignRight="@id/roundedImageView4"
+            android:layout_below="@id/roundedImageView4"
+    android:textStyle="bold"
             android:gravity="center"
             android:text="@string/selectAble"
             android:textColor="#000000"
@@ -1834,18 +1839,21 @@
             android:id="@+id/selectAble5"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:layout_alignLeft="@id/roundedImageView5"
+            android:layout_alignRight="@id/roundedImageView5"
+            android:layout_below="@id/roundedImageView5"
+    android:textStyle="bold"
             android:gravity="center"
             android:text="@string/selectAble"
             android:textColor="#000000"
             android:textSize="10sp" />
-    </LinearLayout>
 
     <TextSwitcher
-        android:id="@+id/countView"
+        android:id="@+id/counterView"
         style="@style/blue"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/coinLayout"
         android:layout_alignTop="@+id/roundedImageView0"
         android:layout_marginRight="25dp"
         android:layout_marginTop="-5dp"
@@ -1856,9 +1864,11 @@
         android:minWidth="32dp"
         android:padding="5dp"
         android:textSize="64sp" >
+
     </TextSwitcher>
 
     <TableLayout
+        android:id="@+id/coinLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignTop="@+id/roundedImageView0"
@@ -2051,7 +2061,7 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/coinLayout"
+        android:id="@+id/btnLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_alignTop="@id/roundedImageView3"

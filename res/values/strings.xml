@@ -128,5 +128,6 @@
 	<string name="payout">PAYOUT</string>
 	<string name="deal">DEAL\n/DOUBLE</string>
 	<string name="selectAble">SELECT ABLE</string>
+	<string name="counterMsg">NUMBER OF\nSUCCCEEDED\nCARDS</string>
 	
 </resources>
