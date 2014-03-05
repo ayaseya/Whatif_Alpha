@@ -4,24 +4,19 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
-import android.view.Display;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
-import android.view.ViewGroup.MarginLayoutParams;
 import android.view.Window;
-import android.view.WindowManager;
-import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.TranslateAnimation;
@@ -117,235 +112,235 @@ public class WhatifActivity extends Activity
 		//		setContentView(R.layout.activity_whatif);
 		setContentView(R.layout.whatif_layout);
 
-		findViewById(R.id.black).bringToFront();
-
-		// トランプ(52枚)を管理するDeckクラスのインスタンスの取得
-		deck = new Deck(this.getApplicationContext());
-		// トランプ(52枚)の生成とシャッフル
-		deck.shuffle(this.getApplicationContext());
-		// 場札に置いた順番を記録するインスタンスを取得する
-		record = new Deck(this.getApplicationContext());
-
-		// コイン処理のインスタンスを取得する
-		coin = new Coin();
-
-		// ldpi : 120 dpi
-		// mdpi : 160 dpi
-		// hdpi : 240 dpi
-		// xhdpi : 320 dpi
-		// xxhdpi : 480 dpi
-		// txdpi : 213 dpi (Nexus 7)
-
-		// ldpi : mdpi : hdpi : xdhpi : xxhdpi : tvdpi = 0.75 : 1 : 1.5 : 2 : 3 : 1.33125
-
-		// Activityを継承していないため、getWindowManager()メソッドは利用できない
-		// Displayクラスのインスタンスを取得するため
-		// 引数のContextを使用してWindowManagerを取得する
-		WindowManager wm = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
-
-		// Displayインスタンスを取得する
-		Display display = wm.getDefaultDisplay();
-
-		// DPI を取得する
-		int _dpi = getResources().getDisplayMetrics().densityDpi;
-
-		// dpi を元に比率を計算する ( dpi ÷ 基準値(mdpi) )
-		float ratio = _dpi / 160f;
-
-		Log.v(TAG, "dpi=" + _dpi + " density=" + ratio);
-
-		width = display.getWidth();
-		height = display.getHeight();
-
-		if (width <= 240) {//ldpi（120dpi）240×320px
-			dpi = DPI.ldpi;
-		} else if (240 < +width && +width <= 320) {//mdpi（160dpi）320×480px
-			dpi = DPI.mdpi;
-		} else if (320 < +width && +width <= 480) {//hdpi（240dpi）480×800px
-			dpi = DPI.hdpi;
-		} else if (480 < +width && +width <= 640) {//xhdpi（320dpi）640×960px
-			dpi = DPI.xhdpi;
-		} else if (640 < +width) {//xxhdpi（480dpi）960×1440px
-			dpi = DPI.xxhdpi;
-		}
-		Log.v(TAG, "> " + dpi + " w=" + width + " h=" + height);
-
-		/* ********** ********** ********** ********** */
-
-		res = getResources();
-
-		for (int i = 0; i <= 5; i++) {
-			int id = res.getIdentifier("trumpView" + i, "id", getPackageName());
-			trumpView[i] = (TrumpView) findViewById(id);
-
-		}
-		for (int i = 0; i <= 5; i++) {
-			int id = res.getIdentifier("roundedImageView" + i, "id", getPackageName());
-			trumpBackView[i] = (RoundedImageView) findViewById(id);
-		}
-
-		// リスナー登録
-		trumpView[0].setOnClickListener(layoutListener);// Y軸回転テスト用のクリックリスナー
-		trumpView[1].setOnClickListener(hand1Listener);
-		trumpView[2].setOnClickListener(hand2Listener);
-		trumpView[3].setOnClickListener(hand3Listener);
-		trumpView[4].setOnClickListener(hand4Listener);
-		trumpView[5].setOnClickListener(hand5Listener);
-
-		findViewById(R.id.collectBtn).setOnClickListener(collectBtnListener);
-		findViewById(R.id.hdBtn).setOnClickListener(hbBtnListener);
-		findViewById(R.id.betBtn).setOnClickListener(betBtnListener);
-		findViewById(R.id.repeatBtn).setOnClickListener(repeatBtnListener);
-		findViewById(R.id.payoutBtn).setOnClickListener(payoutBtnListener);
-		findViewById(R.id.dealBtn).setOnClickListener(dealBtnListener);
-
-		findViewById(R.id.msgLayout).setOnClickListener(msgListener);
-
-		wagerView = (TextView) findViewById(R.id.wager);//
-		winView = (TextView) findViewById(R.id.win);//
-		paidView = (TextView) findViewById(R.id.paid);//
-		creditView = (TextView) findViewById(R.id.credit);//
-
-		// 非表示
-		findViewById(R.id.msgLayout).setVisibility(View.INVISIBLE);
-
-		//カウンター処理
-		txtSwitchOn();
-
-		Log.v(TAG, "onCreate()");
+//		findViewById(R.id.black).bringToFront();
+//
+//		// トランプ(52枚)を管理するDeckクラスのインスタンスの取得
+//		deck = new Deck(this.getApplicationContext());
+//		// トランプ(52枚)の生成とシャッフル
+//		deck.shuffle(this.getApplicationContext());
+//		// 場札に置いた順番を記録するインスタンスを取得する
+//		record = new Deck(this.getApplicationContext());
+//
+//		// コイン処理のインスタンスを取得する
+//		coin = new Coin();
+//
+//		// ldpi : 120 dpi
+//		// mdpi : 160 dpi
+//		// hdpi : 240 dpi
+//		// xhdpi : 320 dpi
+//		// xxhdpi : 480 dpi
+//		// txdpi : 213 dpi (Nexus 7)
+//
+//		// ldpi : mdpi : hdpi : xdhpi : xxhdpi : tvdpi = 0.75 : 1 : 1.5 : 2 : 3 : 1.33125
+//
+//		// Activityを継承していないため、getWindowManager()メソッドは利用できない
+//		// Displayクラスのインスタンスを取得するため
+//		// 引数のContextを使用してWindowManagerを取得する
+//		WindowManager wm = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
+//
+//		// Displayインスタンスを取得する
+//		Display display = wm.getDefaultDisplay();
+//
+//		// DPI を取得する
+//		int _dpi = getResources().getDisplayMetrics().densityDpi;
+//
+//		// dpi を元に比率を計算する ( dpi ÷ 基準値(mdpi) )
+//		float ratio = _dpi / 160f;
+//
+//		Log.v(TAG, "dpi=" + _dpi + " density=" + ratio);
+//
+//		width = display.getWidth();
+//		height = display.getHeight();
+//
+//		if (width <= 240) {//ldpi（120dpi）240×320px
+//			dpi = DPI.ldpi;
+//		} else if (240 < +width && +width <= 320) {//mdpi（160dpi）320×480px
+//			dpi = DPI.mdpi;
+//		} else if (320 < +width && +width <= 480) {//hdpi（240dpi）480×800px
+//			dpi = DPI.hdpi;
+//		} else if (480 < +width && +width <= 640) {//xhdpi（320dpi）640×960px
+//			dpi = DPI.xhdpi;
+//		} else if (640 < +width) {//xxhdpi（480dpi）960×1440px
+//			dpi = DPI.xxhdpi;
+//		}
+//		Log.v(TAG, "> " + dpi + " w=" + width + " h=" + height);
+//
+//		/* ********** ********** ********** ********** */
+//
+//		res = getResources();
+//
+//		for (int i = 0; i <= 5; i++) {
+//			int id = res.getIdentifier("trumpView" + i, "id", getPackageName());
+//			trumpView[i] = (TrumpView) findViewById(id);
+//
+//		}
+//		for (int i = 0; i <= 5; i++) {
+//			int id = res.getIdentifier("roundedImageView" + i, "id", getPackageName());
+//			trumpBackView[i] = (RoundedImageView) findViewById(id);
+//		}
+//
+//		// リスナー登録
+//		trumpView[0].setOnClickListener(layoutListener);// Y軸回転テスト用のクリックリスナー
+//		trumpView[1].setOnClickListener(hand1Listener);
+//		trumpView[2].setOnClickListener(hand2Listener);
+//		trumpView[3].setOnClickListener(hand3Listener);
+//		trumpView[4].setOnClickListener(hand4Listener);
+//		trumpView[5].setOnClickListener(hand5Listener);
+//
+//		findViewById(R.id.collectBtn).setOnClickListener(collectBtnListener);
+//		findViewById(R.id.hdBtn).setOnClickListener(hbBtnListener);
+//		findViewById(R.id.betBtn).setOnClickListener(betBtnListener);
+//		findViewById(R.id.repeatBtn).setOnClickListener(repeatBtnListener);
+//		findViewById(R.id.payoutBtn).setOnClickListener(payoutBtnListener);
+//		findViewById(R.id.dealBtn).setOnClickListener(dealBtnListener);
+//
+//		findViewById(R.id.msgLayout).setOnClickListener(msgListener);
+//
+//		wagerView = (TextView) findViewById(R.id.wager);//
+//		winView = (TextView) findViewById(R.id.win);//
+//		paidView = (TextView) findViewById(R.id.paid);//
+//		creditView = (TextView) findViewById(R.id.credit);//
+//
+//		// 非表示
+//		findViewById(R.id.msgLayout).setVisibility(View.INVISIBLE);
+//
+//		//カウンター処理
+//		txtSwitchOn();
+//
+//		Log.v(TAG, "onCreate()");
 	}// onCreate()
 
 	@Override
 	public void onWindowFocusChanged(boolean hasFocus) {
 		super.onWindowFocusChanged(hasFocus);
 
-		// 機種によって複数回onWindowFocusChanged()が呼ばれる場合があるので
-		// FlagでonCreate()の実行後に一度だけ実行されるように記述する
-		if (replaceFlag) {
-			// ステータスバーの高さを取得
-			//			Rect rect = new Rect();
-			//			getWindow().getDecorView().getWindowVisibleDisplayFrame(rect);
-			//			statusbarHeight = rect.top;
-			//			Log.v(TAG, "ステータスバー height=" + statusbarHeight);
-
-			// trumpViewの縦横を画像に合わせる
-			for (int i = 0; i <= 5; i++) {
-				trumpView[i].getLayoutParams().width = trumpBackView[0].getWidth();
-				trumpView[i].getLayoutParams().height = trumpBackView[0].getHeight();
-				trumpView[i].requestLayout();
-			}
-
-			// trumpViewのフォントサイズを変更する
-			int fontSize = 20;
-			switch (dpi) {
-			case ldpi:
-				fontSize = 20;
-				break;
-			case mdpi:
-				fontSize = 20;
-				break;
-			case hdpi:
-				fontSize = 20;
-				break;
-			case xhdpi:
-				fontSize = 20;
-				break;
-			case xxhdpi:
-				fontSize = 20;
-				break;
-			}
-
-			for (int i = 0; i <= 5; i++) {
-				trumpView[i].setFontSize(fontSize, fontSize * 2);
-			}
-
-			// 山札から5枚トランプの情報を読み込む
-			for (int i = 1; i <= 5; i++) {
-				trumpView[i].setTrump(deck.trump.get(i - 1).getNumber(),
-						deck.trump.get(i - 1).getSuit(),
-						deck.trump.get(i - 1).getSerial(),
-						deck.trump.get(i - 1).getColor());
-			}
-
-			// トランプ画像(×5)のwidthと端末のwidthから余白を計算する
-			int trumpWidth = trumpBackView[0].getWidth();
-
-			Log.v(TAG, "trumpWidth=" + trumpWidth);
-			margin = (Math.max(trumpWidth * 5, width) - Math.min(trumpWidth * 5, width)) / 6;
-			Log.v(TAG, "margin=" + margin);
-
-			trumpBackView[2].getLayoutParams();
-			// trumpBackViewからマージンを取得
-			MarginLayoutParams marginParms2 = (MarginLayoutParams) trumpBackView[2].getLayoutParams();
-			// 移動させたい距離に変更
-			marginParms2.rightMargin += margin;
-			// trumpBackViewへ反映
-			trumpBackView[2].setLayoutParams(marginParms2);
-
-			trumpBackView[1].getLayoutParams();
-			MarginLayoutParams marginParms1 = (MarginLayoutParams) trumpBackView[1].getLayoutParams();
-			marginParms1.rightMargin += margin;
-			trumpBackView[1].setLayoutParams(marginParms1);
-
-			trumpBackView[4].getLayoutParams();
-			MarginLayoutParams marginParms4 = (MarginLayoutParams) trumpBackView[4].getLayoutParams();
-			marginParms4.leftMargin += margin;
-			trumpBackView[4].setLayoutParams(marginParms4);
-
-			trumpBackView[5].getLayoutParams();
-			MarginLayoutParams marginParms5 = (MarginLayoutParams) trumpBackView[5].getLayoutParams();
-			marginParms5.leftMargin += margin;
-			trumpBackView[5].setLayoutParams(marginParms5);
-
-			// Y軸回転用の変数を取得する
-			centerX = trumpBackView[0].getWidth() / 2;
-			centerY = trumpBackView[0].getLayoutParams().height;
-
-			//スクロールViewの設定をする
-			setScrollView();
-			// ボーナスにテキストを設定する
-			setTxtBounus();
-			// コインの初期値を設定する
-			redrawCoin();
-
-			// トランプ画像を非表示にする
-			for (int i = 0; i <= 5; i++) {
-				trumpView[i].setVisibility(View.INVISIBLE);
-				trumpBackView[i].setVisibility(View.INVISIBLE);
-			}
-
-			// 最前面の黒画像をフェードアウトする
-			new Thread((new Runnable() {
-
-				@Override
-				public void run() {
-					handler.post(new Runnable() {
-
-						@Override
-						public void run() {
-
-							AlphaAnimation alpha = new AlphaAnimation(
-									1.0f, // 開始時の透明度（1は全く透過しない）
-									0.0f); // 終了時の透明度（0は完全に透過）
-
-							alpha.setDuration(1000);
-
-							// アニメーション終了時の表示状態を維持する
-							alpha.setFillEnabled(true);
-							alpha.setFillAfter(true);
-
-							// アニメーションを開始
-							findViewById(R.id.black).startAnimation(alpha);
-						}
-					});
-
-				}
-			})).start();
-
-			// 起動時のみ必要な処理が終了したのでフラグを変更する
-			replaceFlag = false;
-
-		}
+//		// 機種によって複数回onWindowFocusChanged()が呼ばれる場合があるので
+//		// FlagでonCreate()の実行後に一度だけ実行されるように記述する
+//		if (replaceFlag) {
+//			// ステータスバーの高さを取得
+//			//			Rect rect = new Rect();
+//			//			getWindow().getDecorView().getWindowVisibleDisplayFrame(rect);
+//			//			statusbarHeight = rect.top;
+//			//			Log.v(TAG, "ステータスバー height=" + statusbarHeight);
+//
+//			// trumpViewの縦横を画像に合わせる
+//			for (int i = 0; i <= 5; i++) {
+//				trumpView[i].getLayoutParams().width = trumpBackView[0].getWidth();
+//				trumpView[i].getLayoutParams().height = trumpBackView[0].getHeight();
+//				trumpView[i].requestLayout();
+//			}
+//
+//			// trumpViewのフォントサイズを変更する
+//			int fontSize = 20;
+//			switch (dpi) {
+//			case ldpi:
+//				fontSize = 20;
+//				break;
+//			case mdpi:
+//				fontSize = 20;
+//				break;
+//			case hdpi:
+//				fontSize = 20;
+//				break;
+//			case xhdpi:
+//				fontSize = 20;
+//				break;
+//			case xxhdpi:
+//				fontSize = 20;
+//				break;
+//			}
+//
+//			for (int i = 0; i <= 5; i++) {
+//				trumpView[i].setFontSize(fontSize, fontSize * 2);
+//			}
+//
+//			// 山札から5枚トランプの情報を読み込む
+//			for (int i = 1; i <= 5; i++) {
+//				trumpView[i].setTrump(deck.trump.get(i - 1).getNumber(),
+//						deck.trump.get(i - 1).getSuit(),
+//						deck.trump.get(i - 1).getSerial(),
+//						deck.trump.get(i - 1).getColor());
+//			}
+//
+//			// トランプ画像(×5)のwidthと端末のwidthから余白を計算する
+//			int trumpWidth = trumpBackView[0].getWidth();
+//
+//			Log.v(TAG, "trumpWidth=" + trumpWidth);
+//			margin = (Math.max(trumpWidth * 5, width) - Math.min(trumpWidth * 5, width)) / 6;
+//			Log.v(TAG, "margin=" + margin);
+//
+//			trumpBackView[2].getLayoutParams();
+//			// trumpBackViewからマージンを取得
+//			MarginLayoutParams marginParms2 = (MarginLayoutParams) trumpBackView[2].getLayoutParams();
+//			// 移動させたい距離に変更
+//			marginParms2.rightMargin += margin;
+//			// trumpBackViewへ反映
+//			trumpBackView[2].setLayoutParams(marginParms2);
+//
+//			trumpBackView[1].getLayoutParams();
+//			MarginLayoutParams marginParms1 = (MarginLayoutParams) trumpBackView[1].getLayoutParams();
+//			marginParms1.rightMargin += margin;
+//			trumpBackView[1].setLayoutParams(marginParms1);
+//
+//			trumpBackView[4].getLayoutParams();
+//			MarginLayoutParams marginParms4 = (MarginLayoutParams) trumpBackView[4].getLayoutParams();
+//			marginParms4.leftMargin += margin;
+//			trumpBackView[4].setLayoutParams(marginParms4);
+//
+//			trumpBackView[5].getLayoutParams();
+//			MarginLayoutParams marginParms5 = (MarginLayoutParams) trumpBackView[5].getLayoutParams();
+//			marginParms5.leftMargin += margin;
+//			trumpBackView[5].setLayoutParams(marginParms5);
+//
+//			// Y軸回転用の変数を取得する
+//			centerX = trumpBackView[0].getWidth() / 2;
+//			centerY = trumpBackView[0].getLayoutParams().height;
+//
+//			//スクロールViewの設定をする
+//			setScrollView();
+//			// ボーナスにテキストを設定する
+//			setTxtBounus();
+//			// コインの初期値を設定する
+//			redrawCoin();
+//
+//			// トランプ画像を非表示にする
+//			for (int i = 0; i <= 5; i++) {
+//				trumpView[i].setVisibility(View.INVISIBLE);
+//				trumpBackView[i].setVisibility(View.INVISIBLE);
+//			}
+//
+//			// 最前面の黒画像をフェードアウトする
+//			new Thread((new Runnable() {
+//
+//				@Override
+//				public void run() {
+//					handler.post(new Runnable() {
+//
+//						@Override
+//						public void run() {
+//
+//							AlphaAnimation alpha = new AlphaAnimation(
+//									1.0f, // 開始時の透明度（1は全く透過しない）
+//									0.0f); // 終了時の透明度（0は完全に透過）
+//
+//							alpha.setDuration(1000);
+//
+//							// アニメーション終了時の表示状態を維持する
+//							alpha.setFillEnabled(true);
+//							alpha.setFillAfter(true);
+//
+//							// アニメーションを開始
+//							findViewById(R.id.black).startAnimation(alpha);
+//						}
+//					});
+//
+//				}
+//			})).start();
+//
+//			// 起動時のみ必要な処理が終了したのでフラグを変更する
+//			replaceFlag = false;
+//
+//		}
 		Log.v(TAG, "onWindowFocusChanged()");
 	}
 
