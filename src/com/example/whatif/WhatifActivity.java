@@ -105,11 +105,18 @@ public class WhatifActivity extends Activity
 	private int scrollSleepTime = 250;//250
 	private int msgSleepTime = 500;//500
 
-	Handler handler = new Handler();
+	private Handler handler = new Handler();
+
+	private int counterWidth = 0;
+	private int counterHeight = 0;
 
 	private int margin;
 
 	private Configuration config;
+
+	private TextView counterMsg;
+
+	private TextView txt;
 
 	/* ********** ********** ********** ********** */
 
@@ -214,8 +221,7 @@ public class WhatifActivity extends Activity
 		// 非表示
 		findViewById(R.id.msgLayout).setVisibility(View.INVISIBLE);
 
-		//カウンター処理
-		txtSwitchOn();
+		counterMsg = (TextView) findViewById(R.id.counterMsg);
 
 		Log.v(TAG, "onCreate()");
 	}// onCreate()
@@ -233,6 +239,8 @@ public class WhatifActivity extends Activity
 		// Landscape(横長)
 		else if (config.orientation == Configuration.ORIENTATION_LANDSCAPE) {
 			horizontal();
+
+			findViewById(R.id.black).setVisibility(View.INVISIBLE);
 			Log.v(TAG, ">横画面");
 		}
 
@@ -286,7 +294,7 @@ public class WhatifActivity extends Activity
 	/* ********** ********** ********** ********** */
 
 	// トランプ1枚をアニメーションの処理
-	public void FlipTrump(final int index) {
+	private void FlipTrump(final int index) {
 
 		// アニメーション中にクリックできないようfalseに変更する
 		flipAnimFlag = false;
@@ -321,7 +329,7 @@ public class WhatifActivity extends Activity
 	}
 
 	// トランプ5枚を順番に捲るアニメーションの処理
-	public void dealFlipTrump(final int index) {
+	private void dealFlipTrump(final int index) {
 
 		// アニメーション中にクリックできないようfalseに変更する
 		dealAnimFlag = false;
@@ -559,7 +567,7 @@ public class WhatifActivity extends Activity
 	}
 
 	// boldNum関数…場札に置いたトランプの数字をガイド上で太字・シアンにする処理
-	public void boldNum(int x) {
+	private void boldNum(int x) {
 		Resources res = getResources();
 		int guideId = res.getIdentifier("card" + x, "id", getPackageName());
 		guideView = (TextView) findViewById(guideId);
@@ -570,7 +578,7 @@ public class WhatifActivity extends Activity
 	}// Card.BoldNum_**********
 
 	// yellowNum関数…場札に置いたトランプの数字をガイド上で黄色にする処理
-	public void yellowNum(int x) {
+	private void yellowNum(int x) {
 		Resources res = getResources();
 		int guideId = res.getIdentifier("card" + x, "id", getPackageName());
 		guideView = (TextView) findViewById(guideId);
@@ -583,7 +591,7 @@ public class WhatifActivity extends Activity
 	}// Card.yellowNum_**********
 
 	// deleteNum関数…場札に置いたトランプの数字をガイド上から消す処理
-	public void deleteNum(int x) {
+	private void deleteNum(int x) {
 		// getResources()でリソースオブジェクトを
 		Resources res = getResources();
 		// guideIdという変数にリソースの場所を格納する
@@ -597,7 +605,7 @@ public class WhatifActivity extends Activity
 		guideView.setBackgroundColor(0xFF0000FF);
 	}// Card.DeleteNum_**********
 
-	public void redrawGuide() {
+	private void redrawGuide() {
 		Resources res = getResources();
 		int guideId;
 		for (int i = 0; i < 52; i++) {
@@ -619,19 +627,19 @@ public class WhatifActivity extends Activity
 		if (config.orientation == Configuration.ORIENTATION_PORTRAIT) {
 			switch (dpi) {
 			case ldpi:
-				txtSwitchFontSize = 32;
+				txtSwitchFontSize = 24;
 				break;
 			case mdpi:
-				txtSwitchFontSize = 36;
+				txtSwitchFontSize = 32;
 				break;
 			case hdpi:
-				txtSwitchFontSize = 42;
+				txtSwitchFontSize = 36;
 				break;
 			case xhdpi:
-				txtSwitchFontSize = 48;
+				txtSwitchFontSize = 42;
 				break;
 			case xxhdpi:
-				txtSwitchFontSize = 62;
+				txtSwitchFontSize = 48;
 				break;
 			}
 		}
@@ -657,11 +665,13 @@ public class WhatifActivity extends Activity
 		}
 
 		count = (TextSwitcher) findViewById(R.id.counterView);
-		count.setFactory(this);
+		counterWidth = count.getWidth();
+		counterHeight = count.getHeight();
 	
+
 		count.setInAnimation(in);
 		count.setOutAnimation(out);
-
+		count.setFactory(this);
 		count.setText(String.valueOf(counter));
 	}
 
@@ -804,7 +814,7 @@ public class WhatifActivity extends Activity
 
 	}
 
-	public void redrawCoin() {
+	private void redrawCoin() {
 		wagerView.setText(String.valueOf(coin.getWager()));
 		winView.setText(String.valueOf(0));
 		paidView.setText(String.valueOf(0));
@@ -813,7 +823,7 @@ public class WhatifActivity extends Activity
 
 	// cuCoin関数…cu = Count Upの略称、払い戻し時にコインの枚数が1枚ずつ
 	// 増減する様子を表示する処理、引数は増減する枚数を渡す
-	public void cuCoin(final int x) {
+	private void cuCoin(final int x) {
 		// コイン増加表示の処理中かフラグ判定
 		if (coinFlag == false && (x != 0)) {
 
@@ -948,7 +958,7 @@ public class WhatifActivity extends Activity
 				trumpView[i].getLayoutParams().width = trumpBackView[0].getWidth();
 				trumpView[i].getLayoutParams().height = trumpBackView[0].getHeight();
 				trumpView[i].requestLayout();
-			}			
+			}
 
 			// trumpViewのフォントサイズを変更する
 			int fontSize = 20;
@@ -991,26 +1001,26 @@ public class WhatifActivity extends Activity
 
 			trumpBackView[2].getLayoutParams();
 			// trumpBackViewからマージンを取得
-			MarginLayoutParams marginParms2 = (MarginLayoutParams) trumpBackView[2].getLayoutParams();
+			MarginLayoutParams marginParams2 = (MarginLayoutParams) trumpBackView[2].getLayoutParams();
 			// 移動させたい距離に変更
-			marginParms2.rightMargin += margin;
+			marginParams2.rightMargin += margin;
 			// trumpBackViewへ反映
-			trumpBackView[2].setLayoutParams(marginParms2);
+			trumpBackView[2].setLayoutParams(marginParams2);
 
 			trumpBackView[1].getLayoutParams();
-			MarginLayoutParams marginParms1 = (MarginLayoutParams) trumpBackView[1].getLayoutParams();
-			marginParms1.rightMargin += margin;
-			trumpBackView[1].setLayoutParams(marginParms1);
+			MarginLayoutParams marginParams1 = (MarginLayoutParams) trumpBackView[1].getLayoutParams();
+			marginParams1.rightMargin += margin;
+			trumpBackView[1].setLayoutParams(marginParams1);
 
 			trumpBackView[4].getLayoutParams();
-			MarginLayoutParams marginParms4 = (MarginLayoutParams) trumpBackView[4].getLayoutParams();
-			marginParms4.leftMargin += margin;
-			trumpBackView[4].setLayoutParams(marginParms4);
+			MarginLayoutParams marginParams4 = (MarginLayoutParams) trumpBackView[4].getLayoutParams();
+			marginParams4.leftMargin += margin;
+			trumpBackView[4].setLayoutParams(marginParams4);
 
 			trumpBackView[5].getLayoutParams();
-			MarginLayoutParams marginParms5 = (MarginLayoutParams) trumpBackView[5].getLayoutParams();
-			marginParms5.leftMargin += margin;
-			trumpBackView[5].setLayoutParams(marginParms5);
+			MarginLayoutParams marginParams5 = (MarginLayoutParams) trumpBackView[5].getLayoutParams();
+			marginParams5.leftMargin += margin;
+			trumpBackView[5].setLayoutParams(marginParams5);
 
 			// Y軸回転用の変数を取得する
 			centerX = trumpBackView[0].getWidth() / 2;
@@ -1056,6 +1066,9 @@ public class WhatifActivity extends Activity
 
 				}
 			})).start();
+
+			//カウンター処理
+			txtSwitchOn();
 
 			// 起動時のみ必要な処理が終了したのでフラグを変更する
 			replaceFlag = false;
@@ -1081,22 +1094,22 @@ public class WhatifActivity extends Activity
 			}
 
 			// trumpViewのフォントサイズを変更する
-			int fontSize = 20;
+			int fontSize = 30;
 			switch (dpi) {
 			case ldpi:
-				fontSize = 20;
+				fontSize = 30;
 				break;
 			case mdpi:
-				fontSize = 20;
+				fontSize = 30;
 				break;
 			case hdpi:
-				fontSize = 20;
+				fontSize = 30;
 				break;
 			case xhdpi:
-				fontSize = 20;
+				fontSize = 30;
 				break;
 			case xxhdpi:
-				fontSize = 20;
+				fontSize = 30;
 				break;
 			}
 
@@ -1121,26 +1134,26 @@ public class WhatifActivity extends Activity
 
 			trumpBackView[2].getLayoutParams();
 			// trumpBackViewからマージンを取得
-			MarginLayoutParams marginParms2 = (MarginLayoutParams) trumpBackView[2].getLayoutParams();
+			MarginLayoutParams marginParams2 = (MarginLayoutParams) trumpBackView[2].getLayoutParams();
 			// 移動させたい距離に変更
-			marginParms2.rightMargin += margin;
+			marginParams2.rightMargin += margin;
 			// trumpBackViewへ反映
-			trumpBackView[2].setLayoutParams(marginParms2);
+			trumpBackView[2].setLayoutParams(marginParams2);
 
 			trumpBackView[1].getLayoutParams();
-			MarginLayoutParams marginParms1 = (MarginLayoutParams) trumpBackView[1].getLayoutParams();
-			marginParms1.rightMargin += margin;
-			trumpBackView[1].setLayoutParams(marginParms1);
+			MarginLayoutParams marginParams1 = (MarginLayoutParams) trumpBackView[1].getLayoutParams();
+			marginParams1.rightMargin += margin;
+			trumpBackView[1].setLayoutParams(marginParams1);
 
 			trumpBackView[4].getLayoutParams();
-			MarginLayoutParams marginParms4 = (MarginLayoutParams) trumpBackView[4].getLayoutParams();
-			marginParms4.leftMargin += margin;
-			trumpBackView[4].setLayoutParams(marginParms4);
+			MarginLayoutParams marginParams4 = (MarginLayoutParams) trumpBackView[4].getLayoutParams();
+			marginParams4.leftMargin += margin;
+			trumpBackView[4].setLayoutParams(marginParams4);
 
 			trumpBackView[5].getLayoutParams();
-			MarginLayoutParams marginParms5 = (MarginLayoutParams) trumpBackView[5].getLayoutParams();
-			marginParms5.leftMargin += margin;
-			trumpBackView[5].setLayoutParams(marginParms5);
+			MarginLayoutParams marginParams5 = (MarginLayoutParams) trumpBackView[5].getLayoutParams();
+			marginParams5.leftMargin += margin;
+			trumpBackView[5].setLayoutParams(marginParams5);
 
 			// Y軸回転用の変数を取得する
 			centerX = trumpBackView[0].getWidth() / 2;
@@ -1187,6 +1200,22 @@ public class WhatifActivity extends Activity
 				}
 			})).start();
 
+			//カウンター処理
+			txtSwitchOn();
+
+			// makeView()内でフォントサイズを変更すると
+			// TextSwitchewと同じlinearlayoutに配置されている子が
+			// 文字の高さ分の空白が生まれてしまう(layout_Gravityを動的に変更しても改善せず)
+			// 代価案としてマージンを詰める
+			counterMsg.getLayoutParams();
+			// counterMsgからマージンを取得
+			MarginLayoutParams counterMsgParams = (MarginLayoutParams) counterMsg.getLayoutParams();
+			// 移動させたい距離に変更
+			counterMsgParams.topMargin -= txtSwitchFontSize;
+
+			// counterMsgへ反映
+			counterMsg.setLayoutParams(counterMsgParams);
+
 			// 起動時のみ必要な処理が終了したのでフラグを変更する
 			replaceFlag = false;
 
@@ -1198,7 +1227,7 @@ public class WhatifActivity extends Activity
 	// ////////////////////////////////////////////////
 
 	// GameOver関数…ゲームフラグの管理
-	public void GameOver() {
+	private void GameOver() {
 		for (int i = 1; i < 6; i++) {
 
 			if (trumpView[0].getSuit().equals(trumpView[i].getSuit()) ||
@@ -1264,7 +1293,7 @@ public class WhatifActivity extends Activity
 
 	}// GameOver_**********
 
-	public void GameClear() {
+	private void GameClear() {
 
 		if (counter == 52) {
 
@@ -1291,12 +1320,10 @@ public class WhatifActivity extends Activity
 	// ////////////////////////////////////////////////
 	@Override
 	public View makeView() {
-		TextView txt = new TextView(this);
+		txt = new TextView(this);
 
-//		txt.setWidth(240);
-//		txt.setHeight(360);
+		txt.setHeight(counterHeight);
 
-		
 		txt.setGravity(Gravity.CENTER);
 		txt.setTextColor(0xFFFFFFFF);
 		txt.setTextSize(txtSwitchFontSize);
@@ -1399,6 +1426,7 @@ public class WhatifActivity extends Activity
 
 	// ハーフダブルボタンをクリックした時の処理
 	OnClickListener hbBtnListener = new OnClickListener() {
+
 		// 当たり枚数の半分を賭けて行うダブルダウンのこと。負けても半分は返ってくる。
 		@Override
 		public void onClick(View v) {
