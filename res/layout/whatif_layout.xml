@@ -1704,7 +1704,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/guideLayout"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="25dp"
+        android:layout_marginTop="10dp"
         android:src="@drawable/back"
         app:border_color="#ffffff"
         app:border_width="1dip"
@@ -2037,7 +2037,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_alignTop="@id/roundedImageView3"
-        android:layout_below="@id/roundedImageView0"
         android:background="#000000"
         android:gravity="center"
         android:orientation="vertical" >
@@ -2064,8 +2063,8 @@
         android:id="@+id/btnLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_alignParentBottom="false"
         android:layout_alignTop="@id/roundedImageView3"
-        android:layout_below="@id/roundedImageView0"
         android:gravity="center"
         android:orientation="vertical" >
 
@@ -2080,7 +2079,7 @@
                 android:layout_gravity="center"
                 android:layout_weight="1"
                 android:text="@string/collect"
-                android:textSize="14sp" />
+                android:textSize="10sp" />
 
             <Button
                 android:id="@+id/hdBtn"
@@ -2089,7 +2088,7 @@
                 android:layout_gravity="center"
                 android:layout_weight="1"
                 android:text="@string/halfdouble"
-                android:textSize="14sp" />
+                android:textSize="12sp" />
 
             <Button
                 android:id="@+id/betBtn"
@@ -2106,7 +2105,7 @@
                 android:layout_gravity="center"
                 android:layout_weight="1"
                 android:text="@string/repeatbet"
-                android:textSize="14sp" />
+                android:textSize="12sp" />
         </LinearLayout>
 
         <LinearLayout
