@@ -464,7 +464,7 @@
             android:textSize="24sp" >
         </TextSwitcher>
     </LinearLayout>
-    
+
     <LinearLayout
         android:id="@+id/bonusLayout"
         android:layout_width="match_parent"
@@ -2009,7 +2009,7 @@
         android:id="@+id/msgLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_alignBottom="@id/roundedImageView3"
+        android:layout_above="@id/coinLayout"
         android:layout_alignTop="@id/roundedImageView3"
         android:layout_below="@id/roundedImageView0"
         android:background="#000000"
@@ -2039,9 +2039,8 @@
         android:id="@+id/btnLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_alignBottom="@id/roundedImageView3"
+        android:layout_above="@id/coinLayout"
         android:layout_alignTop="@id/roundedImageView3"
-        android:layout_below="@id/roundedImageView0"
         android:gravity="center"
         android:orientation="vertical" >
 
@@ -2105,6 +2104,7 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/coinLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"

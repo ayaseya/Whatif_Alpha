@@ -239,8 +239,6 @@ public class WhatifActivity extends Activity
 		// Landscape(横長)
 		else if (config.orientation == Configuration.ORIENTATION_LANDSCAPE) {
 			horizontal();
-
-			findViewById(R.id.black).setVisibility(View.INVISIBLE);
 			Log.v(TAG, ">横画面");
 		}
 
@@ -994,8 +992,10 @@ public class WhatifActivity extends Activity
 
 			// トランプ画像(×5)のwidthと端末のwidthから余白を計算する
 			int trumpWidth = trumpBackView[0].getWidth();
-
 			Log.v(TAG, "trumpWidth=" + trumpWidth);
+			int trumpHeight = trumpBackView[0].getHeight();
+			Log.v(TAG, "trumpHeight=" + trumpHeight);	
+			
 			margin = (Math.max(trumpWidth * 5, width) - Math.min(trumpWidth * 5, width)) / 6;
 			Log.v(TAG, "margin=" + margin);
 
@@ -1127,8 +1127,10 @@ public class WhatifActivity extends Activity
 
 			// トランプ画像(×5)のwidthと端末のwidthから余白を計算する
 			int trumpWidth = trumpBackView[0].getWidth();
-
 			Log.v(TAG, "trumpWidth=" + trumpWidth);
+			int trumpHeight = trumpBackView[0].getHeight();
+			Log.v(TAG, "trumpHeight=" + trumpHeight);	
+			
 			margin = (Math.max(trumpWidth * 5, width) - Math.min(trumpWidth * 5, width)) / 6;
 			Log.v(TAG, "margin=" + margin);
 
