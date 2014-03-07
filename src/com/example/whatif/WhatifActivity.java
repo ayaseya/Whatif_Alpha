@@ -118,6 +118,8 @@ public class WhatifActivity extends Activity
 
 	private TextView txt;
 
+	private int[] idList;
+
 	/* ********** ********** ********** ********** */
 
 	@Override
@@ -129,6 +131,7 @@ public class WhatifActivity extends Activity
 
 		findViewById(R.id.black).bringToFront();
 
+		//端末の画面の向きを取得するためリソースを取得する
 		config = getResources().getConfiguration();
 
 		// トランプ(52枚)を管理するDeckクラスのインスタンスの取得
@@ -208,7 +211,6 @@ public class WhatifActivity extends Activity
 		findViewById(R.id.hdBtn).setOnClickListener(hbBtnListener);
 		findViewById(R.id.betBtn).setOnClickListener(betBtnListener);
 		findViewById(R.id.repeatBtn).setOnClickListener(repeatBtnListener);
-		findViewById(R.id.payoutBtn).setOnClickListener(payoutBtnListener);
 		findViewById(R.id.dealBtn).setOnClickListener(dealBtnListener);
 
 		findViewById(R.id.msgLayout).setOnClickListener(msgListener);
@@ -223,6 +225,27 @@ public class WhatifActivity extends Activity
 
 		counterMsg = (TextView) findViewById(R.id.counterMsg);
 
+		
+		
+		 String[] itemList = res.getStringArray(R.array.textView);
+		
+		idList  = new int[itemList.length];
+        //配列データからIDの取得
+        for (int i = 0; i < itemList.length; i++) {
+            idList[i] = res.getIdentifier(itemList[i], "id", getPackageName());
+        }
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
 		Log.v(TAG, "onCreate()");
 	}// onCreate()
 
@@ -665,7 +688,6 @@ public class WhatifActivity extends Activity
 		count = (TextSwitcher) findViewById(R.id.counterView);
 		counterWidth = count.getWidth();
 		counterHeight = count.getHeight();
-	
 
 		count.setInAnimation(in);
 		count.setOutAnimation(out);
@@ -994,8 +1016,8 @@ public class WhatifActivity extends Activity
 			int trumpWidth = trumpBackView[0].getWidth();
 			Log.v(TAG, "trumpWidth=" + trumpWidth);
 			int trumpHeight = trumpBackView[0].getHeight();
-			Log.v(TAG, "trumpHeight=" + trumpHeight);	
-			
+			Log.v(TAG, "trumpHeight=" + trumpHeight);
+
 			margin = (Math.max(trumpWidth * 5, width) - Math.min(trumpWidth * 5, width)) / 6;
 			Log.v(TAG, "margin=" + margin);
 
@@ -1129,8 +1151,8 @@ public class WhatifActivity extends Activity
 			int trumpWidth = trumpBackView[0].getWidth();
 			Log.v(TAG, "trumpWidth=" + trumpWidth);
 			int trumpHeight = trumpBackView[0].getHeight();
-			Log.v(TAG, "trumpHeight=" + trumpHeight);	
-			
+			Log.v(TAG, "trumpHeight=" + trumpHeight);
+
 			margin = (Math.max(trumpWidth * 5, width) - Math.min(trumpWidth * 5, width)) / 6;
 			Log.v(TAG, "margin=" + margin);
 
@@ -1342,6 +1364,10 @@ public class WhatifActivity extends Activity
 		@Override
 		public void onClick(View v) {
 
+			
+			
+
+
 		}
 	};
 
@@ -1460,14 +1486,6 @@ public class WhatifActivity extends Activity
 				wagerView.setText(String.valueOf(coin.getWager()));
 				creditView.setText(String.valueOf(coin.getCredit()));
 			}
-		}
-	};
-	// プレイアウトボタンをクリックした時の処理
-	OnClickListener payoutBtnListener = new OnClickListener() {
-
-		@Override
-		public void onClick(View v) {
-
 		}
 	};
 

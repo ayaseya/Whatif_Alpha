@@ -1332,18 +1332,17 @@
 
         <TableRow
             android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:layout_weight="1"
+            android:layout_height="wrap_content"
             android:gravity="center" >
 
             <TextView
+                android:id="@+id/spade1"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
                 android:text="@string/spade"
-                android:textColor="#FFFFFF"
-                android:textSize="14sp" />
+                android:textColor="#FFFFFF" />
 
             <TextView
                 android:id="@+id/card0"
@@ -1352,8 +1351,7 @@
                 android:layout_weight="1"
                 android:gravity="center"
                 android:text="@string/rank1"
-                android:textColor="#FFFFFF"
-                android:textSize="14sp" />
+                android:textColor="#FFFFFF" />
 
             <TextView
                 android:id="@+id/card1"
@@ -1362,8 +1360,7 @@
                 android:layout_weight="1"
                 android:gravity="center"
                 android:text="@string/rank2"
-                android:textColor="#FFFFFF"
-                android:textSize="14sp" />
+                android:textColor="#FFFFFF" />
 
             <TextView
                 android:id="@+id/card2"
@@ -1372,8 +1369,7 @@
                 android:layout_weight="1"
                 android:gravity="center"
                 android:text="@string/rank3"
-                android:textColor="#FFFFFF"
-                android:textSize="14sp" />
+                android:textColor="#FFFFFF" />
 
             <TextView
                 android:id="@+id/card3"
@@ -1382,8 +1378,7 @@
                 android:layout_weight="1"
                 android:gravity="center"
                 android:text="@string/rank4"
-                android:textColor="#FFFFFF"
-                android:textSize="14sp" />
+                android:textColor="#FFFFFF" />
 
             <TextView
                 android:id="@+id/card4"
@@ -1392,8 +1387,7 @@
                 android:layout_weight="1"
                 android:gravity="center"
                 android:text="@string/rank5"
-                android:textColor="#FFFFFF"
-                android:textSize="14sp" />
+                android:textColor="#FFFFFF" />
 
             <TextView
                 android:id="@+id/card5"
@@ -1402,8 +1396,7 @@
                 android:layout_weight="1"
                 android:gravity="center"
                 android:text="@string/rank6"
-                android:textColor="#FFFFFF"
-                android:textSize="14sp" />
+                android:textColor="#FFFFFF" />
 
             <TextView
                 android:id="@+id/card6"
@@ -1412,8 +1405,7 @@
                 android:layout_weight="1"
                 android:gravity="center"
                 android:text="@string/rank7"
-                android:textColor="#FFFFFF"
-                android:textSize="14sp" />
+                android:textColor="#FFFFFF" />
 
             <TextView
                 android:id="@+id/card7"
@@ -1422,8 +1414,7 @@
                 android:layout_weight="1"
                 android:gravity="center"
                 android:text="@string/rank8"
-                android:textColor="#FFFFFF"
-                android:textSize="14sp" />
+                android:textColor="#FFFFFF" />
 
             <TextView
                 android:id="@+id/card8"
@@ -1432,8 +1423,7 @@
                 android:layout_weight="1"
                 android:gravity="center"
                 android:text="@string/rank9"
-                android:textColor="#FFFFFF"
-                android:textSize="14sp" />
+                android:textColor="#FFFFFF" />
 
             <TextView
                 android:id="@+id/card9"
@@ -1442,8 +1432,7 @@
                 android:layout_weight="1"
                 android:gravity="center"
                 android:text="@string/rank10"
-                android:textColor="#FFFFFF"
-                android:textSize="14sp" />
+                android:textColor="#FFFFFF" />
 
             <TextView
                 android:id="@+id/card10"
@@ -1452,8 +1441,7 @@
                 android:layout_weight="1"
                 android:gravity="center"
                 android:text="@string/rank11"
-                android:textColor="#FFFFFF"
-                android:textSize="14sp" />
+                android:textColor="#FFFFFF" />
 
             <TextView
                 android:id="@+id/card11"
@@ -1462,8 +1450,7 @@
                 android:layout_weight="1"
                 android:gravity="center"
                 android:text="@string/rank12"
-                android:textColor="#FFFFFF"
-                android:textSize="14sp" />
+                android:textColor="#FFFFFF" />
 
             <TextView
                 android:id="@+id/card12"
@@ -1472,35 +1459,33 @@
                 android:layout_weight="1"
                 android:gravity="center"
                 android:text="@string/rank13"
-                android:textColor="#FFFFFF"
-                android:textSize="14sp" />
+                android:textColor="#FFFFFF" />
 
             <TextView
+                android:id="@+id/spade2"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
                 android:text="@string/spade"
-                android:textColor="#FFFFFF"
-                android:textSize="14sp" />
+                android:textColor="#FFFFFF" />
         </TableRow>
 
         <!-- ################## ハート ################## -->
 
         <TableRow
             android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:layout_weight="1"
+            android:layout_height="wrap_content"
             android:gravity="center" >
 
             <TextView
+                android:id="@+id/heart1"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
                 android:text="@string/heart"
-                android:textColor="#FF0000"
-                android:textSize="14sp" />
+                android:textColor="#FF0000" />
 
             <TextView
                 android:id="@+id/card13"
@@ -1509,8 +1494,7 @@
                 android:layout_weight="1"
                 android:gravity="center"
                 android:text="@string/rank1"
-                android:textColor="#FFFFFF"
-                android:textSize="14sp" />
+                android:textColor="#FFFFFF" />
 
             <TextView
                 android:id="@+id/card14"
@@ -1519,8 +1503,7 @@
                 android:layout_weight="1"
                 android:gravity="center"
                 android:text="@string/rank2"
-                android:textColor="#FFFFFF"
-                android:textSize="14sp" />
+                android:textColor="#FFFFFF" />
 
             <TextView
                 android:id="@+id/card15"
@@ -1529,8 +1512,7 @@
                 android:layout_weight="1"
                 android:gravity="center"
                 android:text="@string/rank3"
-                android:textColor="#FFFFFF"
-                android:textSize="14sp" />
+                android:textColor="#FFFFFF" />
 
             <TextView
                 android:id="@+id/card16"
@@ -1539,8 +1521,7 @@
                 android:layout_weight="1"
                 android:gravity="center"
                 android:text="@string/rank4"
-                android:textColor="#FFFFFF"
-                android:textSize="14sp" />
+                android:textColor="#FFFFFF" />
 
             <TextView
                 android:id="@+id/card17"
@@ -1549,8 +1530,7 @@
                 android:layout_weight="1"
                 android:gravity="center"
                 android:text="@string/rank5"
-                android:textColor="#FFFFFF"
-                android:textSize="14sp" />
+                android:textColor="#FFFFFF" />
 
             <TextView
                 android:id="@+id/card18"
@@ -1559,8 +1539,7 @@
                 android:layout_weight="1"
                 android:gravity="center"
                 android:text="@string/rank6"
-                android:textColor="#FFFFFF"
-                android:textSize="14sp" />
+                android:textColor="#FFFFFF" />
 
             <TextView
                 android:id="@+id/card19"
@@ -1569,8 +1548,7 @@
                 android:layout_weight="1"
                 android:gravity="center"
                 android:text="@string/rank7"
-                android:textColor="#FFFFFF"
-                android:textSize="14sp" />
+                android:textColor="#FFFFFF" />
 
             <TextView
                 android:id="@+id/card20"
@@ -1579,8 +1557,7 @@
                 android:layout_weight="1"
                 android:gravity="center"
                 android:text="@string/rank8"
-                android:textColor="#FFFFFF"
-                android:textSize="14sp" />
+                android:textColor="#FFFFFF" />
 
             <TextView
                 android:id="@+id/card21"
@@ -1589,8 +1566,7 @@
                 android:layout_weight="1"
                 android:gravity="center"
                 android:text="@string/rank9"
-                android:textColor="#FFFFFF"
-                android:textSize="14sp" />
+                android:textColor="#FFFFFF" />
 
             <TextView
                 android:id="@+id/card22"
@@ -1599,8 +1575,7 @@
                 android:layout_weight="1"
                 android:gravity="center"
                 android:text="@string/rank10"
-                android:textColor="#FFFFFF"
-                android:textSize="14sp" />
+                android:textColor="#FFFFFF" />
 
             <TextView
                 android:id="@+id/card23"
@@ -1609,8 +1584,7 @@
                 android:layout_weight="1"
                 android:gravity="center"
                 android:text="@string/rank11"
-                android:textColor="#FFFFFF"
-                android:textSize="14sp" />
+                android:textColor="#FFFFFF" />
 
             <TextView
                 android:id="@+id/card24"
@@ -1619,8 +1593,7 @@
                 android:layout_weight="1"
                 android:gravity="center"
                 android:text="@string/rank12"
-                android:textColor="#FFFFFF"
-                android:textSize="14sp" />
+                android:textColor="#FFFFFF" />
 
             <TextView
                 android:id="@+id/card25"
@@ -1629,35 +1602,33 @@
                 android:layout_weight="1"
                 android:gravity="center"
                 android:text="@string/rank13"
-                android:textColor="#FFFFFF"
-                android:textSize="14sp" />
+                android:textColor="#FFFFFF" />
 
             <TextView
+                android:id="@+id/heart2"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
                 android:text="@string/heart"
-                android:textColor="#FF0000"
-                android:textSize="14sp" />
+                android:textColor="#FF0000" />
         </TableRow>
 
         <!-- ################## クラブ ################## -->
 
         <TableRow
             android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:layout_weight="1"
+            android:layout_height="wrap_content"
             android:gravity="center" >
 
             <TextView
+                android:id="@+id/club1"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
                 android:text="@string/club"
-                android:textColor="#FFFFFF"
-                android:textSize="14sp" />
+                android:textColor="#FFFFFF" />
 
             <TextView
                 android:id="@+id/card26"
@@ -1666,8 +1637,7 @@
                 android:layout_weight="1"
                 android:gravity="center"
                 android:text="@string/rank1"
-                android:textColor="#FFFFFF"
-                android:textSize="14sp" />
+                android:textColor="#FFFFFF" />
 
             <TextView
                 android:id="@+id/card27"
@@ -1676,8 +1646,7 @@
                 android:layout_weight="1"
                 android:gravity="center"
                 android:text="@string/rank2"
-                android:textColor="#FFFFFF"
-                android:textSize="14sp" />
+                android:textColor="#FFFFFF" />
 
             <TextView
                 android:id="@+id/card28"
@@ -1686,8 +1655,7 @@
                 android:layout_weight="1"
                 android:gravity="center"
                 android:text="@string/rank3"
-                android:textColor="#FFFFFF"
-                android:textSize="14sp" />
+                android:textColor="#FFFFFF" />
 
             <TextView
                 android:id="@+id/card29"
@@ -1696,8 +1664,7 @@
                 android:layout_weight="1"
                 android:gravity="center"
                 android:text="@string/rank4"
-                android:textColor="#FFFFFF"
-                android:textSize="14sp" />
+                android:textColor="#FFFFFF" />
 
             <TextView
                 android:id="@+id/card30"
@@ -1706,8 +1673,7 @@
                 android:layout_weight="1"
                 android:gravity="center"
                 android:text="@string/rank5"
-                android:textColor="#FFFFFF"
-                android:textSize="14sp" />
+                android:textColor="#FFFFFF" />
 
             <TextView
                 android:id="@+id/card31"
@@ -1716,8 +1682,7 @@
                 android:layout_weight="1"
                 android:gravity="center"
                 android:text="@string/rank6"
-                android:textColor="#FFFFFF"
-                android:textSize="14sp" />
+                android:textColor="#FFFFFF" />
 
             <TextView
                 android:id="@+id/card32"
@@ -1726,8 +1691,7 @@
                 android:layout_weight="1"
                 android:gravity="center"
                 android:text="@string/rank7"
-                android:textColor="#FFFFFF"
-                android:textSize="14sp" />
+                android:textColor="#FFFFFF" />
 
             <TextView
                 android:id="@+id/card33"
@@ -1736,8 +1700,7 @@
                 android:layout_weight="1"
                 android:gravity="center"
                 android:text="@string/rank8"
-                android:textColor="#FFFFFF"
-                android:textSize="14sp" />
+                android:textColor="#FFFFFF" />
 
             <TextView
                 android:id="@+id/card34"
@@ -1746,8 +1709,7 @@
                 android:layout_weight="1"
                 android:gravity="center"
                 android:text="@string/rank9"
-                android:textColor="#FFFFFF"
-                android:textSize="14sp" />
+                android:textColor="#FFFFFF" />
 
             <TextView
                 android:id="@+id/card35"
@@ -1756,8 +1718,7 @@
                 android:layout_weight="1"
                 android:gravity="center"
                 android:text="@string/rank10"
-                android:textColor="#FFFFFF"
-                android:textSize="14sp" />
+                android:textColor="#FFFFFF" />
 
             <TextView
                 android:id="@+id/card36"
@@ -1766,8 +1727,7 @@
                 android:layout_weight="1"
                 android:gravity="center"
                 android:text="@string/rank11"
-                android:textColor="#FFFFFF"
-                android:textSize="14sp" />
+                android:textColor="#FFFFFF" />
 
             <TextView
                 android:id="@+id/card37"
@@ -1776,8 +1736,7 @@
                 android:layout_weight="1"
                 android:gravity="center"
                 android:text="@string/rank12"
-                android:textColor="#FFFFFF"
-                android:textSize="14sp" />
+                android:textColor="#FFFFFF" />
 
             <TextView
                 android:id="@+id/card38"
@@ -1786,35 +1745,33 @@
                 android:layout_weight="1"
                 android:gravity="center"
                 android:text="@string/rank13"
-                android:textColor="#FFFFFF"
-                android:textSize="14sp" />
+                android:textColor="#FFFFFF" />
 
             <TextView
+                android:id="@+id/club2"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
                 android:text="@string/club"
-                android:textColor="#FFFFFF"
-                android:textSize="14sp" />
+                android:textColor="#FFFFFF" />
         </TableRow>
 
         <!-- ################## ダイヤ ################## -->
 
         <TableRow
             android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:layout_weight="1"
+            android:layout_height="wrap_content"
             android:gravity="center" >
 
             <TextView
+                android:id="@+id/diamond1"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
                 android:text="@string/diamond"
-                android:textColor="#FF0000"
-                android:textSize="14sp" />
+                android:textColor="#FF0000" />
 
             <TextView
                 android:id="@+id/card39"
@@ -1823,8 +1780,7 @@
                 android:layout_weight="1"
                 android:gravity="center"
                 android:text="@string/rank1"
-                android:textColor="#FFFFFF"
-                android:textSize="14sp" />
+                android:textColor="#FFFFFF" />
 
             <TextView
                 android:id="@+id/card40"
@@ -1833,8 +1789,7 @@
                 android:layout_weight="1"
                 android:gravity="center"
                 android:text="@string/rank2"
-                android:textColor="#FFFFFF"
-                android:textSize="14sp" />
+                android:textColor="#FFFFFF" />
 
             <TextView
                 android:id="@+id/card41"
@@ -1843,8 +1798,7 @@
                 android:layout_weight="1"
                 android:gravity="center"
                 android:text="@string/rank3"
-                android:textColor="#FFFFFF"
-                android:textSize="14sp" />
+                android:textColor="#FFFFFF" />
 
             <TextView
                 android:id="@+id/card42"
@@ -1853,8 +1807,7 @@
                 android:layout_weight="1"
                 android:gravity="center"
                 android:text="@string/rank4"
-                android:textColor="#FFFFFF"
-                android:textSize="14sp" />
+                android:textColor="#FFFFFF" />
 
             <TextView
                 android:id="@+id/card43"
@@ -1863,8 +1816,7 @@
                 android:layout_weight="1"
                 android:gravity="center"
                 android:text="@string/rank5"
-                android:textColor="#FFFFFF"
-                android:textSize="14sp" />
+                android:textColor="#FFFFFF" />
 
             <TextView
                 android:id="@+id/card44"
@@ -1873,8 +1825,7 @@
                 android:layout_weight="1"
                 android:gravity="center"
                 android:text="@string/rank6"
-                android:textColor="#FFFFFF"
-                android:textSize="14sp" />
+                android:textColor="#FFFFFF" />
 
             <TextView
                 android:id="@+id/card45"
@@ -1883,8 +1834,7 @@
                 android:layout_weight="1"
                 android:gravity="center"
                 android:text="@string/rank7"
-                android:textColor="#FFFFFF"
-                android:textSize="14sp" />
+                android:textColor="#FFFFFF" />
 
             <TextView
                 android:id="@+id/card46"
@@ -1893,8 +1843,7 @@
                 android:layout_weight="1"
                 android:gravity="center"
                 android:text="@string/rank8"
-                android:textColor="#FFFFFF"
-                android:textSize="14sp" />
+                android:textColor="#FFFFFF" />
 
             <TextView
                 android:id="@+id/card47"
@@ -1903,8 +1852,7 @@
                 android:layout_weight="1"
                 android:gravity="center"
                 android:text="@string/rank9"
-                android:textColor="#FFFFFF"
-                android:textSize="14sp" />
+                android:textColor="#FFFFFF" />
 
             <TextView
                 android:id="@+id/card48"
@@ -1913,8 +1861,7 @@
                 android:layout_weight="1"
                 android:gravity="center"
                 android:text="@string/rank10"
-                android:textColor="#FFFFFF"
-                android:textSize="14sp" />
+                android:textColor="#FFFFFF" />
 
             <TextView
                 android:id="@+id/card49"
@@ -1923,8 +1870,7 @@
                 android:layout_weight="1"
                 android:gravity="center"
                 android:text="@string/rank11"
-                android:textColor="#FFFFFF"
-                android:textSize="14sp" />
+                android:textColor="#FFFFFF" />
 
             <TextView
                 android:id="@+id/card50"
@@ -1933,8 +1879,7 @@
                 android:layout_weight="1"
                 android:gravity="center"
                 android:text="@string/rank12"
-                android:textColor="#FFFFFF"
-                android:textSize="14sp" />
+                android:textColor="#FFFFFF" />
 
             <TextView
                 android:id="@+id/card51"
@@ -1943,17 +1888,16 @@
                 android:layout_weight="1"
                 android:gravity="center"
                 android:text="@string/rank13"
-                android:textColor="#FFFFFF"
-                android:textSize="14sp" />
+                android:textColor="#FFFFFF" />
 
             <TextView
+                android:id="@+id/diamond2"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
                 android:text="@string/diamond"
-                android:textColor="#FF0000"
-                android:textSize="14sp" />
+                android:textColor="#FF0000" />
         </TableRow>
     </TableLayout>
 
@@ -2049,14 +1993,6 @@
             android:layout_height="wrap_content" >
 
             <Button
-                android:id="@+id/collectBtn"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:layout_weight="1"
-                android:text="@string/collect" />
-
-            <Button
                 android:id="@+id/hdBtn"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
@@ -2086,12 +2022,11 @@
             android:layout_height="wrap_content" >
 
             <Button
-                android:id="@+id/payoutBtn"
+                android:id="@+id/collectBtn"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_gravity="center"
                 android:layout_weight="1"
-                android:text="@string/payout" />
+                android:text="@string/collect" />
 
             <Button
                 android:id="@+id/dealBtn"
