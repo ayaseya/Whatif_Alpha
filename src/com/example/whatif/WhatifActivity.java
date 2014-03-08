@@ -26,6 +26,8 @@ import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.TranslateAnimation;
+import android.widget.RelativeLayout;
+import android.widget.RelativeLayout.LayoutParams;
 import android.widget.ScrollView;
 import android.widget.TextSwitcher;
 import android.widget.TextView;
@@ -110,7 +112,7 @@ public class WhatifActivity extends Activity
 	private int counterWidth = 0;
 	private int counterHeight = 0;
 
-	private int margin;
+	private int margin = 10;
 
 	private Configuration config;
 
@@ -129,6 +131,9 @@ public class WhatifActivity extends Activity
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+
+		Log.v(TAG, "/* ********** ********** ********** ********** */");
+
 		requestWindowFeature(Window.FEATURE_NO_TITLE); // タイトルバーを非表示にする
 		//		setContentView(R.layout.activity_whatif);
 		setContentView(R.layout.whatif_layout);
@@ -171,23 +176,21 @@ public class WhatifActivity extends Activity
 		// dpi を元に比率を計算する ( dpi ÷ 基準値(mdpi) )
 		float ratio = _dpi / 160f;
 
-		Log.v(TAG, "dpi=" + _dpi + " density=" + ratio);
-
 		width = display.getWidth();
 		height = display.getHeight();
 
-		if (width <= 240) {//ldpi（120dpi）240×320px
+		if (ratio == 0.75) {
 			dpi = DPI.ldpi;
-		} else if (240 < +width && +width <= 320) {//mdpi（160dpi）320×480px
+		} else if (ratio == 1.0) {
 			dpi = DPI.mdpi;
-		} else if (320 < +width && +width <= 480) {//hdpi（240dpi）480×800px
+		} else if (ratio == 1.5) {
 			dpi = DPI.hdpi;
-		} else if (480 < +width && +width <= 640) {//xhdpi（320dpi）640×960px
+		} else if (ratio == 2.0) {
 			dpi = DPI.xhdpi;
-		} else if (640 < +width) {//xxhdpi（480dpi）960×1440px
+		} else if (ratio >= 3.0) {
 			dpi = DPI.xxhdpi;
 		}
-		Log.v(TAG, "> " + dpi + " w=" + width + " h=" + height);
+		Log.v(TAG, "> " + dpi + "(" + _dpi + "dpi)" + " density=" + ratio + " w=" + width + " h=" + height);
 
 		/* ********** ********** ********** ********** */
 
@@ -229,66 +232,65 @@ public class WhatifActivity extends Activity
 
 		counterMsg = (TextView) findViewById(R.id.counterMsg);
 
-		Log.v(TAG, "onCreate()");
+		trumpViewWidth = 60;
+		trumpViewHeight = 90;
+
+		//		Log.v(TAG, "onCreate()");
 	}// onCreate()
 
 	@Override
 	public void onWindowFocusChanged(boolean hasFocus) {
 		super.onWindowFocusChanged(hasFocus);
 
-		calculateTrumpSize();
-
 		// Portrait(縦長)
 		if (config.orientation == Configuration.ORIENTATION_PORTRAIT) {
 			vertical();
-			Log.v(TAG, ">縦画面");
 
 		}
 		// Landscape(横長)
 		else if (config.orientation == Configuration.ORIENTATION_LANDSCAPE) {
 			horizontal();
-			Log.v(TAG, ">横画面");
 		}
 
 		fixFont();
 
-		Log.v(TAG, "onWindowFocusChanged()");
+		//		Log.v(TAG, "onWindowFocusChanged()");
 	}
 
 	@Override
 	protected void onRestart() {
 		super.onRestart();
-		Log.v(TAG, "onRestart()");
+		//		Log.v(TAG, "onRestart()");
 	}
 
 	@Override
 	protected void onStart() {
 		super.onStart();
-		Log.v(TAG, "onStart()");
+		//		Log.v(TAG, "onStart()");
 	}
 
 	@Override
 	protected void onResume() {
 		super.onResume();
-		Log.v(TAG, "onResume()");
+		//		Log.v(TAG, "onResume()");
 	}
 
 	@Override
 	protected void onPause() {
 		super.onPause();
-		Log.v(TAG, "onPause()");
+		//		Log.v(TAG, "onPause()");
 	}
 
 	@Override
 	protected void onStop() {
 		super.onStop();
-		Log.v(TAG, "onStop()");
+		//		Log.v(TAG, "onStop()");
 	}
 
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
-		Log.v(TAG, "onDestroy()");
+		//		Log.v(TAG, "onDestroy()");
 	}
 
 	@Override
@@ -301,25 +303,118 @@ public class WhatifActivity extends Activity
 
 	/* ********** ********** ********** ********** */
 
-	private void calculateTrumpSize() {
+	private void resizeTrump() {
 
-		trumpViewWidth = 60;
-		trumpViewHeight = 90;
-
-		trumpViewWidth = (width - 60) / 5;
-		trumpViewHeight = (int) (trumpViewWidth * 1.5);
-
-		//		RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(trumpViewWidth, trumpViewHeight);
-		//		trumpBackView[1].setLayoutParams(lp);
-
-		// trumpViewの縦横を画像に合わせる
 		for (int i = 0; i <= 5; i++) {
+			RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(trumpViewWidth, trumpViewHeight);
+			int[] rules = ((LayoutParams) trumpBackView[i].getLayoutParams()).getRules();
 
-			//			trumpBackView[i].getLayoutParams().width = trumpViewWidth;
-			//			trumpBackView[i].getLayoutParams().height = trumpViewHeight;
-			//			trumpBackView[i].requestLayout();
+			//		Log.v(TAG, "rules[]="
+			//				+ rules[0] + ","
+			//				+ rules[1] + ","
+			//				+ rules[2] + ","
+			//				+ rules[3] + ","
+			//				+ rules[4] + ","
+			//				+ rules[5] + ","
+			//				+ rules[6] + ","
+			//				+ rules[7] + ","
+			//				+ rules[8] + ","
+			//				+ rules[9] + ","
+			//				+ rules[10] + ","
+			//				+ rules[11] + ","
+			//				+ rules[12] + ","
+			//				+ rules[13] + ","
+			//				+ rules[14] + ","
+			//				+ rules[15]);
+
+			if (rules[0] != 0) {// -1ならtrue
+				lp.addRule(RelativeLayout.LEFT_OF, rules[0]);
+			}
+			if (rules[1] != 0) {
+				lp.addRule(RelativeLayout.RIGHT_OF, rules[1]);
+			}
+			if (rules[2] != 0) {
+				lp.addRule(RelativeLayout.ABOVE, rules[2]);
+			}
+			if (rules[3] != 0) {
+				lp.addRule(RelativeLayout.BELOW, rules[3]);
+			}
+			if (rules[4] != 0) {
+				lp.addRule(RelativeLayout.ALIGN_BASELINE, rules[4]);
+			}
+			if (rules[5] != 0) {
+				lp.addRule(RelativeLayout.ALIGN_LEFT, rules[5]);
+			}
+			if (rules[6] != 0) {
+				lp.addRule(RelativeLayout.ALIGN_TOP, rules[6]);
+			}
+			if (rules[7] != 0) {
+				lp.addRule(RelativeLayout.ALIGN_RIGHT, rules[7]);
+			}
+			if (rules[8] != 0) {
+				lp.addRule(RelativeLayout.ALIGN_BOTTOM, rules[8]);
+			}
+			if (rules[9] != 0) {
+				lp.addRule(RelativeLayout.ALIGN_PARENT_LEFT, rules[9]);
+			}
+			if (rules[10] != 0) {
+				lp.addRule(RelativeLayout.ALIGN_PARENT_TOP, rules[10]);
+			}
+			if (rules[11] != 0) {
+				lp.addRule(RelativeLayout.ALIGN_PARENT_RIGHT, rules[11]);
+			}
+			if (rules[12] != 0) {
+				lp.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, rules[12]);
+			}
+			if (rules[13] != 0) {
+				lp.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
+			}
+			if (rules[14] != 0) {
+				lp.addRule(RelativeLayout.CENTER_HORIZONTAL, RelativeLayout.TRUE);
+			}
+			if (rules[15] != 0) {
+				lp.addRule(RelativeLayout.CENTER_VERTICAL, RelativeLayout.TRUE);
+			}
+
+			if (config.orientation == Configuration.ORIENTATION_PORTRAIT) { // 縦画面でのマージンを設定する
+				if (i == 0) {
+					lp.topMargin = 15;
+				} else if (i == 3) {
+					lp.topMargin = 15;
+					lp.leftMargin = margin;
+					lp.rightMargin = margin;
+				} else if (i == 1) {
+					lp.rightMargin = margin;
+				} else if (i == 5) {
+					lp.leftMargin = margin;
+				}
+			} else if (config.orientation == Configuration.ORIENTATION_LANDSCAPE) {// 横画面でのマージンを設定する
+				margin = (width - (trumpViewWidth * 5)) / 6;
+
+				if (i == 0) {
+					lp.topMargin = 5;
+				} else if (i == 3) {
+					lp.topMargin = 10;
+
+					if ((height / 2) < (findViewById(R.id.ruler).getHeight())) {
+						lp.topMargin = (findViewById(R.id.ruler).getHeight() - trumpViewHeight) / 2;
+					}
+
+				} else if (i == 2) {
+					lp.rightMargin = margin;
+				} else if (i == 1) {
+					lp.rightMargin = margin;
+				} else if (i == 4) {
+					lp.leftMargin = margin;
+				} else if (i == 5) {
+					lp.leftMargin = margin;
+				}
+
+			}
+			trumpBackView[i].setLayoutParams(lp);
 
 		}
+
 	}
 
 	private void fixFont() {
@@ -333,17 +428,16 @@ public class WhatifActivity extends Activity
 		for (int i = 0; i < itemList.length; i++) {
 			idList[i] = res.getIdentifier(itemList[i], "id", getPackageName());
 			textView[i] = (TextView) findViewById(idList[i]);
-			Log.v(TAG, "i=" + i);
 			//			textView[i].setTextSize(TypedValue.COMPLEX_UNIT_DIP,20);
 		}
 
 		TextView bonus1 = (TextView) findViewById(R.id.bonus1);
 		//		bonus1.setTextSize(TypedValue.COMPLEX_UNIT_DIP,20);
-		Log.v(TAG, "bonus1.getMeasuredWidth()=" + bonus1.getMeasuredWidth());
-		Log.v(TAG, "bonus1.getWidth()" + bonus1.getWidth());
-		Log.v(TAG, "bonus1.getMeasuredHeight()=" + bonus1.getMeasuredHeight());
-		Log.v(TAG, "bonus1.getHeight()" + bonus1.getHeight());
-		Log.v(TAG, "bonus1.getLineHeight()" + bonus1.getLineHeight());
+		//		Log.v(TAG, "bonus1.getMeasuredWidth()=" + bonus1.getMeasuredWidth());
+		//		Log.v(TAG, "bonus1.getWidth()" + bonus1.getWidth());
+		//		Log.v(TAG, "bonus1.getMeasuredHeight()=" + bonus1.getMeasuredHeight());
+		//		Log.v(TAG, "bonus1.getHeight()" + bonus1.getHeight());
+		//		Log.v(TAG, "bonus1.getLineHeight()" + bonus1.getLineHeight());
 
 	}
 
@@ -1006,10 +1100,21 @@ public class WhatifActivity extends Activity
 			//			statusbarHeight = rect.top;
 			//			Log.v(TAG, "ステータスバー height=" + statusbarHeight);
 
+			// 縦画面の時のトランプのサイズを決定する
+			trumpViewWidth = width / 6;
+			trumpViewHeight = (int) (trumpViewWidth * 1.5);
+
+			Log.v(TAG, "trump w=" + trumpViewWidth + " h=" + trumpViewHeight);
+
+			//トランプの背景画像のサイズを変更する
+			resizeTrump();
+
 			// trumpViewの縦横を画像に合わせる
 			for (int i = 0; i <= 5; i++) {
-				trumpView[i].getLayoutParams().width = trumpBackView[0].getWidth();
-				trumpView[i].getLayoutParams().height = trumpBackView[0].getHeight();
+				//				trumpView[i].getLayoutParams().width = trumpBackView[0].getWidth();
+				//				trumpView[i].getLayoutParams().height = trumpBackView[0].getHeight();
+				trumpView[i].getLayoutParams().width = trumpViewWidth;
+				trumpView[i].getLayoutParams().height = trumpViewHeight;
 				trumpView[i].requestLayout();
 			}
 
@@ -1046,36 +1151,37 @@ public class WhatifActivity extends Activity
 			}
 
 			// トランプ画像(×5)のwidthと端末のwidthから余白を計算する
-			int trumpWidth = trumpBackView[0].getWidth();
-			Log.v(TAG, "trumpWidth=" + trumpWidth);
-			int trumpHeight = trumpBackView[0].getHeight();
-			Log.v(TAG, "trumpHeight=" + trumpHeight);
+			//			int trumpWidth = trumpBackView[0].getWidth();
+			//			Log.v(TAG, "trumpWidth=" + trumpWidth);
+			//			int trumpHeight = trumpBackView[0].getHeight();
+			//			Log.v(TAG, "trumpHeight=" + trumpHeight);
+			//
+			//			margin = (Math.max(trumpWidth * 5, width) - Math.min(trumpWidth * 5, width)) / 6;
+			//			Log.v(TAG, "margin=" + margin);
 
-			margin = (Math.max(trumpWidth * 5, width) - Math.min(trumpWidth * 5, width)) / 6;
-			Log.v(TAG, "margin=" + margin);
-
-			trumpBackView[2].getLayoutParams();
-			// trumpBackViewからマージンを取得
-			MarginLayoutParams marginParams2 = (MarginLayoutParams) trumpBackView[2].getLayoutParams();
-			// 移動させたい距離に変更
-			marginParams2.rightMargin += margin;
-			// trumpBackViewへ反映
-			trumpBackView[2].setLayoutParams(marginParams2);
-
-			trumpBackView[1].getLayoutParams();
-			MarginLayoutParams marginParams1 = (MarginLayoutParams) trumpBackView[1].getLayoutParams();
-			marginParams1.rightMargin += margin;
-			trumpBackView[1].setLayoutParams(marginParams1);
-
-			trumpBackView[4].getLayoutParams();
-			MarginLayoutParams marginParams4 = (MarginLayoutParams) trumpBackView[4].getLayoutParams();
-			marginParams4.leftMargin += margin;
-			trumpBackView[4].setLayoutParams(marginParams4);
-
-			trumpBackView[5].getLayoutParams();
-			MarginLayoutParams marginParams5 = (MarginLayoutParams) trumpBackView[5].getLayoutParams();
-			marginParams5.leftMargin += margin;
-			trumpBackView[5].setLayoutParams(marginParams5);
+			//			// trumpBackViewからマージンを取得
+			//			trumpBackView[2].getLayoutParams();
+			//			// マージン移動用のパラメータを取得する
+			//			MarginLayoutParams marginParams2 = (MarginLayoutParams) trumpBackView[2].getLayoutParams();
+			//			// 移動させたい距離に変更
+			//			marginParams2.rightMargin += margin;
+			//			// trumpBackViewへ反映
+			//			trumpBackView[2].setLayoutParams(marginParams2);
+			//
+			//			trumpBackView[1].getLayoutParams();
+			//			MarginLayoutParams marginParams1 = (MarginLayoutParams) trumpBackView[1].getLayoutParams();
+			//			marginParams1.rightMargin += margin;
+			//			trumpBackView[1].setLayoutParams(marginParams1);
+			//
+			//			trumpBackView[4].getLayoutParams();
+			//			MarginLayoutParams marginParams4 = (MarginLayoutParams) trumpBackView[4].getLayoutParams();
+			//			marginParams4.leftMargin += margin;
+			//			trumpBackView[4].setLayoutParams(marginParams4);
+			//
+			//			trumpBackView[5].getLayoutParams();
+			//			MarginLayoutParams marginParams5 = (MarginLayoutParams) trumpBackView[5].getLayoutParams();
+			//			marginParams5.leftMargin += margin;
+			//			trumpBackView[5].setLayoutParams(marginParams5);
 
 			// Y軸回転用の変数を取得する
 			centerX = trumpBackView[0].getWidth() / 2;
@@ -1141,10 +1247,33 @@ public class WhatifActivity extends Activity
 			//			statusbarHeight = rect.top;
 			//			Log.v(TAG, "ステータスバー height=" + statusbarHeight);
 
+			// 横画面の時のトランプのサイズを決定する
+			TextView selectAble = (TextView) findViewById(R.id.selectAble1);
+
+			if ((findViewById(R.id.ruler).getHeight()) > height / 2) {
+
+				trumpViewHeight = height
+						- (findViewById(R.id.ruler).getHeight())
+						- 10 // マージン
+						- selectAble.getLineHeight() //
+						- 10; // マージン
+
+			} else {
+				trumpViewHeight = (findViewById(R.id.ruler).getHeight())
+						- 10 // マージン
+						- selectAble.getLineHeight() //
+						- 10;
+			}
+
+			trumpViewWidth = (int) (trumpViewHeight / 1.5);
+			Log.v(TAG, "trump w=" + trumpViewWidth + " h=" + trumpViewHeight);
+			//トランプの背景画像のサイズを変更する
+			resizeTrump();
+
 			// trumpViewの縦横を画像に合わせる
 			for (int i = 0; i <= 5; i++) {
-				trumpView[i].getLayoutParams().width = trumpBackView[0].getWidth();
-				trumpView[i].getLayoutParams().height = trumpBackView[0].getHeight();
+				trumpView[i].getLayoutParams().width = trumpViewWidth;
+				trumpView[i].getLayoutParams().height = trumpViewHeight;
 				trumpView[i].requestLayout();
 			}
 
@@ -1181,36 +1310,36 @@ public class WhatifActivity extends Activity
 			}
 
 			// トランプ画像(×5)のwidthと端末のwidthから余白を計算する
-			int trumpWidth = trumpBackView[0].getWidth();
-			Log.v(TAG, "trumpWidth=" + trumpWidth);
-			int trumpHeight = trumpBackView[0].getHeight();
-			Log.v(TAG, "trumpHeight=" + trumpHeight);
-
-			margin = (Math.max(trumpWidth * 5, width) - Math.min(trumpWidth * 5, width)) / 6;
-			Log.v(TAG, "margin=" + margin);
-
-			trumpBackView[2].getLayoutParams();
-			// trumpBackViewからマージンを取得
-			MarginLayoutParams marginParams2 = (MarginLayoutParams) trumpBackView[2].getLayoutParams();
-			// 移動させたい距離に変更
-			marginParams2.rightMargin += margin;
-			// trumpBackViewへ反映
-			trumpBackView[2].setLayoutParams(marginParams2);
-
-			trumpBackView[1].getLayoutParams();
-			MarginLayoutParams marginParams1 = (MarginLayoutParams) trumpBackView[1].getLayoutParams();
-			marginParams1.rightMargin += margin;
-			trumpBackView[1].setLayoutParams(marginParams1);
-
-			trumpBackView[4].getLayoutParams();
-			MarginLayoutParams marginParams4 = (MarginLayoutParams) trumpBackView[4].getLayoutParams();
-			marginParams4.leftMargin += margin;
-			trumpBackView[4].setLayoutParams(marginParams4);
-
-			trumpBackView[5].getLayoutParams();
-			MarginLayoutParams marginParams5 = (MarginLayoutParams) trumpBackView[5].getLayoutParams();
-			marginParams5.leftMargin += margin;
-			trumpBackView[5].setLayoutParams(marginParams5);
+			//			int trumpWidth = trumpBackView[0].getWidth();
+			//			Log.v(TAG, "trumpWidth=" + trumpWidth);
+			//			int trumpHeight = trumpBackView[0].getHeight();
+			//			Log.v(TAG, "trumpHeight=" + trumpHeight);
+			//
+			//			margin = (Math.max(trumpWidth * 5, width) - Math.min(trumpWidth * 5, width)) / 6;
+			//			Log.v(TAG, "margin=" + margin);
+			//
+			//			trumpBackView[2].getLayoutParams();
+			//			// trumpBackViewからマージンを取得
+			//			MarginLayoutParams marginParams2 = (MarginLayoutParams) trumpBackView[2].getLayoutParams();
+			//			// 移動させたい距離に変更
+			//			marginParams2.rightMargin += margin;
+			//			// trumpBackViewへ反映
+			//			trumpBackView[2].setLayoutParams(marginParams2);
+			//
+			//			trumpBackView[1].getLayoutParams();
+			//			MarginLayoutParams marginParams1 = (MarginLayoutParams) trumpBackView[1].getLayoutParams();
+			//			marginParams1.rightMargin += margin;
+			//			trumpBackView[1].setLayoutParams(marginParams1);
+			//
+			//			trumpBackView[4].getLayoutParams();
+			//			MarginLayoutParams marginParams4 = (MarginLayoutParams) trumpBackView[4].getLayoutParams();
+			//			marginParams4.leftMargin += margin;
+			//			trumpBackView[4].setLayoutParams(marginParams4);
+			//
+			//			trumpBackView[5].getLayoutParams();
+			//			MarginLayoutParams marginParams5 = (MarginLayoutParams) trumpBackView[5].getLayoutParams();
+			//			marginParams5.leftMargin += margin;
+			//			trumpBackView[5].setLayoutParams(marginParams5);
 
 			// Y軸回転用の変数を取得する
 			centerX = trumpBackView[0].getWidth() / 2;
@@ -1396,7 +1525,8 @@ public class WhatifActivity extends Activity
 
 		@Override
 		public void onClick(View v) {
-
+			Log.v(TAG, "場札 w=" + trumpView[0].getWidth() + " h=" + trumpView[0].getHeight());
+			Log.v("Test", "(findViewById(R.id.ruler).getHeight()" + (findViewById(R.id.ruler).getHeight()));
 		}
 	};
 

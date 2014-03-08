@@ -9,6 +9,14 @@
     android:paddingRight="10dp" >
 
     <View
+        android:id="@+id/ruler"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignBottom="@+id/coinLayout"
+        android:layout_below="@+id/counterLayout"
+        android:background="#00FF0000" />
+
+    <View
         android:id="@+id/header"
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -31,7 +39,7 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="5dp"
-        android:src="@drawable/back_"
+        android:src="@drawable/back"
         app:border_color="#ffffff"
         app:border_width="1dip"
         app:corner_radius="4dip"
@@ -46,7 +54,7 @@
         android:layout_alignLeft="@+id/roundedImageView0"
         android:layout_below="@+id/guideLayout"
         android:layout_marginTop="10dp"
-        android:src="@drawable/back_"
+        android:src="@drawable/back"
         app:border_color="#ffffff"
         app:border_width="1dip"
         app:corner_radius="4dip"
@@ -60,7 +68,7 @@
         android:layout_height="wrap_content"
         android:layout_alignTop="@+id/roundedImageView3"
         android:layout_toLeftOf="@+id/roundedImageView3"
-        android:src="@drawable/back_"
+        android:src="@drawable/back"
         app:border_color="#ffffff"
         app:border_width="1dip"
         app:corner_radius="4dip"
@@ -74,7 +82,7 @@
         android:layout_height="wrap_content"
         android:layout_alignTop="@+id/roundedImageView3"
         android:layout_toLeftOf="@+id/roundedImageView2"
-        android:src="@drawable/back_"
+        android:src="@drawable/back"
         app:border_color="#ffffff"
         app:border_width="1dip"
         app:corner_radius="4dip"
@@ -88,7 +96,7 @@
         android:layout_height="wrap_content"
         android:layout_alignTop="@+id/roundedImageView3"
         android:layout_toRightOf="@+id/roundedImageView3"
-        android:src="@drawable/back_"
+        android:src="@drawable/back"
         app:border_color="#ffffff"
         app:border_width="1dip"
         app:corner_radius="4dip"
@@ -102,7 +110,7 @@
         android:layout_height="wrap_content"
         android:layout_alignTop="@+id/roundedImageView3"
         android:layout_toRightOf="@+id/roundedImageView4"
-        android:src="@drawable/back_"
+        android:src="@drawable/back"
         app:border_color="#ffffff"
         app:border_width="1dip"
         app:corner_radius="4dip"
