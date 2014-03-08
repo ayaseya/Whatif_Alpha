@@ -57,7 +57,7 @@
         <item>cChain52</item>
         
         <item>pays1</item>
-                <item>cBonus1</item>
+        <item>cBonus1</item>
         <item>cBonus2</item>
         <item>cBonus3</item>
         <item>cBonus4</item>
@@ -143,6 +143,7 @@
         <item>diamond1</item>
         <item>diamond2</item>
         
+        <item>card0</item>
         <item>card1</item>
         <item>card2</item>
         <item>card3</item>
@@ -194,7 +195,6 @@
         <item>card49</item>
         <item>card50</item>
         <item>card51</item>
-        <item>card52</item>
         
         <item>wagerView</item>
         <item>wager</item>
@@ -204,17 +204,6 @@
         <item>paid</item>
         <item>creditView</item>
         <item>credit</item>
-        
-        <item></item>
-        <item></item>
-        <item></item>
-        <item></item>
-        <item></item>
-        <item></item>
-        <item></item>
-        <item></item>
-        <item></item>
-        <item></item>
         
     </string-array>
 

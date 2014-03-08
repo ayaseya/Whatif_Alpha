@@ -1729,6 +1729,7 @@
         android:layout_below="@+id/roundedImageView0"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="25dp"
+        android:scaleType="matrix"
         android:src="@drawable/back"
         app:border_color="#ffffff"
         app:border_width="1dip"

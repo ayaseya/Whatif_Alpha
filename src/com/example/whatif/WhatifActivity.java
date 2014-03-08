@@ -120,6 +120,10 @@ public class WhatifActivity extends Activity
 
 	private int[] idList;
 
+	private int trumpViewWidth;
+
+	private int trumpViewHeight;
+
 	/* ********** ********** ********** ********** */
 
 	@Override
@@ -225,33 +229,14 @@ public class WhatifActivity extends Activity
 
 		counterMsg = (TextView) findViewById(R.id.counterMsg);
 
-		
-		
-		 String[] itemList = res.getStringArray(R.array.textView);
-		
-		idList  = new int[itemList.length];
-        //配列データからIDの取得
-        for (int i = 0; i < itemList.length; i++) {
-            idList[i] = res.getIdentifier(itemList[i], "id", getPackageName());
-        }
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
 		Log.v(TAG, "onCreate()");
 	}// onCreate()
 
 	@Override
 	public void onWindowFocusChanged(boolean hasFocus) {
 		super.onWindowFocusChanged(hasFocus);
+
+		calculateTrumpSize();
 
 		// Portrait(縦長)
 		if (config.orientation == Configuration.ORIENTATION_PORTRAIT) {
@@ -264,6 +249,8 @@ public class WhatifActivity extends Activity
 			horizontal();
 			Log.v(TAG, ">横画面");
 		}
+
+		fixFont();
 
 		Log.v(TAG, "onWindowFocusChanged()");
 	}
@@ -313,6 +300,52 @@ public class WhatifActivity extends Activity
 	}// onCreateOptionsMenu()
 
 	/* ********** ********** ********** ********** */
+
+	private void calculateTrumpSize() {
+
+		trumpViewWidth = 60;
+		trumpViewHeight = 90;
+
+		trumpViewWidth = (width - 60) / 5;
+		trumpViewHeight = (int) (trumpViewWidth * 1.5);
+
+		//		RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(trumpViewWidth, trumpViewHeight);
+		//		trumpBackView[1].setLayoutParams(lp);
+
+		// trumpViewの縦横を画像に合わせる
+		for (int i = 0; i <= 5; i++) {
+
+			//			trumpBackView[i].getLayoutParams().width = trumpViewWidth;
+			//			trumpBackView[i].getLayoutParams().height = trumpViewHeight;
+			//			trumpBackView[i].requestLayout();
+
+		}
+	}
+
+	private void fixFont() {
+
+		String[] itemList = res.getStringArray(R.array.textView);
+
+		TextView[] textView = new TextView[itemList.length];
+
+		idList = new int[itemList.length];
+		//配列データからIDの取得
+		for (int i = 0; i < itemList.length; i++) {
+			idList[i] = res.getIdentifier(itemList[i], "id", getPackageName());
+			textView[i] = (TextView) findViewById(idList[i]);
+			Log.v(TAG, "i=" + i);
+			//			textView[i].setTextSize(TypedValue.COMPLEX_UNIT_DIP,20);
+		}
+
+		TextView bonus1 = (TextView) findViewById(R.id.bonus1);
+		//		bonus1.setTextSize(TypedValue.COMPLEX_UNIT_DIP,20);
+		Log.v(TAG, "bonus1.getMeasuredWidth()=" + bonus1.getMeasuredWidth());
+		Log.v(TAG, "bonus1.getWidth()" + bonus1.getWidth());
+		Log.v(TAG, "bonus1.getMeasuredHeight()=" + bonus1.getMeasuredHeight());
+		Log.v(TAG, "bonus1.getHeight()" + bonus1.getHeight());
+		Log.v(TAG, "bonus1.getLineHeight()" + bonus1.getLineHeight());
+
+	}
 
 	// トランプ1枚をアニメーションの処理
 	private void FlipTrump(final int index) {
@@ -1363,10 +1396,6 @@ public class WhatifActivity extends Activity
 
 		@Override
 		public void onClick(View v) {
-
-			
-			
-
 
 		}
 	};
