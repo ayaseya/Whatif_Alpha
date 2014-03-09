@@ -126,6 +126,10 @@ public class WhatifActivity extends Activity
 
 	private int trumpViewHeight;
 
+	private float ratio;
+
+	private float scale;
+
 	/* ********** ********** ********** ********** */
 
 	@Override
@@ -174,7 +178,9 @@ public class WhatifActivity extends Activity
 		int _dpi = getResources().getDisplayMetrics().densityDpi;
 
 		// dpi を元に比率を計算する ( dpi ÷ 基準値(mdpi) )
-		float ratio = _dpi / 160f;
+		ratio = _dpi / 160f;
+		
+		scale=getResources().getDisplayMetrics().scaledDensity;
 
 		width = display.getWidth();
 		height = display.getHeight();
@@ -190,7 +196,7 @@ public class WhatifActivity extends Activity
 		} else if (ratio >= 3.0) {
 			dpi = DPI.xxhdpi;
 		}
-		Log.v(TAG, "> " + dpi + "(" + _dpi + "dpi)" + " density=" + ratio + " w=" + width + " h=" + height);
+		Log.v(TAG, "> " + dpi + "(" + _dpi + "dpi)" + " density=" + ratio + " w=" + width + " h=" + height+" s="+scale);
 
 		/* ********** ********** ********** ********** */
 
@@ -390,14 +396,16 @@ public class WhatifActivity extends Activity
 				}
 			} else if (config.orientation == Configuration.ORIENTATION_LANDSCAPE) {// 横画面でのマージンを設定する
 				margin = (width - (trumpViewWidth * 5)) / 6;
+				TextView selectAble = (TextView) findViewById(R.id.selectAble1);
 
 				if (i == 0) {
 					lp.topMargin = 5;
 				} else if (i == 3) {
 					lp.topMargin = 10;
 
-					if ((height / 2) < (findViewById(R.id.ruler).getHeight())) {
-						lp.topMargin = (findViewById(R.id.ruler).getHeight() - trumpViewHeight) / 2;
+					if ((height / 2) < findViewById(R.id.ruler).getHeight()) {
+						lp.topMargin = (findViewById(R.id.ruler).getHeight() - 
+								(trumpViewHeight+20+selectAble.getHeight())) / 2;
 					}
 
 				} else if (i == 2) {
@@ -771,46 +779,46 @@ public class WhatifActivity extends Activity
 		final Animation in = AnimationUtils.loadAnimation(this, R.anim.down_in);
 		final Animation out = AnimationUtils.loadAnimation(this, R.anim.down_out);
 
-		// Portrait(縦長)
-		if (config.orientation == Configuration.ORIENTATION_PORTRAIT) {
-			switch (dpi) {
-			case ldpi:
-				txtSwitchFontSize = 24;
-				break;
-			case mdpi:
-				txtSwitchFontSize = 32;
-				break;
-			case hdpi:
-				txtSwitchFontSize = 36;
-				break;
-			case xhdpi:
-				txtSwitchFontSize = 42;
-				break;
-			case xxhdpi:
-				txtSwitchFontSize = 48;
-				break;
-			}
-		}
-		// Landscape(横長)
-		else if (config.orientation == Configuration.ORIENTATION_LANDSCAPE) {
-			switch (dpi) {
-			case ldpi:
-				txtSwitchFontSize = 20;
-				break;
-			case mdpi:
-				txtSwitchFontSize = 20;
-				break;
-			case hdpi:
-				txtSwitchFontSize = 24;
-				break;
-			case xhdpi:
-				txtSwitchFontSize = 24;
-				break;
-			case xxhdpi:
-				txtSwitchFontSize = 32;
-				break;
-			}
-		}
+//		// Portrait(縦長)
+//		if (config.orientation == Configuration.ORIENTATION_PORTRAIT) {
+//			switch (dpi) {
+//			case ldpi:
+//				txtSwitchFontSize = 24;
+//				break;
+//			case mdpi:
+//				txtSwitchFontSize = 32;
+//				break;
+//			case hdpi:
+//				txtSwitchFontSize = 36;
+//				break;
+//			case xhdpi:
+//				txtSwitchFontSize = 42;
+//				break;
+//			case xxhdpi:
+//				txtSwitchFontSize = 48;
+//				break;
+//			}
+//		}
+//		// Landscape(横長)
+//		else if (config.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+//			switch (dpi) {
+//			case ldpi:
+//				txtSwitchFontSize = 20;
+//				break;
+//			case mdpi:
+//				txtSwitchFontSize = 20;
+//				break;
+//			case hdpi:
+//				txtSwitchFontSize = 24;
+//				break;
+//			case xhdpi:
+//				txtSwitchFontSize = 24;
+//				break;
+//			case xxhdpi:
+//				txtSwitchFontSize = 32;
+//				break;
+//			}
+//		}
 
 		count = (TextSwitcher) findViewById(R.id.counterView);
 		counterWidth = count.getWidth();
@@ -1119,24 +1127,29 @@ public class WhatifActivity extends Activity
 			}
 
 			// trumpViewのフォントサイズを変更する
-			int fontSize = 20;
-			switch (dpi) {
-			case ldpi:
-				fontSize = 20;
-				break;
-			case mdpi:
-				fontSize = 20;
-				break;
-			case hdpi:
-				fontSize = 20;
-				break;
-			case xhdpi:
-				fontSize = 20;
-				break;
-			case xxhdpi:
-				fontSize = 20;
-				break;
-			}
+			int fontSize = 10;
+			
+			fontSize=(int) ((trumpViewHeight/scale)/4);
+			fontSize-=fontSize/10;
+//			Log.v(TAG, "TEST"+fontSize);
+			
+//			switch (dpi) {
+//			case ldpi:
+//				fontSize = 20;
+//				break;
+//			case mdpi:
+//				fontSize = 20;
+//				break;
+//			case hdpi:
+//				fontSize = 20;
+//				break;
+//			case xhdpi:
+//				fontSize = 20;
+//				break;
+//			case xxhdpi:
+//				fontSize = 20;
+//				break;
+//			}
 
 			for (int i = 0; i <= 5; i++) {
 				trumpView[i].setFontSize(fontSize, fontSize * 2);
@@ -1279,23 +1292,27 @@ public class WhatifActivity extends Activity
 
 			// trumpViewのフォントサイズを変更する
 			int fontSize = 30;
-			switch (dpi) {
-			case ldpi:
-				fontSize = 30;
-				break;
-			case mdpi:
-				fontSize = 30;
-				break;
-			case hdpi:
-				fontSize = 30;
-				break;
-			case xhdpi:
-				fontSize = 30;
-				break;
-			case xxhdpi:
-				fontSize = 30;
-				break;
-			}
+			
+			fontSize=(int) ((trumpViewHeight/scale)/4);
+			fontSize-=fontSize/10;
+			
+//			switch (dpi) {
+//			case ldpi:
+//				fontSize = 30;
+//				break;
+//			case mdpi:
+//				fontSize = 30;
+//				break;
+//			case hdpi:
+//				fontSize = 30;
+//				break;
+//			case xhdpi:
+//				fontSize = 30;
+//				break;
+//			case xxhdpi:
+//				fontSize = 30;
+//				break;
+//			}
 
 			for (int i = 0; i <= 5; i++) {
 				trumpView[i].setFontSize(fontSize, fontSize * 2);
@@ -1509,6 +1526,17 @@ public class WhatifActivity extends Activity
 		txt = new TextView(this);
 
 		txt.setHeight(counterHeight);
+		
+		
+		
+		if (config.orientation == Configuration.ORIENTATION_PORTRAIT) {
+			txtSwitchFontSize=(int) ((counterHeight/scale)*0.7);
+		}
+		else if (config.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+			txtSwitchFontSize=(int) ((counterHeight/scale)*0.8);	
+		}
+		
+		
 
 		txt.setGravity(Gravity.CENTER);
 		txt.setTextColor(0xFFFFFFFF);
