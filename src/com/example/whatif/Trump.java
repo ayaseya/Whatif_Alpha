@@ -1,6 +1,8 @@
 package com.example.whatif;
 
-public class Trump {
+import java.io.Serializable;
+
+public class Trump implements Serializable{
 
 	//トランプの数字(1～13)
 	private int number;

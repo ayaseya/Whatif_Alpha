@@ -1,11 +1,12 @@
 package com.example.whatif;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import android.content.Context;
 import android.graphics.Color;
 
-public class Deck {
+public class Deck implements Serializable{
 	ArrayList<Trump> trump;
 
 	public Deck(Context context) {

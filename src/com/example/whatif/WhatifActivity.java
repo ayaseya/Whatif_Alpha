@@ -1590,6 +1590,7 @@ public class WhatifActivity extends Activity
 		super.onSaveInstanceState(outState);
 
 		outState.putInt("COUNTER", counter);
+		outState.putInt("COUNTER", counter);
 
 	}
 
