@@ -55,7 +55,6 @@
         <item>cChain50</item>
         <item>cChain51</item>
         <item>cChain52</item>
-        
         <item>pays1</item>
         <item>cBonus1</item>
         <item>cBonus2</item>
@@ -109,7 +108,6 @@
         <item>cBonus50</item>
         <item>cBonus51</item>
         <item>cBonus52</item>
-        
         <item>bonus2</item>
         <item>handName0</item>
         <item>handName1</item>
@@ -117,7 +115,6 @@
         <item>handName3</item>
         <item>handName4</item>
         <item>handName5</item>
-        
         <item>pays2</item>
         <item>handBonus0</item>
         <item>handBonus1</item>
@@ -125,15 +122,13 @@
         <item>handBonus3</item>
         <item>handBonus4</item>
         <item>handBonus5</item>
-        
         <item>hits1</item>
         <item>hitsFlag0</item>
         <item>hitsFlag1</item>
         <item>hitsFlag2</item>
         <item>hitsFlag3</item>
-		<item>hitsFlag4</item>
+        <item>hitsFlag4</item>
         <item>hitsFlag5</item>
-        
         <item>spade1</item>
         <item>spade2</item>
         <item>heart1</item>
@@ -142,7 +137,6 @@
         <item>club2</item>
         <item>diamond1</item>
         <item>diamond2</item>
-        
         <item>card0</item>
         <item>card1</item>
         <item>card2</item>
@@ -195,16 +189,15 @@
         <item>card49</item>
         <item>card50</item>
         <item>card51</item>
-        
+        <item>counterMsg</item>
         <item>wagerView</item>
         <item>wager</item>
         <item>winView</item>
-		<item>win</item>
+        <item>win</item>
         <item>paidView</item>
         <item>paid</item>
         <item>creditView</item>
         <item>credit</item>
-        
     </string-array>
 
 </resources>

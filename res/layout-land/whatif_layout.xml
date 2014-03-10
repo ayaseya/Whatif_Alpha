@@ -1438,7 +1438,7 @@
                 android:id="@+id/card9"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
+                android:layout_weight="1.5"
                 android:gravity="center"
                 android:text="@string/rank10"
                 android:textColor="#FFFFFF" />
@@ -1582,7 +1582,7 @@
                 android:id="@+id/card22"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
+                android:layout_weight="1.5"
                 android:gravity="center"
                 android:text="@string/rank10"
                 android:textColor="#FFFFFF" />
@@ -1726,7 +1726,7 @@
                 android:id="@+id/card35"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
+                android:layout_weight="1.5"
                 android:gravity="center"
                 android:text="@string/rank10"
                 android:textColor="#FFFFFF" />
@@ -1870,7 +1870,7 @@
                 android:id="@+id/card48"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
+                android:layout_weight="1.5"
                 android:gravity="center"
                 android:text="@string/rank10"
                 android:textColor="#FFFFFF" />

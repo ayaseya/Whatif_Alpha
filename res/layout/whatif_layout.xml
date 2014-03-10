@@ -9,6 +9,13 @@
     android:paddingRight="10dp" >
 
     <View
+        android:id="@+id/ruler"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/counterView"
+        android:background="#00FF0000" />
+
+    <View
         android:id="@+id/header"
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -1234,7 +1241,7 @@
                 android:id="@+id/card9"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
+                android:layout_weight="1.5"
                 android:gravity="center"
                 android:text="@string/rank10"
                 android:textColor="#FFFFFF" />
@@ -1378,7 +1385,7 @@
                 android:id="@+id/card22"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
+                android:layout_weight="1.5"
                 android:gravity="center"
                 android:text="@string/rank10"
                 android:textColor="#FFFFFF" />
@@ -1429,7 +1436,7 @@
             android:gravity="center" >
 
             <TextView
-                 android:id="@+id/club1"
+                android:id="@+id/club1"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -1522,7 +1529,7 @@
                 android:id="@+id/card35"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
+                android:layout_weight="1.5"
                 android:gravity="center"
                 android:text="@string/rank10"
                 android:textColor="#FFFFFF" />
@@ -1666,7 +1673,7 @@
                 android:id="@+id/card48"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
+                android:layout_weight="1.5"
                 android:gravity="center"
                 android:text="@string/rank10"
                 android:textColor="#FFFFFF" />
@@ -1699,7 +1706,6 @@
                 android:textColor="#FFFFFF" />
 
             <TextView
-                
                 android:id="@+id/diamond2"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
