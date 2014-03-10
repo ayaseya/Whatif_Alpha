@@ -243,7 +243,7 @@ public class WhatifActivity extends Activity
 		trumpViewWidth = 60;
 		trumpViewHeight = 90;
 
-			fixFont();
+		fixFont();
 
 		//		Log.v(TAG, "onCreate()");
 	}// onCreate()
@@ -263,7 +263,6 @@ public class WhatifActivity extends Activity
 		}
 
 		//		fixFont();
-
 		//		Log.v(TAG, "onWindowFocusChanged()");
 	}
 
@@ -573,7 +572,16 @@ public class WhatifActivity extends Activity
 		bonusScroll1.post(new Runnable() {
 			@Override
 			public void run() {
-				bonusScroll1.fullScroll(ScrollView.FOCUS_DOWN);// 一番下までスクロールする
+				if (counter == 0) {
+					bonusScroll1.fullScroll(ScrollView.FOCUS_DOWN);// 一番下までスクロールする
+				} else {
+					bonusScroll1.scrollBy(0, scrollHeight * (50 - counter));
+
+					int cChainId = res.getIdentifier("cChain" + counter, "id", getPackageName());
+
+					((TextView) findViewById(cChainId)).setBackgroundColor(0xFFFF0000);
+
+				}
 			}
 		});
 
@@ -590,7 +598,16 @@ public class WhatifActivity extends Activity
 		paysScroll1.post(new Runnable() {
 			@Override
 			public void run() {
-				paysScroll1.fullScroll(ScrollView.FOCUS_DOWN);// 一番下までスクロールする
+
+				if (counter == 0) {
+					paysScroll1.fullScroll(ScrollView.FOCUS_DOWN);// 一番下までスクロールする
+				} else {
+					paysScroll1.scrollBy(0, scrollHeight * (50 - counter));
+
+					int cBonusId = res.getIdentifier("cBonus" + counter, "id", getPackageName());
+					((TextView) findViewById(cBonusId)).setTextColor(0xFFFF0000);
+					((TextView) findViewById(cBonusId)).setBackgroundColor(0xFFFFFFFF);
+				}
 			}
 		});
 
@@ -1566,17 +1583,34 @@ public class WhatifActivity extends Activity
 	}
 
 	// ////////////////////////////////////////////////
+	// 端末画面が回転した時の処理
+	// ////////////////////////////////////////////////
+	@Override
+	protected void onSaveInstanceState(Bundle outState) {
+		super.onSaveInstanceState(outState);
+
+		outState.putInt("COUNTER", counter);
+
+	}
+
+	@Override
+	protected void onRestoreInstanceState(Bundle savedInstanceState) {
+		super.onRestoreInstanceState(savedInstanceState);
+
+		counter = savedInstanceState.getInt("COUNTER");
+
+	}
+
+	// ////////////////////////////////////////////////
 	// ボタンクリック時の処理
 	// ////////////////////////////////////////////////
 
 	// レイアウトViewをクリックした時の処理
 	OnClickListener layoutListener = new OnClickListener() {
 
-
 		@Override
 		public void onClick(View v) {
 
-		
 		}
 	};
 
