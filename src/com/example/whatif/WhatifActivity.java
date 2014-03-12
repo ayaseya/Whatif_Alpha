@@ -4,11 +4,16 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.media.AudioManager;
+import android.media.SoundPool;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -122,9 +127,9 @@ public class WhatifActivity extends Activity
 
 	private int[] idList;
 
-	private int trumpViewWidth;
+	private int trumpViewWidth = 60;
 
-	private int trumpViewHeight;
+	private int trumpViewHeight = 90;
 
 	private float ratio;
 
@@ -135,6 +140,26 @@ public class WhatifActivity extends Activity
 	private Deck standard;
 
 	private boolean game = false;//ゲーム中であるか否かの判断
+
+	private SoundPool soundPool;
+
+	private int[] soundId = new int[8];
+
+	private boolean ringerMode = false;
+
+	private boolean isPlugged = false;
+
+	/** ヘッドセットプラグ状態取得Intent Filter */
+	private static IntentFilter ringerModeIntentFilter = new IntentFilter(AudioManager.RINGER_MODE_CHANGED_ACTION);
+
+	/** 指令を飛ばすBroadCastReceiver */
+	private static BroadcastReceiver ringerModeStateChangeReceiver = null;
+
+	/** ヘッドセットプラグ状態取得Intent Filter */
+	private static IntentFilter plugIntentFilter = new IntentFilter(Intent.ACTION_HEADSET_PLUG);
+
+	/** 指令を飛ばすBroadCastReceiver */
+	private static BroadcastReceiver plugStateChangeReceiver = null;
 
 	/* ********** ********** ********** ********** */
 
@@ -247,8 +272,42 @@ public class WhatifActivity extends Activity
 
 		counterMsg = (TextView) findViewById(R.id.counterMsg);
 
-		trumpViewWidth = 60;
-		trumpViewHeight = 90;
+		// AudioManager取得
+		AudioManager am = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+
+		ringerModeStateChangeReceiver = new BroadcastReceiver() {
+
+			@Override
+			public void onReceive(Context context, Intent intent) {
+				// 接続状態を取得
+				if (intent.getAction().equals(AudioManager.RINGER_MODE_CHANGED_ACTION)) {
+					if (intent.getIntExtra(AudioManager.EXTRA_RINGER_MODE, -1) == AudioManager.RINGER_MODE_NORMAL) {
+						// 通常モード
+						ringerMode = true;
+						Log.v(TAG, "通常モード");
+					} else {
+						// マナーモードorサイレントモード
+						ringerMode = false;
+						Log.v(TAG, "マナーモードorサイレントモード");
+					}
+				}
+			}
+		};
+
+		plugStateChangeReceiver = new BroadcastReceiver() {
+
+			@Override
+			public void onReceive(Context context, Intent intent) {
+				// 接続状態を取得
+				if (intent.getIntExtra("state", 0) > 0) {
+					isPlugged = true;
+					Log.v(TAG, "プラグIN");
+				} else {
+					isPlugged = false;
+					Log.v(TAG, "プラグOUT");
+				}
+			}
+		};
 
 		fixFont();
 
@@ -269,6 +328,8 @@ public class WhatifActivity extends Activity
 			horizontal();
 		}
 
+		Log.v(TAG, "Counter=" + counter);
+
 		//		Log.v(TAG, "onWindowFocusChanged()");
 	}
 
@@ -287,18 +348,41 @@ public class WhatifActivity extends Activity
 	@Override
 	protected void onResume() {
 		super.onResume();
+		// headset plug状態 Broadcast Receiver登録
+		registerReceiver(plugStateChangeReceiver, plugIntentFilter);
+
+		registerReceiver(ringerModeStateChangeReceiver, ringerModeIntentFilter);
+
+		soundPool = new SoundPool(8, AudioManager.STREAM_MUSIC, 0);
+
+		soundId[0] = soundPool.load(this, R.raw.se_cancel, 1);
+		soundId[1] = soundPool.load(this, R.raw.se_counter, 1);
+		soundId[2] = soundPool.load(this, R.raw.se_enter, 1);
+		soundId[3] = soundPool.load(this, R.raw.se_even, 1);
+		soundId[4] = soundPool.load(this, R.raw.se_loser, 1);
+		soundId[5] = soundPool.load(this, R.raw.se_trump_flip, 1);
+		soundId[6] = soundPool.load(this, R.raw.se_trump_select, 1);
+		soundId[7] = soundPool.load(this, R.raw.se_winner, 1);
 		//		Log.v(TAG, "onResume()");
 	}
 
 	@Override
 	protected void onPause() {
 		super.onPause();
+
+		soundPool.release();
+
+		// headset plug状態 Broadcast Receiver登録解除
+		unregisterReceiver(plugStateChangeReceiver);
+
+		unregisterReceiver(ringerModeStateChangeReceiver);
 		//		Log.v(TAG, "onPause()");
 	}
 
 	@Override
 	protected void onStop() {
 		super.onStop();
+
 		//		Log.v(TAG, "onStop()");
 	}
 
@@ -491,6 +575,13 @@ public class WhatifActivity extends Activity
 		Rotate3dAnimation rotation = new Rotate3dAnimation(0, 90, centerX, centerY, 0f, true);
 		rotation.setDuration(timeFlip);
 		trumpBackView[index].startAnimation(rotation);
+
+		if (ringerMode && !isPlugged) {
+			soundPool.play(soundId[5], 0.5F, 0.5F, 0, 0, 1.0F);
+		} else if (isPlugged) {
+			soundPool.play(soundId[5], 0.1F, 0.1F, 0, 0, 1.0F);
+		}
+
 		rotation.setAnimationListener(new TrumpAnimationListener(index) {
 			// 裏面が回転し終わり表面が回転し始める
 			@Override
@@ -527,6 +618,13 @@ public class WhatifActivity extends Activity
 
 		rotation.setDuration(timeDeal);
 		trumpBackView[index].startAnimation(rotation);
+
+		if (ringerMode && !isPlugged) {
+			soundPool.play(soundId[5], 0.5F, 0.5F, 0, 0, 0.5F);
+		} else if (isPlugged) {
+			soundPool.play(soundId[5], 0.1F, 0.1F, 0, 0, 0.5F);
+		}
+
 		rotation.setAnimationListener(new TrumpAnimationListener(index) {
 			// 裏面が回転し終わり表面が回転し始める
 			@Override
@@ -866,6 +964,7 @@ public class WhatifActivity extends Activity
 		for (int i = 1; i <= 52; i++) {
 			id = res.getIdentifier("cChain" + i, "id", getPackageName());
 			view = (TextView) findViewById(id);
+			view.setText(String.valueOf(i) + " CARDS");
 			view.setBackgroundColor(0xFF0000FF);
 		}
 
@@ -1131,18 +1230,6 @@ public class WhatifActivity extends Activity
 				yellowNum(trumpView[4].getSerial());
 				yellowNum(trumpView[5].getSerial());
 			}
-			// コインの増加処理中に画面の回転が発生した場合
-			// 払い戻しの演出をスキップしてCreditに反映させておく
-			if (coin.getWin() != 0) {
-
-				coin.setCredit(coin.getCredit() + coin.getWin());
-
-				coin.setWager(0);
-				coin.setWin(0);
-				coin.setPaid(0);
-
-				redrawCoin();
-			}
 
 			// 縦画面の時のトランプのサイズを決定する
 			trumpViewWidth = width / 6;
@@ -1187,7 +1274,12 @@ public class WhatifActivity extends Activity
 			//スクロールViewの設定をする
 			setScrollView();
 			// ボーナスにテキストを設定する
-			setTxtBounus();
+			if (coin.getWager() == 0) {
+				setTxtBounus();
+			} else {
+				setTxtBounus(coin.getWager());
+			}
+
 			// コインの初期値を設定する
 			redrawCoin();
 
@@ -1227,6 +1319,19 @@ public class WhatifActivity extends Activity
 
 			//カウンター処理
 			txtSwitchOn();
+
+			// コインの増加処理中に画面の回転が発生した場合
+			// 払い戻しの演出をスキップしてCreditに反映させておく
+			if (coin.getWin() != 0) {
+
+				coin.setCredit(coin.getCredit() + coin.getWin());
+
+				coin.setWager(0);
+				coin.setWin(0);
+				coin.setPaid(0);
+
+				redrawCoin();
+			}
 
 			if (game) {
 
@@ -1268,18 +1373,6 @@ public class WhatifActivity extends Activity
 				yellowNum(trumpView[3].getSerial());
 				yellowNum(trumpView[4].getSerial());
 				yellowNum(trumpView[5].getSerial());
-			}
-			// コインの増加処理中に画面の回転が発生した場合
-			// 払い戻しの演出をスキップしてCreditに反映させておく
-			if (coin.getWin() != 0) {
-
-				coin.setCredit(coin.getCredit() + coin.getWin());
-
-				coin.setWager(0);
-				coin.setWin(0);
-				coin.setPaid(0);
-
-				redrawCoin();
 			}
 
 			// 横画面の時のトランプのサイズを決定する
@@ -1339,7 +1432,11 @@ public class WhatifActivity extends Activity
 			//スクロールViewの設定をする
 			setScrollView();
 			// ボーナスにテキストを設定する
-			setTxtBounus();
+			if (coin.getWager() == 0) {
+				setTxtBounus();
+			} else {
+				setTxtBounus(coin.getWager());
+			}
 			// コインの初期値を設定する
 			redrawCoin();
 
@@ -1392,6 +1489,19 @@ public class WhatifActivity extends Activity
 
 			// counterMsgへ反映
 			counterMsg.setLayoutParams(counterMsgParams);
+
+			// コインの増加処理中に画面の回転が発生した場合
+			// 払い戻しの演出をスキップしてCreditに反映させておく
+			if (coin.getWin() != 0) {
+
+				coin.setCredit(coin.getCredit() + coin.getWin());
+
+				coin.setWager(0);
+				coin.setWin(0);
+				coin.setPaid(0);
+
+				redrawCoin();
+			}
 
 			if (game) {
 
@@ -1447,14 +1557,33 @@ public class WhatifActivity extends Activity
 
 							if (counter >= 14) {
 
+								if (ringerMode && !isPlugged) {
+									soundPool.play(soundId[7], 0.5F, 0.5F, 0, 0, 1.0F);
+								} else if (isPlugged) {
+									soundPool.play(soundId[7], 0.1F, 0.1F, 0, 0, 1.0F);
+								}
+
 								msg.setText("WINNER!");
 								msg.setTextColor(Color.RED);
 							}
 							else if (10 <= counter && counter <= 13) {
+
+								if (ringerMode && !isPlugged) {
+									soundPool.play(soundId[3], 0.5F, 0.5F, 0, 0, 1.0F);
+								} else if (isPlugged) {
+									soundPool.play(soundId[3], 0.1F, 0.1F, 0, 0, 1.0F);
+								}
+
 								msg.setText("DRAW!");
 								msg.setTextColor(Color.GREEN);
 							}
 							else {
+								if (ringerMode && !isPlugged) {
+									soundPool.play(soundId[4], 0.5F, 0.5F, 0, 0, 1.0F);
+								} else if (isPlugged) {
+									soundPool.play(soundId[4], 0.1F, 0.1F, 0, 0, 1.0F);
+								}
+
 								msg.setText("LOSER!");
 								msg.setTextColor(Color.BLUE);
 							}
@@ -1514,7 +1643,7 @@ public class WhatifActivity extends Activity
 			txtSwitchFontSize = (int) ((counterHeight / scale) * 0.7);
 		}
 		else if (config.orientation == Configuration.ORIENTATION_LANDSCAPE) {
-			txtSwitchFontSize = (int) ((counterHeight / scale) * 0.8);
+			txtSwitchFontSize = (int) ((counterHeight / scale) * 0.5);
 		}
 
 		txt.setGravity(Gravity.CENTER);
@@ -1636,6 +1765,11 @@ public class WhatifActivity extends Activity
 		public void onClick(View v) {
 
 			if (dealAnimFlag && flipAnimFlag && moveAnimFlag && agreeTrump(1)) {
+				if (ringerMode && !isPlugged) {
+					soundPool.play(soundId[6], 0.5F, 0.5F, 0, 0, 1.0F);
+				} else if (isPlugged) {
+					soundPool.play(soundId[6], 0.1F, 0.1F, 0, 0, 1.0F);
+				}
 				moveTrump(1);
 			}
 
@@ -1649,6 +1783,11 @@ public class WhatifActivity extends Activity
 		public void onClick(View v) {
 
 			if (dealAnimFlag && flipAnimFlag && moveAnimFlag && agreeTrump(2)) {
+				if (ringerMode && !isPlugged) {
+					soundPool.play(soundId[6], 0.5F, 0.5F, 0, 0, 1.0F);
+				} else if (isPlugged) {
+					soundPool.play(soundId[6], 0.1F, 0.1F, 0, 0, 1.0F);
+				}
 				moveTrump(2);
 			}
 
@@ -1661,6 +1800,11 @@ public class WhatifActivity extends Activity
 		public void onClick(View v) {
 
 			if (dealAnimFlag && flipAnimFlag && moveAnimFlag && agreeTrump(3)) {
+				if (ringerMode && !isPlugged) {
+					soundPool.play(soundId[6], 0.5F, 0.5F, 0, 0, 1.0F);
+				} else if (isPlugged) {
+					soundPool.play(soundId[6], 0.1F, 0.1F, 0, 0, 1.0F);
+				}
 				moveTrump(3);
 			}
 		}
@@ -1673,6 +1817,11 @@ public class WhatifActivity extends Activity
 		public void onClick(View v) {
 
 			if (dealAnimFlag && flipAnimFlag && moveAnimFlag && agreeTrump(4)) {
+				if (ringerMode && !isPlugged) {
+					soundPool.play(soundId[6], 0.5F, 0.5F, 0, 0, 1.0F);
+				} else if (isPlugged) {
+					soundPool.play(soundId[6], 0.1F, 0.1F, 0, 0, 1.0F);
+				}
 				moveTrump(4);
 			}
 
@@ -1685,6 +1834,11 @@ public class WhatifActivity extends Activity
 		public void onClick(View v) {
 
 			if (dealAnimFlag && flipAnimFlag && moveAnimFlag && agreeTrump(5)) {
+				if (ringerMode && !isPlugged) {
+					soundPool.play(soundId[6], 0.5F, 0.5F, 0, 0, 1.0F);
+				} else if (isPlugged) {
+					soundPool.play(soundId[6], 0.1F, 0.1F, 0, 0, 1.0F);
+				}
 				moveTrump(5);
 			}
 		}
@@ -1696,6 +1850,12 @@ public class WhatifActivity extends Activity
 
 		@Override
 		public void onClick(View v) {
+
+			if (ringerMode && !isPlugged) {
+				soundPool.play(soundId[0], 0.5F, 0.5F, 0, 0, 1.0F);
+			} else if (isPlugged) {
+				soundPool.play(soundId[0], 0.1F, 0.1F, 0, 0, 1.0F);
+			}
 
 			if (coinFlag) {
 				skipFlag = true;
@@ -1717,7 +1877,13 @@ public class WhatifActivity extends Activity
 		@Override
 		public void onClick(View v) {
 
-			trumpView[0].setVisibility(View.VISIBLE);
+			if (ringerMode && !isPlugged) {
+				soundPool.play(soundId[2], 0.5F, 0.5F, 0, 0, 1.0F);
+				Log.v(TAG, "♪");
+			} else if (isPlugged) {
+				soundPool.play(soundId[2], 0.1F, 0.1F, 0, 0, 1.0F);
+				Log.v(TAG, "♫");
+			}
 
 		}
 	};
@@ -1728,6 +1894,12 @@ public class WhatifActivity extends Activity
 		public void onClick(View v) {
 
 			if (!coinFlag) {
+
+				if (ringerMode && !isPlugged) {
+					soundPool.play(soundId[1], 0.5F, 0.5F, 0, 0, 1.0F);
+				} else if (isPlugged) {
+					soundPool.play(soundId[1], 0.1F, 0.1F, 0, 0, 1.0F);
+				}
 
 				coin.minBet();
 
@@ -1758,7 +1930,11 @@ public class WhatifActivity extends Activity
 			if (!coinFlag) {
 				// 最小BET数を満たしていたらゲーム開始
 				if (coin.getWager() >= coin.getMinbet() && counter == 0) {
-
+					if (ringerMode && !isPlugged) {
+						soundPool.play(soundId[2], 0.5F, 0.5F, 0, 0, 1.0F);
+					} else if (isPlugged) {
+						soundPool.play(soundId[2], 0.1F, 0.1F, 0, 0, 1.0F);
+					}
 					setTxtBounus(coin.getWager());
 
 					// コイン操作画面を非表示にして、手札を表示する				
@@ -1766,7 +1942,11 @@ public class WhatifActivity extends Activity
 
 					dealFlipTrump(1);
 				} else if (coin.getWager() >= coin.getMinbet() && counter > 0) {
-
+					if (ringerMode && !isPlugged) {
+						soundPool.play(soundId[2], 0.5F, 0.5F, 0, 0, 1.0F);
+					} else if (isPlugged) {
+						soundPool.play(soundId[2], 0.1F, 0.1F, 0, 0, 1.0F);
+					}
 					counter = 0;
 					count.setText(String.valueOf(0));
 
