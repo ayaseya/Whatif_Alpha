@@ -143,7 +143,7 @@ public class WhatifActivity extends Activity
 
 	private SoundPool soundPool;
 
-	private int[] soundId = new int[8];
+	private int[] soundId = new int[14];
 
 	private boolean ringerMode = false;
 
@@ -355,14 +355,21 @@ public class WhatifActivity extends Activity
 
 		soundPool = new SoundPool(8, AudioManager.STREAM_MUSIC, 0);
 
-		soundId[0] = soundPool.load(this, R.raw.se_cancel, 1);
-		soundId[1] = soundPool.load(this, R.raw.se_counter, 1);
-		soundId[2] = soundPool.load(this, R.raw.se_enter, 1);
-		soundId[3] = soundPool.load(this, R.raw.se_even, 1);
-		soundId[4] = soundPool.load(this, R.raw.se_loser, 1);
-		soundId[5] = soundPool.load(this, R.raw.se_trump_flip, 1);
-		soundId[6] = soundPool.load(this, R.raw.se_trump_select, 1);
-		soundId[7] = soundPool.load(this, R.raw.se_winner, 1);
+		soundId[0] = soundPool.load(this, R.raw.se_beep, 1);
+		soundId[1] = soundPool.load(this, R.raw.se_cancel, 1);
+		soundId[2] = soundPool.load(this, R.raw.se_clear, 1);
+		soundId[3] = soundPool.load(this, R.raw.se_coin, 1);
+		soundId[4] = soundPool.load(this, R.raw.se_enter, 1);
+		soundId[5] = soundPool.load(this, R.raw.se_even, 1);
+		soundId[6] = soundPool.load(this, R.raw.se_loser, 1);
+		soundId[7] = soundPool.load(this, R.raw.se_msg, 1);
+		soundId[8] = soundPool.load(this, R.raw.se_next, 1);
+		soundId[9] = soundPool.load(this, R.raw.se_score, 1);
+		soundId[10] = soundPool.load(this, R.raw.se_select, 1);
+		soundId[11] = soundPool.load(this, R.raw.se_trump_flip, 1);
+		soundId[12] = soundPool.load(this, R.raw.se_trump_select, 1);
+		soundId[13] = soundPool.load(this, R.raw.se_winner, 1);
+
 		//		Log.v(TAG, "onResume()");
 	}
 
@@ -577,9 +584,9 @@ public class WhatifActivity extends Activity
 		trumpBackView[index].startAnimation(rotation);
 
 		if (ringerMode && !isPlugged) {
-			soundPool.play(soundId[5], 0.5F, 0.5F, 0, 0, 1.0F);
+			soundPool.play(soundId[11], 0.5F, 0.5F, 0, 0, 1.0F);
 		} else if (isPlugged) {
-			soundPool.play(soundId[5], 0.1F, 0.1F, 0, 0, 1.0F);
+			soundPool.play(soundId[11], 0.1F, 0.1F, 0, 0, 1.0F);
 		}
 
 		rotation.setAnimationListener(new TrumpAnimationListener(index) {
@@ -620,9 +627,9 @@ public class WhatifActivity extends Activity
 		trumpBackView[index].startAnimation(rotation);
 
 		if (ringerMode && !isPlugged) {
-			soundPool.play(soundId[5], 0.5F, 0.5F, 0, 0, 0.5F);
+			soundPool.play(soundId[11], 0.5F, 0.5F, 0, 0, 0.5F);
 		} else if (isPlugged) {
-			soundPool.play(soundId[5], 0.1F, 0.1F, 0, 0, 0.5F);
+			soundPool.play(soundId[11], 0.1F, 0.1F, 0, 0, 0.5F);
 		}
 
 		rotation.setAnimationListener(new TrumpAnimationListener(index) {
@@ -1105,13 +1112,20 @@ public class WhatifActivity extends Activity
 						public void run() {
 							paidView.setText(String.valueOf(timerCounter));
 							creditView.setText(String.valueOf(coin.getCredit() + timerCounter));
+//							if (ringerMode && !isPlugged) {
+//								soundPool.play(soundId[9], 0.5F, 0.5F, 0, 0, 1.0F);
+//							} else if (isPlugged) {
+//								soundPool.play(soundId[9], 0.1F, 0.1F, 0, 0, 1.0F);
+//							}							
 							timerCounter++;
 
+							
 							if (x == coin.getWager()) {
 								//								Log.v(TAG, "timer_stop_MIN");
 								coin.setCredit(coin.getCredit() + coin.getWager());
 								coin.setWager(0);
-
+								coin.setPaid(0);
+								
 								redrawCoin();
 
 								coinFlag = false;
@@ -1123,7 +1137,8 @@ public class WhatifActivity extends Activity
 
 								coin.setCredit(coin.getCredit() + x);
 								coin.setWager(0);
-
+								coin.setPaid(0);
+								
 								redrawCoin();
 
 								coinFlag = false;
@@ -1134,7 +1149,8 @@ public class WhatifActivity extends Activity
 
 								coin.setCredit(coin.getCredit() + x);
 								coin.setWager(0);
-
+								coin.setPaid(0);
+								
 								redrawCoin();
 
 								coinFlag = false;
@@ -1558,9 +1574,9 @@ public class WhatifActivity extends Activity
 							if (counter >= 14) {
 
 								if (ringerMode && !isPlugged) {
-									soundPool.play(soundId[7], 0.5F, 0.5F, 0, 0, 1.0F);
+									soundPool.play(soundId[13], 0.5F, 0.5F, 0, 0, 1.0F);
 								} else if (isPlugged) {
-									soundPool.play(soundId[7], 0.1F, 0.1F, 0, 0, 1.0F);
+									soundPool.play(soundId[13], 0.1F, 0.1F, 0, 0, 1.0F);
 								}
 
 								msg.setText("WINNER!");
@@ -1569,9 +1585,9 @@ public class WhatifActivity extends Activity
 							else if (10 <= counter && counter <= 13) {
 
 								if (ringerMode && !isPlugged) {
-									soundPool.play(soundId[3], 0.5F, 0.5F, 0, 0, 1.0F);
+									soundPool.play(soundId[5], 0.5F, 0.5F, 0, 0, 1.0F);
 								} else if (isPlugged) {
-									soundPool.play(soundId[3], 0.1F, 0.1F, 0, 0, 1.0F);
+									soundPool.play(soundId[5], 0.1F, 0.1F, 0, 0, 1.0F);
 								}
 
 								msg.setText("DRAW!");
@@ -1579,9 +1595,9 @@ public class WhatifActivity extends Activity
 							}
 							else {
 								if (ringerMode && !isPlugged) {
-									soundPool.play(soundId[4], 0.5F, 0.5F, 0, 0, 1.0F);
+									soundPool.play(soundId[6], 0.5F, 0.5F, 0, 0, 1.0F);
 								} else if (isPlugged) {
-									soundPool.play(soundId[4], 0.1F, 0.1F, 0, 0, 1.0F);
+									soundPool.play(soundId[6], 0.1F, 0.1F, 0, 0, 1.0F);
 								}
 
 								msg.setText("LOSER!");
@@ -1611,7 +1627,11 @@ public class WhatifActivity extends Activity
 	private void GameClear() {
 
 		if (counter == 52) {
-
+			if (ringerMode && !isPlugged) {
+				soundPool.play(soundId[2], 0.5F, 0.5F, 0, 0, 1.0F);
+			} else if (isPlugged) {
+				soundPool.play(soundId[2], 0.1F, 0.1F, 0, 0, 1.0F);
+			}
 			for (int i = 1; i < 6; i++) {
 				trumpView[i].setVisibility(View.INVISIBLE);
 			}
@@ -1766,9 +1786,9 @@ public class WhatifActivity extends Activity
 
 			if (dealAnimFlag && flipAnimFlag && moveAnimFlag && agreeTrump(1)) {
 				if (ringerMode && !isPlugged) {
-					soundPool.play(soundId[6], 0.5F, 0.5F, 0, 0, 1.0F);
+					soundPool.play(soundId[12], 0.5F, 0.5F, 0, 0, 1.0F);
 				} else if (isPlugged) {
-					soundPool.play(soundId[6], 0.1F, 0.1F, 0, 0, 1.0F);
+					soundPool.play(soundId[12], 0.1F, 0.1F, 0, 0, 1.0F);
 				}
 				moveTrump(1);
 			}
@@ -1784,9 +1804,9 @@ public class WhatifActivity extends Activity
 
 			if (dealAnimFlag && flipAnimFlag && moveAnimFlag && agreeTrump(2)) {
 				if (ringerMode && !isPlugged) {
-					soundPool.play(soundId[6], 0.5F, 0.5F, 0, 0, 1.0F);
+					soundPool.play(soundId[12], 0.5F, 0.5F, 0, 0, 1.0F);
 				} else if (isPlugged) {
-					soundPool.play(soundId[6], 0.1F, 0.1F, 0, 0, 1.0F);
+					soundPool.play(soundId[12], 0.1F, 0.1F, 0, 0, 1.0F);
 				}
 				moveTrump(2);
 			}
@@ -1801,9 +1821,9 @@ public class WhatifActivity extends Activity
 
 			if (dealAnimFlag && flipAnimFlag && moveAnimFlag && agreeTrump(3)) {
 				if (ringerMode && !isPlugged) {
-					soundPool.play(soundId[6], 0.5F, 0.5F, 0, 0, 1.0F);
+					soundPool.play(soundId[12], 0.5F, 0.5F, 0, 0, 1.0F);
 				} else if (isPlugged) {
-					soundPool.play(soundId[6], 0.1F, 0.1F, 0, 0, 1.0F);
+					soundPool.play(soundId[12], 0.1F, 0.1F, 0, 0, 1.0F);
 				}
 				moveTrump(3);
 			}
@@ -1818,9 +1838,9 @@ public class WhatifActivity extends Activity
 
 			if (dealAnimFlag && flipAnimFlag && moveAnimFlag && agreeTrump(4)) {
 				if (ringerMode && !isPlugged) {
-					soundPool.play(soundId[6], 0.5F, 0.5F, 0, 0, 1.0F);
+					soundPool.play(soundId[12], 0.5F, 0.5F, 0, 0, 1.0F);
 				} else if (isPlugged) {
-					soundPool.play(soundId[6], 0.1F, 0.1F, 0, 0, 1.0F);
+					soundPool.play(soundId[12], 0.1F, 0.1F, 0, 0, 1.0F);
 				}
 				moveTrump(4);
 			}
@@ -1835,9 +1855,9 @@ public class WhatifActivity extends Activity
 
 			if (dealAnimFlag && flipAnimFlag && moveAnimFlag && agreeTrump(5)) {
 				if (ringerMode && !isPlugged) {
-					soundPool.play(soundId[6], 0.5F, 0.5F, 0, 0, 1.0F);
+					soundPool.play(soundId[12], 0.5F, 0.5F, 0, 0, 1.0F);
 				} else if (isPlugged) {
-					soundPool.play(soundId[6], 0.1F, 0.1F, 0, 0, 1.0F);
+					soundPool.play(soundId[12], 0.1F, 0.1F, 0, 0, 1.0F);
 				}
 				moveTrump(5);
 			}
@@ -1852,9 +1872,9 @@ public class WhatifActivity extends Activity
 		public void onClick(View v) {
 
 			if (ringerMode && !isPlugged) {
-				soundPool.play(soundId[0], 0.5F, 0.5F, 0, 0, 1.0F);
+				soundPool.play(soundId[1], 0.5F, 0.5F, 0, 0, 1.0F);
 			} else if (isPlugged) {
-				soundPool.play(soundId[0], 0.1F, 0.1F, 0, 0, 1.0F);
+				soundPool.play(soundId[1], 0.1F, 0.1F, 0, 0, 1.0F);
 			}
 
 			if (coinFlag) {
@@ -1877,13 +1897,7 @@ public class WhatifActivity extends Activity
 		@Override
 		public void onClick(View v) {
 
-			if (ringerMode && !isPlugged) {
-				soundPool.play(soundId[2], 0.5F, 0.5F, 0, 0, 1.0F);
-				Log.v(TAG, "♪");
-			} else if (isPlugged) {
-				soundPool.play(soundId[2], 0.1F, 0.1F, 0, 0, 1.0F);
-				Log.v(TAG, "♫");
-			}
+
 
 		}
 	};
@@ -1896,9 +1910,9 @@ public class WhatifActivity extends Activity
 			if (!coinFlag) {
 
 				if (ringerMode && !isPlugged) {
-					soundPool.play(soundId[1], 0.5F, 0.5F, 0, 0, 1.0F);
+					soundPool.play(soundId[0], 0.5F, 0.5F, 0, 0, 1.0F);
 				} else if (isPlugged) {
-					soundPool.play(soundId[1], 0.1F, 0.1F, 0, 0, 1.0F);
+					soundPool.play(soundId[0], 0.1F, 0.1F, 0, 0, 1.0F);
 				}
 
 				coin.minBet();
@@ -1914,6 +1928,13 @@ public class WhatifActivity extends Activity
 		@Override
 		public void onClick(View v) {
 			if (!coinFlag) {
+				
+				if (ringerMode && !isPlugged) {
+					soundPool.play(soundId[0], 0.5F, 0.5F, 0, 0, 1.0F);
+				} else if (isPlugged) {
+					soundPool.play(soundId[0], 0.1F, 0.1F, 0, 0, 1.0F);
+				}
+				
 				coin.repBet();
 				wagerView.setText(String.valueOf(coin.getWager()));
 				creditView.setText(String.valueOf(coin.getCredit()));
@@ -1931,9 +1952,9 @@ public class WhatifActivity extends Activity
 				// 最小BET数を満たしていたらゲーム開始
 				if (coin.getWager() >= coin.getMinbet() && counter == 0) {
 					if (ringerMode && !isPlugged) {
-						soundPool.play(soundId[2], 0.5F, 0.5F, 0, 0, 1.0F);
+						soundPool.play(soundId[4], 0.5F, 0.5F, 0, 0, 1.0F);
 					} else if (isPlugged) {
-						soundPool.play(soundId[2], 0.1F, 0.1F, 0, 0, 1.0F);
+						soundPool.play(soundId[4], 0.1F, 0.1F, 0, 0, 1.0F);
 					}
 					setTxtBounus(coin.getWager());
 
@@ -1943,9 +1964,9 @@ public class WhatifActivity extends Activity
 					dealFlipTrump(1);
 				} else if (coin.getWager() >= coin.getMinbet() && counter > 0) {
 					if (ringerMode && !isPlugged) {
-						soundPool.play(soundId[2], 0.5F, 0.5F, 0, 0, 1.0F);
+						soundPool.play(soundId[4], 0.5F, 0.5F, 0, 0, 1.0F);
 					} else if (isPlugged) {
-						soundPool.play(soundId[2], 0.1F, 0.1F, 0, 0, 1.0F);
+						soundPool.play(soundId[4], 0.1F, 0.1F, 0, 0, 1.0F);
 					}
 					counter = 0;
 					count.setText(String.valueOf(0));
@@ -1996,6 +2017,12 @@ public class WhatifActivity extends Activity
 
 			findViewById(R.id.msgLayout).setVisibility(View.INVISIBLE);
 			findViewById(R.id.btnLayout).setVisibility(View.VISIBLE);
+			
+			if (ringerMode && !isPlugged) {
+				soundPool.play(soundId[10], 0.5F, 0.5F, 0, 0, 1.0F);
+			} else if (isPlugged) {
+				soundPool.play(soundId[10], 0.1F, 0.1F, 0, 0, 1.0F);
+			}
 
 		}
 	};
