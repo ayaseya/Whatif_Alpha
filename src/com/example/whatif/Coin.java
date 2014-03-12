@@ -1,10 +1,11 @@
 package com.example.whatif;
 
-
 public class Coin {
 
-	private int credit = 100;// プレイヤーのコイン枚数（初期値100）
 	private int wager = 0;// 掛け金
+	private int win = 0;// 払戻金(このゲームで勝った総額)
+	private int paid = 0;// 払戻金(プレイヤーに払い戻した金額)
+	private int credit = 100;// プレイヤーのコイン枚数（初期値100）
 
 	private int beforeCredit = 0;// プレイヤーのコイン枚数
 	private int beforeWager = 0;// 掛け金
@@ -27,24 +28,24 @@ public class Coin {
 
 		if (beforeWager < credit && wager < maxbet) {
 			if (wager == 0) {
-				
+
 				credit -= beforeWager;
 				wager += beforeWager;
-//				Log.v("Test", "1:credit="+credit+" wager="+wager);
-				
-		} else if (wager + beforeWager < maxbet) {
-	
+				//				Log.v("Test", "1:credit="+credit+" wager="+wager);
+
+			} else if (wager + beforeWager < maxbet) {
+
 				credit -= beforeWager;
 				wager += beforeWager;
-				
-//				Log.v("Test", "2:credit="+credit+" wager="+wager);
-				
+
+				//				Log.v("Test", "2:credit="+credit+" wager="+wager);
+
 			} else if (wager + beforeWager >= maxbet) {
-	
+
 				credit -= maxbet - wager;
 				wager = maxbet;
-				
-//				Log.v("Test", "3:credit="+credit+" wager="+wager);
+
+				//				Log.v("Test", "3:credit="+credit+" wager="+wager);
 			}
 		}
 
@@ -93,13 +94,6 @@ public class Coin {
 	// getter、setter群
 	// ////////////////////////////////////////////////
 
-	public int getCredit() {
-		return credit;
-	}
-
-	public void setCredit(int credit) {
-		this.credit = credit;
-	}
 
 	public int getWager() {
 		return wager;
@@ -107,6 +101,30 @@ public class Coin {
 
 	public void setWager(int wager) {
 		this.wager = wager;
+	}
+
+	public int getWin() {
+		return win;
+	}
+
+	public void setWin(int win) {
+		this.win = win;
+	}
+
+	public int getPaid() {
+		return paid;
+	}
+
+	public void setPaid(int paid) {
+		this.paid = paid;
+	}
+
+	public int getCredit() {
+		return credit;
+	}
+
+	public void setCredit(int credit) {
+		this.credit = credit;
 	}
 
 	public int getMinbet() {

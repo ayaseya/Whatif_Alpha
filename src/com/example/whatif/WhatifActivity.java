@@ -132,6 +132,10 @@ public class WhatifActivity extends Activity
 
 	private int fontSize = 16;
 
+	private Deck standard;
+
+	private boolean game = false;//ゲーム中であるか否かの判断
+
 	/* ********** ********** ********** ********** */
 
 	@Override
@@ -155,6 +159,9 @@ public class WhatifActivity extends Activity
 		deck.shuffle(this.getApplicationContext());
 		// 場札に置いた順番を記録するインスタンスを取得する
 		record = new Deck(this.getApplicationContext());
+
+		standard = new Deck(this.getApplicationContext());
+		standard.standard(this.getApplicationContext());
 
 		// コイン処理のインスタンスを取得する
 		coin = new Coin();
@@ -262,7 +269,6 @@ public class WhatifActivity extends Activity
 			horizontal();
 		}
 
-		//		fixFont();
 		//		Log.v(TAG, "onWindowFocusChanged()");
 	}
 
@@ -821,47 +827,6 @@ public class WhatifActivity extends Activity
 		final Animation in = AnimationUtils.loadAnimation(this, R.anim.down_in);
 		final Animation out = AnimationUtils.loadAnimation(this, R.anim.down_out);
 
-		//		// Portrait(縦長)
-		//		if (config.orientation == Configuration.ORIENTATION_PORTRAIT) {
-		//			switch (dpi) {
-		//			case ldpi:
-		//				txtSwitchFontSize = 24;
-		//				break;
-		//			case mdpi:
-		//				txtSwitchFontSize = 32;
-		//				break;
-		//			case hdpi:
-		//				txtSwitchFontSize = 36;
-		//				break;
-		//			case xhdpi:
-		//				txtSwitchFontSize = 42;
-		//				break;
-		//			case xxhdpi:
-		//				txtSwitchFontSize = 48;
-		//				break;
-		//			}
-		//		}
-		//		// Landscape(横長)
-		//		else if (config.orientation == Configuration.ORIENTATION_LANDSCAPE) {
-		//			switch (dpi) {
-		//			case ldpi:
-		//				txtSwitchFontSize = 20;
-		//				break;
-		//			case mdpi:
-		//				txtSwitchFontSize = 20;
-		//				break;
-		//			case hdpi:
-		//				txtSwitchFontSize = 24;
-		//				break;
-		//			case xhdpi:
-		//				txtSwitchFontSize = 24;
-		//				break;
-		//			case xxhdpi:
-		//				txtSwitchFontSize = 32;
-		//				break;
-		//			}
-		//		}
-
 		count = (TextSwitcher) findViewById(R.id.counterView);
 		counterWidth = count.getWidth();
 		counterHeight = count.getHeight();
@@ -1150,6 +1115,35 @@ public class WhatifActivity extends Activity
 			//			statusbarHeight = rect.top;
 			//			Log.v(TAG, "ステータスバー height=" + statusbarHeight);
 
+			// 画面回転前のガイドの状態を復元する
+			if (counter > 1) {
+				for (int i = 0; i < counter - 1; i++) {
+					deleteNum(record.trump.get(i).getSerial());
+				}
+			}
+			if (counter != 0) {
+				yellowNum(trumpView[0].getSerial());
+				boldNum(trumpView[0].getSerial());
+
+				yellowNum(trumpView[1].getSerial());
+				yellowNum(trumpView[2].getSerial());
+				yellowNum(trumpView[3].getSerial());
+				yellowNum(trumpView[4].getSerial());
+				yellowNum(trumpView[5].getSerial());
+			}
+			// コインの増加処理中に画面の回転が発生した場合
+			// 払い戻しの演出をスキップしてCreditに反映させておく
+			if (coin.getWin() != 0) {
+
+				coin.setCredit(coin.getCredit() + coin.getWin());
+
+				coin.setWager(0);
+				coin.setWin(0);
+				coin.setPaid(0);
+
+				redrawCoin();
+			}
+
 			// 縦画面の時のトランプのサイズを決定する
 			trumpViewWidth = width / 6;
 			trumpViewHeight = (int) (trumpViewWidth * 1.5);
@@ -1161,8 +1155,6 @@ public class WhatifActivity extends Activity
 
 			// trumpViewの縦横を画像に合わせる
 			for (int i = 0; i <= 5; i++) {
-				//				trumpView[i].getLayoutParams().width = trumpBackView[0].getWidth();
-				//				trumpView[i].getLayoutParams().height = trumpBackView[0].getHeight();
 				trumpView[i].getLayoutParams().width = trumpViewWidth;
 				trumpView[i].getLayoutParams().height = trumpViewHeight;
 				trumpView[i].requestLayout();
@@ -1173,70 +1165,20 @@ public class WhatifActivity extends Activity
 
 			fontSize = (int) ((trumpViewHeight / scale) / 4);
 			fontSize -= fontSize / 10;
-			//			Log.v(TAG, "TEST"+fontSize);
-
-			//			switch (dpi) {
-			//			case ldpi:
-			//				fontSize = 20;
-			//				break;
-			//			case mdpi:
-			//				fontSize = 20;
-			//				break;
-			//			case hdpi:
-			//				fontSize = 20;
-			//				break;
-			//			case xhdpi:
-			//				fontSize = 20;
-			//				break;
-			//			case xxhdpi:
-			//				fontSize = 20;
-			//				break;
-			//			}
 
 			for (int i = 0; i <= 5; i++) {
 				trumpView[i].setFontSize(fontSize, fontSize * 2);
 			}
 
 			// 山札から5枚トランプの情報を読み込む
-			for (int i = 1; i <= 5; i++) {
-				trumpView[i].setTrump(deck.trump.get(i - 1).getNumber(),
-						deck.trump.get(i - 1).getSuit(),
-						deck.trump.get(i - 1).getSerial(),
-						deck.trump.get(i - 1).getColor());
+			if (!game) {
+				for (int i = 1; i <= 5; i++) {
+					trumpView[i].setTrump(deck.trump.get(i - 1).getNumber(),
+							deck.trump.get(i - 1).getSuit(),
+							deck.trump.get(i - 1).getSerial(),
+							deck.trump.get(i - 1).getColor());
+				}
 			}
-
-			// トランプ画像(×5)のwidthと端末のwidthから余白を計算する
-			//			int trumpWidth = trumpBackView[0].getWidth();
-			//			Log.v(TAG, "trumpWidth=" + trumpWidth);
-			//			int trumpHeight = trumpBackView[0].getHeight();
-			//			Log.v(TAG, "trumpHeight=" + trumpHeight);
-			//
-			//			margin = (Math.max(trumpWidth * 5, width) - Math.min(trumpWidth * 5, width)) / 6;
-			//			Log.v(TAG, "margin=" + margin);
-
-			//			// trumpBackViewからマージンを取得
-			//			trumpBackView[2].getLayoutParams();
-			//			// マージン移動用のパラメータを取得する
-			//			MarginLayoutParams marginParams2 = (MarginLayoutParams) trumpBackView[2].getLayoutParams();
-			//			// 移動させたい距離に変更
-			//			marginParams2.rightMargin += margin;
-			//			// trumpBackViewへ反映
-			//			trumpBackView[2].setLayoutParams(marginParams2);
-			//
-			//			trumpBackView[1].getLayoutParams();
-			//			MarginLayoutParams marginParams1 = (MarginLayoutParams) trumpBackView[1].getLayoutParams();
-			//			marginParams1.rightMargin += margin;
-			//			trumpBackView[1].setLayoutParams(marginParams1);
-			//
-			//			trumpBackView[4].getLayoutParams();
-			//			MarginLayoutParams marginParams4 = (MarginLayoutParams) trumpBackView[4].getLayoutParams();
-			//			marginParams4.leftMargin += margin;
-			//			trumpBackView[4].setLayoutParams(marginParams4);
-			//
-			//			trumpBackView[5].getLayoutParams();
-			//			MarginLayoutParams marginParams5 = (MarginLayoutParams) trumpBackView[5].getLayoutParams();
-			//			marginParams5.leftMargin += margin;
-			//			trumpBackView[5].setLayoutParams(marginParams5);
 
 			// Y軸回転用の変数を取得する
 			centerX = trumpBackView[0].getWidth() / 2;
@@ -1286,6 +1228,15 @@ public class WhatifActivity extends Activity
 			//カウンター処理
 			txtSwitchOn();
 
+			if (game) {
+
+				findViewById(R.id.btnLayout).setVisibility(View.INVISIBLE);
+				// トランプ画像を非表示にする
+				for (int i = 0; i <= 5; i++) {
+					trumpView[i].setVisibility(View.VISIBLE);
+				}
+			}
+
 			// 起動時のみ必要な処理が終了したのでフラグを変更する
 			replaceFlag = false;
 
@@ -1301,6 +1252,35 @@ public class WhatifActivity extends Activity
 			//			getWindow().getDecorView().getWindowVisibleDisplayFrame(rect);
 			//			statusbarHeight = rect.top;
 			//			Log.v(TAG, "ステータスバー height=" + statusbarHeight);
+
+			// 画面回転前のガイドの状態を復元する
+			if (counter > 1) {
+				for (int i = 0; i < counter - 1; i++) {
+					deleteNum(record.trump.get(i).getSerial());
+				}
+			}
+			if (counter != 0) {
+				yellowNum(trumpView[0].getSerial());
+				boldNum(trumpView[0].getSerial());
+
+				yellowNum(trumpView[1].getSerial());
+				yellowNum(trumpView[2].getSerial());
+				yellowNum(trumpView[3].getSerial());
+				yellowNum(trumpView[4].getSerial());
+				yellowNum(trumpView[5].getSerial());
+			}
+			// コインの増加処理中に画面の回転が発生した場合
+			// 払い戻しの演出をスキップしてCreditに反映させておく
+			if (coin.getWin() != 0) {
+
+				coin.setCredit(coin.getCredit() + coin.getWin());
+
+				coin.setWager(0);
+				coin.setWin(0);
+				coin.setPaid(0);
+
+				redrawCoin();
+			}
 
 			// 横画面の時のトランプのサイズを決定する
 			TextView selectAble = (TextView) findViewById(R.id.selectAble1);
@@ -1338,68 +1318,20 @@ public class WhatifActivity extends Activity
 			fontSize = (int) ((trumpViewHeight / scale) / 4);
 			fontSize -= fontSize / 10;
 
-			//			switch (dpi) {
-			//			case ldpi:
-			//				fontSize = 30;
-			//				break;
-			//			case mdpi:
-			//				fontSize = 30;
-			//				break;
-			//			case hdpi:
-			//				fontSize = 30;
-			//				break;
-			//			case xhdpi:
-			//				fontSize = 30;
-			//				break;
-			//			case xxhdpi:
-			//				fontSize = 30;
-			//				break;
-			//			}
-
 			for (int i = 0; i <= 5; i++) {
 				trumpView[i].setFontSize(fontSize, fontSize * 2);
 			}
 
 			// 山札から5枚トランプの情報を読み込む
-			for (int i = 1; i <= 5; i++) {
-				trumpView[i].setTrump(deck.trump.get(i - 1).getNumber(),
-						deck.trump.get(i - 1).getSuit(),
-						deck.trump.get(i - 1).getSerial(),
-						deck.trump.get(i - 1).getColor());
+			if (!game) {
+
+				for (int i = 1; i <= 5; i++) {
+					trumpView[i].setTrump(deck.trump.get(i - 1).getNumber(),
+							deck.trump.get(i - 1).getSuit(),
+							deck.trump.get(i - 1).getSerial(),
+							deck.trump.get(i - 1).getColor());
+				}
 			}
-
-			// トランプ画像(×5)のwidthと端末のwidthから余白を計算する
-			//			int trumpWidth = trumpBackView[0].getWidth();
-			//			Log.v(TAG, "trumpWidth=" + trumpWidth);
-			//			int trumpHeight = trumpBackView[0].getHeight();
-			//			Log.v(TAG, "trumpHeight=" + trumpHeight);
-			//
-			//			margin = (Math.max(trumpWidth * 5, width) - Math.min(trumpWidth * 5, width)) / 6;
-			//			Log.v(TAG, "margin=" + margin);
-			//
-			//			trumpBackView[2].getLayoutParams();
-			//			// trumpBackViewからマージンを取得
-			//			MarginLayoutParams marginParams2 = (MarginLayoutParams) trumpBackView[2].getLayoutParams();
-			//			// 移動させたい距離に変更
-			//			marginParams2.rightMargin += margin;
-			//			// trumpBackViewへ反映
-			//			trumpBackView[2].setLayoutParams(marginParams2);
-			//
-			//			trumpBackView[1].getLayoutParams();
-			//			MarginLayoutParams marginParams1 = (MarginLayoutParams) trumpBackView[1].getLayoutParams();
-			//			marginParams1.rightMargin += margin;
-			//			trumpBackView[1].setLayoutParams(marginParams1);
-			//
-			//			trumpBackView[4].getLayoutParams();
-			//			MarginLayoutParams marginParams4 = (MarginLayoutParams) trumpBackView[4].getLayoutParams();
-			//			marginParams4.leftMargin += margin;
-			//			trumpBackView[4].setLayoutParams(marginParams4);
-			//
-			//			trumpBackView[5].getLayoutParams();
-			//			MarginLayoutParams marginParams5 = (MarginLayoutParams) trumpBackView[5].getLayoutParams();
-			//			marginParams5.leftMargin += margin;
-			//			trumpBackView[5].setLayoutParams(marginParams5);
-
 			// Y軸回転用の変数を取得する
 			centerX = trumpBackView[0].getWidth() / 2;
 			centerY = trumpBackView[0].getLayoutParams().height;
@@ -1460,6 +1392,15 @@ public class WhatifActivity extends Activity
 
 			// counterMsgへ反映
 			counterMsg.setLayoutParams(counterMsgParams);
+
+			if (game) {
+
+				findViewById(R.id.btnLayout).setVisibility(View.INVISIBLE);
+				// トランプ画像を非表示にする
+				for (int i = 0; i <= 5; i++) {
+					trumpView[i].setVisibility(View.VISIBLE);
+				}
+			}
 
 			// 起動時のみ必要な処理が終了したのでフラグを変更する
 			replaceFlag = false;
@@ -1589,17 +1530,90 @@ public class WhatifActivity extends Activity
 	protected void onSaveInstanceState(Bundle outState) {
 		super.onSaveInstanceState(outState);
 
-		outState.putInt("COUNTER", counter);
-		outState.putInt("COUNTER", counter);
+		outState.putInt("WAGER", coin.getWager());
+		outState.putInt("WIN", coin.getWin());
+		outState.putInt("PAID", coin.getPaid());
+		outState.putInt("CREDIT", coin.getCredit());
 
+		if (findViewById(R.id.msgLayout).getVisibility() == View.INVISIBLE &&
+				findViewById(R.id.btnLayout).getVisibility() == View.INVISIBLE) {
+
+			outState.putBoolean("GAME", true);// 画面回転時にゲーム中であることを記録する
+
+			outState.putInt("COUNTER", counter);
+
+			outState.putInt("LAYOUT", trumpView[0].getSerial());
+
+			outState.putInt("HAND1", trumpView[1].getSerial());
+			outState.putInt("HAND2", trumpView[2].getSerial());
+			outState.putInt("HAND3", trumpView[3].getSerial());
+			outState.putInt("HAND4", trumpView[4].getSerial());
+			outState.putInt("HAND5", trumpView[5].getSerial());
+
+			outState.putSerializable("DECK", deck);
+			outState.putSerializable("RECORD", record);
+
+		}
 	}
 
 	@Override
 	protected void onRestoreInstanceState(Bundle savedInstanceState) {
 		super.onRestoreInstanceState(savedInstanceState);
 
-		counter = savedInstanceState.getInt("COUNTER");
+		coin.setWager(savedInstanceState.getInt("WAGER"));
+		coin.setWin(savedInstanceState.getInt("WIN"));
+		coin.setPaid(savedInstanceState.getInt("PAID"));
+		coin.setCredit(savedInstanceState.getInt("CREDIT"));
 
+		if (savedInstanceState.getBoolean("GAME")) {// 画面回転前がゲーム中なら処理をする箇所
+			game = true;
+			counter = savedInstanceState.getInt("COUNTER");
+
+			deck = (Deck) savedInstanceState.getSerializable("DECK");
+			record = (Deck) savedInstanceState.getSerializable("RECORD");
+
+			trumpView[0].setTrump(
+					standard.trump.get(savedInstanceState.getInt("LAYOUT")).getNumber(),
+					standard.trump.get(savedInstanceState.getInt("LAYOUT")).getSuit(),
+					standard.trump.get(savedInstanceState.getInt("LAYOUT")).getSerial(),
+					standard.trump.get(savedInstanceState.getInt("LAYOUT")).getColor()
+					);
+
+			trumpView[1].setTrump(
+					standard.trump.get(savedInstanceState.getInt("HAND1")).getNumber(),
+					standard.trump.get(savedInstanceState.getInt("HAND1")).getSuit(),
+					standard.trump.get(savedInstanceState.getInt("HAND1")).getSerial(),
+					standard.trump.get(savedInstanceState.getInt("HAND1")).getColor()
+					);
+
+			trumpView[2].setTrump(
+					standard.trump.get(savedInstanceState.getInt("HAND2")).getNumber(),
+					standard.trump.get(savedInstanceState.getInt("HAND2")).getSuit(),
+					standard.trump.get(savedInstanceState.getInt("HAND2")).getSerial(),
+					standard.trump.get(savedInstanceState.getInt("HAND2")).getColor()
+					);
+
+			trumpView[3].setTrump(
+					standard.trump.get(savedInstanceState.getInt("HAND3")).getNumber(),
+					standard.trump.get(savedInstanceState.getInt("HAND3")).getSuit(),
+					standard.trump.get(savedInstanceState.getInt("HAND3")).getSerial(),
+					standard.trump.get(savedInstanceState.getInt("HAND3")).getColor()
+					);
+
+			trumpView[4].setTrump(
+					standard.trump.get(savedInstanceState.getInt("HAND4")).getNumber(),
+					standard.trump.get(savedInstanceState.getInt("HAND4")).getSuit(),
+					standard.trump.get(savedInstanceState.getInt("HAND4")).getSerial(),
+					standard.trump.get(savedInstanceState.getInt("HAND4")).getColor()
+					);
+
+			trumpView[5].setTrump(
+					standard.trump.get(savedInstanceState.getInt("HAND5")).getNumber(),
+					standard.trump.get(savedInstanceState.getInt("HAND5")).getSuit(),
+					standard.trump.get(savedInstanceState.getInt("HAND5")).getSerial(),
+					standard.trump.get(savedInstanceState.getInt("HAND5")).getColor()
+					);
+		}
 	}
 
 	// ////////////////////////////////////////////////
@@ -1702,6 +1716,8 @@ public class WhatifActivity extends Activity
 		// 当たり枚数の半分を賭けて行うダブルダウンのこと。負けても半分は返ってくる。
 		@Override
 		public void onClick(View v) {
+
+			trumpView[0].setVisibility(View.VISIBLE);
 
 		}
 	};
