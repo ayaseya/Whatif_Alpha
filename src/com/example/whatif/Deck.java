@@ -2,6 +2,7 @@ package com.example.whatif;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -45,7 +46,7 @@ public class Deck implements Serializable {
 		}
 
 		// リスト内の要素をシャッフルする
-		//		 Collections.shuffle(trump);
+		Collections.shuffle(trump);
 	}
 
 	//	public void standard(Context context) {

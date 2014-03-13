@@ -38,6 +38,7 @@ import android.widget.RelativeLayout.LayoutParams;
 import android.widget.ScrollView;
 import android.widget.TextSwitcher;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ViewSwitcher.ViewFactory;
 
 public class WhatifActivity extends Activity
@@ -891,7 +892,6 @@ public class WhatifActivity extends Activity
 				}
 
 				scrollUp();
-
 				moveAnimFlag = true;
 			}
 
@@ -1457,6 +1457,7 @@ public class WhatifActivity extends Activity
 
 							if (x == coin.getWager()) {
 								//								Log.v(TAG, "timer_stop_MIN");
+
 								coin.setCredit(coin.getCredit() + coin.getWager());
 								coin.setWager(0);
 								coin.setPaid(0);
@@ -1471,6 +1472,20 @@ public class WhatifActivity extends Activity
 
 							} else if (coin.getWager() > 0 && x == timerCounter) {
 								//								Log.v(TAG, "timer_stop_WIN");
+
+								coin.setCredit(coin.getCredit() + x);
+								coin.setWager(0);
+								coin.setPaid(0);
+
+								redrawCoin();
+
+								soundPool.stop(streamId);
+
+								coinFlag = false;
+								timerCounter = 0;
+								timer.cancel();
+							} else if (coin.getWager() == 0 && x == timerCounter) {
+								//								Log.v(TAG, "timer_stop_PRESENT");
 
 								coin.setCredit(coin.getCredit() + x);
 								coin.setWager(0);
@@ -1964,11 +1979,13 @@ public class WhatifActivity extends Activity
 
 								msg.setText("LOSER!");
 								msg.setTextColor(Color.BLUE);
+
+								present();
 							}
 							// 手札を非表示にして、メッセージ画面手札を表示する
 							findViewById(R.id.msgLayout).setVisibility(View.VISIBLE);
-
 							refundCoin();
+
 							//Toast.makeText(WhatifActivity.this, "ＧＡＭＥ ＯＶＥＲ", Toast.LENGTH_SHORT).show();
 
 						}
@@ -1985,6 +2002,13 @@ public class WhatifActivity extends Activity
 		}).start();
 
 	}// GameOver_**********
+
+	private void present() {
+		if (coin.getCredit() == 0) {
+			Toast.makeText(this.getApplicationContext(), "Present for you!", Toast.LENGTH_SHORT).show();
+			countUp(100);
+		}
+	}
 
 	private void GameClear() {
 
