@@ -320,7 +320,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center"
-                        android:text="@string/handBonus1" />
+                        android:text="@string/Blank" />
 
                     <TextView
                         android:id="@+id/handBonus2"
@@ -328,7 +328,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center"
-                        android:text="@string/handBonus2" />
+                        android:text="@string/Blank" />
 
                     <TextView
                         android:id="@+id/handBonus3"
@@ -336,7 +336,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center"
-                        android:text="@string/handBonus3" />
+                        android:text="@string/Blank" />
 
                     <TextView
                         android:id="@+id/handBonus4"
@@ -344,7 +344,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center"
-                        android:text="@string/handBonus4" />
+                        android:text="@string/Blank" />
 
                     <TextView
                         android:id="@+id/handBonus5"
@@ -352,7 +352,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center"
-                        android:text="@string/handBonus5" />
+                        android:text="@string/Blank" />
                 </LinearLayout>
             </ScrollView>
         </LinearLayout>
