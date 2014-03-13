@@ -175,6 +175,10 @@ public class WhatifActivity extends Activity
 
 	private int se_winner;
 
+	private int streamId;
+
+
+
 	/** マナーモード等の状態取得Intent Filter */
 	private static IntentFilter ringerModeIntentFilter = new IntentFilter(AudioManager.RINGER_MODE_CHANGED_ACTION);
 
@@ -335,6 +339,8 @@ public class WhatifActivity extends Activity
 			}
 		};
 
+
+
 		fixFont();
 
 		//		Log.v(TAG, "onCreate()");
@@ -409,6 +415,7 @@ public class WhatifActivity extends Activity
 		unregisterReceiver(plugStateChangeReceiver);
 
 		unregisterReceiver(ringerModeStateChangeReceiver);
+
 		//		Log.v(TAG, "onPause()");
 	}
 
@@ -592,8 +599,11 @@ public class WhatifActivity extends Activity
 				//				textView[i].setTextSize(TypedValue.COMPLEX_UNIT_PX ,fontSize);
 				textView[i].setTextSize(fontSize);
 			}
-
 		}
+		wagerView.setTextSize(fontSize - 2);
+		winView.setTextSize(fontSize - 2);
+		paidView.setTextSize(fontSize - 2);
+		creditView.setTextSize(fontSize - 2);
 	}
 
 	// トランプ1枚をアニメーションの処理
@@ -1117,7 +1127,7 @@ public class WhatifActivity extends Activity
 
 	// cuCoin関数…cu = Count Upの略称、払い戻し時にコインの枚数が1枚ずつ
 	// 増減する様子を表示する処理、引数は増減する枚数を渡す
-	private void cuCoin(final int x) {
+	private void countUp(final int x) {
 		// コイン増加表示の処理中かフラグ判定
 		if (coinFlag == false && (x != 0)) {
 
@@ -1129,7 +1139,16 @@ public class WhatifActivity extends Activity
 			//			Log.v(TAG, "timer_start x=" + x);
 
 			winView.setText(String.valueOf(x));
-
+			
+			if (ringerMode && !isPlugged) {
+				streamId=soundPool.play(se_score, 0.5F, 0.5F, 0, -1, 1.0F);
+			} else if (isPlugged) {
+				streamId=soundPool.play(se_score, 0.1F, 0.1F, 0, -1, 1.0F);
+			}
+			
+			
+			
+			
 			timer.schedule(new TimerTask() {
 				@Override
 				public void run() {
@@ -1138,22 +1157,22 @@ public class WhatifActivity extends Activity
 						public void run() {
 							paidView.setText(String.valueOf(timerCounter));
 							creditView.setText(String.valueOf(coin.getCredit() + timerCounter));
-//							if (ringerMode && !isPlugged) {
-//								soundPool.play(se_score, 0.5F, 0.5F, 0, 0, 1.0F);
-//							} else if (isPlugged) {
-//								soundPool.play(se_score, 0.1F, 0.1F, 0, 0, 1.0F);
-//							}							
-							timerCounter++;
+
 
 							
+							//											
+							timerCounter++;
+
 							if (x == coin.getWager()) {
 								//								Log.v(TAG, "timer_stop_MIN");
 								coin.setCredit(coin.getCredit() + coin.getWager());
 								coin.setWager(0);
 								coin.setPaid(0);
-								
+
 								redrawCoin();
 
+								soundPool.stop(streamId);
+								
 								coinFlag = false;
 								timerCounter = 0;
 								timer.cancel();
@@ -1164,8 +1183,10 @@ public class WhatifActivity extends Activity
 								coin.setCredit(coin.getCredit() + x);
 								coin.setWager(0);
 								coin.setPaid(0);
-								
+
 								redrawCoin();
+
+								soundPool.stop(streamId);
 
 								coinFlag = false;
 								timerCounter = 0;
@@ -1176,9 +1197,11 @@ public class WhatifActivity extends Activity
 								coin.setCredit(coin.getCredit() + x);
 								coin.setWager(0);
 								coin.setPaid(0);
-								
-								redrawCoin();
 
+								redrawCoin();
+								
+								soundPool.stop(streamId);
+								
 								coinFlag = false;
 								skipFlag = false;
 								timerCounter = 0;
@@ -1202,7 +1225,7 @@ public class WhatifActivity extends Activity
 	// 払い戻し金を表示する処理
 	private void refundCoin() {
 
-		cuCoin(rate52[counter - 1] * coin.getWager());
+		countUp(rate52[counter - 1] * coin.getWager());
 		//		Log.v(TAG, "RATE=" + rate52[counter - 1] + "WAGER" + coin.getWager());
 		//		Log.v(TAG, "WIN=" + rate52[counter - 1] * coin.getWager());
 	}
@@ -1923,7 +1946,7 @@ public class WhatifActivity extends Activity
 		@Override
 		public void onClick(View v) {
 
-
+			countUp(1000);
 
 		}
 	};
@@ -1954,13 +1977,13 @@ public class WhatifActivity extends Activity
 		@Override
 		public void onClick(View v) {
 			if (!coinFlag) {
-				
+
 				if (ringerMode && !isPlugged) {
 					soundPool.play(se_beep, 0.5F, 0.5F, 0, 0, 1.0F);
 				} else if (isPlugged) {
 					soundPool.play(se_beep, 0.1F, 0.1F, 0, 0, 1.0F);
 				}
-				
+
 				coin.repBet();
 				wagerView.setText(String.valueOf(coin.getWager()));
 				creditView.setText(String.valueOf(coin.getCredit()));
@@ -2043,7 +2066,7 @@ public class WhatifActivity extends Activity
 
 			findViewById(R.id.msgLayout).setVisibility(View.INVISIBLE);
 			findViewById(R.id.btnLayout).setVisibility(View.VISIBLE);
-			
+
 			if (ringerMode && !isPlugged) {
 				soundPool.play(se_peep, 0.5F, 0.5F, 0, 0, 1.0F);
 			} else if (isPlugged) {
