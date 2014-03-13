@@ -96,11 +96,11 @@
     <string name="handName4">FULL HOUSE</string>
     <string name="handName5">FLUSH</string>
     
-    <string name="handBonus1">500</string>
-    <string name="handBonus2">100</string>
-    <string name="handBonus3">25</string>
-    <string name="handBonus4">10</string>
-    <string name="handBonus5">5</string>
+<!--     <string name="handBonus1">500</string> -->
+<!--     <string name="handBonus2">100</string> -->
+<!--     <string name="handBonus3">25</string> -->
+<!--     <string name="handBonus4">10</string> -->
+<!--     <string name="handBonus5">5</string> -->
     
 <!--     <string name="suit1">&#9824;</string> -->
 <!-- 	<string name="suit2">&#9829;</string> -->
