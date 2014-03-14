@@ -10,6 +10,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Color;
@@ -18,6 +19,7 @@ import android.media.AudioManager;
 import android.media.SoundPool;
 import android.os.Bundle;
 import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
@@ -151,33 +153,19 @@ public class WhatifActivity extends Activity
 	private boolean isPlugged = false;
 
 	private int se_beep;
-
 	private int se_cancel;
-
 	private int se_clear;
-
 	private int se_coin;
-
 	private int se_enter;
-
 	private int se_even;
-
 	private int se_loser;
-
 	private int se_msg;
-
 	private int se_on;
-
 	private int se_score;
-
 	private int se_peep;
-
 	private int se_trump_flip;
-
 	private int se_trump_select;
-
 	private int se_winner;
-
 	private int streamId;
 
 	/** マナーモード等の状態取得Intent Filter */
@@ -201,6 +189,8 @@ public class WhatifActivity extends Activity
 
 	int pokerPosition = 0;// ポーカーのスクロールビューの現在位置
 	int pokerPrevPosition = 0;// ポーカーのスクロールビューの現在位置
+
+	private static final String KEY_CREDIT = "DATA_COIN";
 
 	/* ********** ********** ********** ********** */
 
@@ -350,7 +340,7 @@ public class WhatifActivity extends Activity
 				}
 			}
 		};
-
+		loadCoin();
 		fixFont();
 
 		//		Log.v(TAG, "onCreate()");
@@ -439,6 +429,8 @@ public class WhatifActivity extends Activity
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
+
+		saveCoin();
 		//		Log.v(TAG, "onDestroy()");
 	}
 
@@ -1610,6 +1602,38 @@ public class WhatifActivity extends Activity
 
 	}
 
+	private void saveCoin() {
+
+		TextView credit = (TextView) findViewById(R.id.credit);
+		int valueInt = Integer.parseInt(credit.getText().toString());
+
+		// プリファレンスを取得する
+		SharedPreferences preference = PreferenceManager.getDefaultSharedPreferences(this);
+
+		// 編集用のeditorインスタンスを取得する
+		SharedPreferences.Editor editor = preference.edit();
+
+		// editorを利用してデータをput(書き出す)する
+		editor.putInt(KEY_CREDIT, valueInt);
+
+		// commitメソッドを利用して書き込みを確定させる
+		editor.commit();
+
+	}
+
+	private void loadCoin() {
+
+		// プリファレンスを取得する
+		SharedPreferences preference = PreferenceManager.getDefaultSharedPreferences(this);
+
+		// プリファレンスに保存したデータを読み取る
+		//第2引数は、第1引数が見つからなかった場合に返す値
+
+		int valueInt = preference.getInt(KEY_CREDIT, 100);
+		coin.setCredit(valueInt);
+
+	}
+
 	// ////////////////////////////////////////////////
 	// Vertical and Horizontal
 	// ////////////////////////////////////////////////
@@ -2300,7 +2324,11 @@ public class WhatifActivity extends Activity
 		@Override
 		public void onClick(View v) {
 
-			countUp(1000);
+			if (ringerMode && !isPlugged) {
+				soundPool.play(se_beep, 0.5F, 0.5F, 0, 0, 1.5F);
+			} else if (isPlugged) {
+				soundPool.play(se_beep, 0.1F, 0.1F, 0, 0, 1.5F);
+			}
 
 		}
 	};
@@ -2333,9 +2361,11 @@ public class WhatifActivity extends Activity
 			if (!coinFlag) {
 
 				if (ringerMode && !isPlugged) {
-					soundPool.play(se_beep, 0.5F, 0.5F, 0, 0, 1.0F);
+					soundPool.play(se_beep, 0.5F, 0.5F, 0, 0, 0.5F);
+
 				} else if (isPlugged) {
-					soundPool.play(se_beep, 0.1F, 0.1F, 0, 0, 1.0F);
+					soundPool.play(se_beep, 0.1F, 0.1F, 0, 0, 0.5F);
+
 				}
 
 				coin.repBet();
