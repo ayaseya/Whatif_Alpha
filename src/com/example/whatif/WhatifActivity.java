@@ -787,6 +787,16 @@ public class WhatifActivity extends Activity
 				return true;//trueでタッチスクロールを禁止する
 			}
 		});
+		
+		bonusScroll2.post(new Runnable() {
+			@Override
+			public void run() {
+
+				if (counter == 0) {
+					bonusScroll2.fullScroll(ScrollView.FOCUS_UP);// 一番上までスクロールする
+				}
+			}
+		});
 
 		// スクロールViewの高さを変更
 		paysScroll2.getLayoutParams().height = scrollHeight;
@@ -797,6 +807,15 @@ public class WhatifActivity extends Activity
 				return true;//trueでタッチスクロールを禁止する
 			}
 		});
+		paysScroll2.post(new Runnable() {
+			@Override
+			public void run() {
+
+				if (counter == 0) {
+					paysScroll2.fullScroll(ScrollView.FOCUS_UP);// 一番上までスクロールする
+				}
+			}
+		});
 
 		// スクロールViewの高さを変更
 		hitsScroll1.getLayoutParams().height = scrollHeight;
@@ -805,6 +824,15 @@ public class WhatifActivity extends Activity
 			@Override
 			public boolean onTouch(View v, MotionEvent event) {
 				return true;//trueでタッチスクロールを禁止する
+			}
+		});
+		hitsScroll1.post(new Runnable() {
+			@Override
+			public void run() {
+
+				if (counter == 0) {
+					hitsScroll1.fullScroll(ScrollView.FOCUS_UP);// 一番上までスクロールする
+				}
 			}
 		});
 
