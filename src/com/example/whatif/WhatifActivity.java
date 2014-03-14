@@ -528,12 +528,18 @@ public class WhatifActivity extends Activity
 			if (config.orientation == Configuration.ORIENTATION_PORTRAIT) { // 縦画面でのマージンを設定する
 				if (i == 0) {
 					lp.topMargin = 15;
+
 					TextView selectAble = (TextView) findViewById(R.id.selectAble1);
 					if ((trumpViewHeight + 20 + selectAble.getHeight())
 					< findViewById(R.id.ruler).getHeight()) {
 						lp.topMargin = (findViewById(R.id.ruler).getHeight() -
 								(trumpViewHeight + 20 + selectAble.getHeight())) / 4;
+
 					}
+					if (width == 240) {
+						lp.topMargin = 15;
+					}
+
 				} else if (i == 3) {
 					lp.topMargin = 15;
 
@@ -544,11 +550,22 @@ public class WhatifActivity extends Activity
 								(trumpViewHeight + 20 + selectAble.getHeight())) / 4;
 					}
 
+					if (width == 240) {
+						lp.topMargin = 15;
+						margin = 5;
+					}
+
 					lp.leftMargin = margin;
 					lp.rightMargin = margin;
 				} else if (i == 1) {
+					if (width == 240) {
+						margin = 5;
+					}
 					lp.rightMargin = margin;
 				} else if (i == 5) {
+					if (width == 240) {
+						margin = 5;
+					}
 					lp.leftMargin = margin;
 				}
 			} else if (config.orientation == Configuration.ORIENTATION_LANDSCAPE) {// 横画面でのマージンを設定する
@@ -591,7 +608,7 @@ public class WhatifActivity extends Activity
 		}
 		// Landscape(横長)
 		else if (config.orientation == Configuration.ORIENTATION_LANDSCAPE) {
-			fontSize = (int) ((width / scale) / 40);
+			fontSize = (int) ((width / scale) / 42);
 		}
 
 		Log.v(TAG, "fontSize=" + fontSize);
@@ -1776,13 +1793,13 @@ public class WhatifActivity extends Activity
 				trumpViewHeight = height
 						- (findViewById(R.id.ruler).getHeight())
 						- 10 // マージン
-						- selectAble.getLineHeight() //
+						- selectAble.getLineHeight() * 2 //
 						- 10; // マージン
 
 			} else {
 				trumpViewHeight = (findViewById(R.id.ruler).getHeight())
 						- 10 // マージン
-						- selectAble.getLineHeight() //
+						- selectAble.getLineHeight() * 2 //
 						- 10;
 			}
 
